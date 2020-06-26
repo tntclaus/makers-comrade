@@ -1,0 +1,4 @@
+{
+    "VSlot_Gantry_Plate_20mm.stl": 40.999, 
+    "gantry_cart_spacer_6_35.stl": 1.299
+}
