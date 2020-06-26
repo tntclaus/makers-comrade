@@ -81,23 +81,23 @@ module printing_bed(showVolume = false) {
     elevation = 32;
     translate([-workingSpaceSize/2+10,0,elevation])
     rotate([0,90,90])
-        extrusion(E2020, workingSpaceSize-40, center = true);
+        extrusion(T2020, workingSpaceSize-40, center = true);
 
     translate([workingSpaceSize/2-10,0,elevation])    
     rotate([0,90,90])
-        extrusion(E2020, workingSpaceSize-40, center = true);
+        extrusion(T2020, workingSpaceSize-40, center = true);
     
     translate([0,-workingSpaceSize/2+10,elevation])
         rotate([0,90,0])
-            extrusion(E2020, workingSpaceSize, center = true);
+            extrusion(T2020, workingSpaceSize, center = true);
 
     translate([0,0,elevation])
         rotate([0,90,0])
-            extrusion(E2020, workingSpaceSize-40, center = true);
+            extrusion(T2020, workingSpaceSize-40, center = true);
     
     translate([0,workingSpaceSize/2-10,elevation])
         rotate([0,90,0])
-            extrusion(E2020, workingSpaceSize, center = true);
+            extrusion(T2020, workingSpaceSize, center = true);
     
     if(showVolume) {
         translate([-workingSpaceSize/2,-workingSpaceSize/2,elevation+10]) 
@@ -135,7 +135,7 @@ module portal() {
     // todo может здесь можно обойтись полосой алюминия
     translate([0,0,baseFrontSize+30])
         rotate([0,90,90])
-            extrusion(E2020, baseFrontSize+40, center = true);
+            extrusion(T2020, baseFrontSize+40, center = true);
 }
 
 
