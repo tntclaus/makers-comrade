@@ -1,24 +1,17 @@
 Vitamins:
-  2 Lead Screw Coupler, D =30, d1 =8, d2 =5, L =50
+  2 Lead Screw Coupler, D=30, d1=8, d2=5, L=50
   2 Stepper motor NEMA17 x 47mm
-  4 Openbuilds Eccentric Spacer (h=6.35mm)
- 12 V Wheel
- 24 Ball bearing 625-2RS 5mm x 16mm x 5mm
-  3 Extrusion E2020 x 460mm
-  2 Extrusion E2020 x 500mm
-  3 Extrusion E2020 x 590mm
+  1 Extrusion E2020 x 630mm
   3 Extrusion T2020 x 800mm
   2 Extrusion V20.40x40.22 x 800mm
+  2 Extrusion V2040 x 590mm
   2 Extrusion ignoreMe x 800mm
   1 KP08_18 pillow block
   1 Leadscrew 8 x 700mm, 8mm lead, 2 starts
- 12 Nut M5 x 4mm 
-  8 Screw M3 hex x 30mm
- 12 Screw M5 hex x 30mm
-  1 SCS12LUU bearing block
-  1 Aluminium tooling plate 71mm x 100mm x 6mm
+  8 Screw M3 hex x 15mm
+  8 Screw M3 pan x 15mm
+ 28 Screw M5 pan x 15mm
   2 Sheet mild steel 60mm x 590mm x 3mm
-
-Printed:
-  4 VSlot_Gantry_Plate_20mm.stl
-  8 gantry_cart_spacer_6_35.stl
+ 16 Washer spring M3 x 1mm
+ 28 Washer spring M5 x 1.6mm
+  8 Washer  M3 x 7mm x 0.5mm

@@ -4,12 +4,7 @@ openscad.echo: \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/ring_terminal.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/screws.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/core.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/sweep.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/scs_bearing_block.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/quadrant.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/insert.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/rod.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/rounded_cylinder.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/maths.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/clip.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/rounded_rectangle.scad \
@@ -23,6 +18,11 @@ openscad.echo: \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/bom.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/round.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/linear_bearing.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/quadrant.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/scs_bearing_block.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/sweep.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/polyholes.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/kp_pillow_block.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/ball_bearings.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/ring_terminals.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/stepper_motor.scad \
@@ -31,6 +31,7 @@ openscad.echo: \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/sheet.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/nuts.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/kp_pillow_blocks.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/washers.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/utils/core/core.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/nut.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/screw.scad \
@@ -50,8 +51,8 @@ openscad.echo: \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/inserts.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/washers.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/screws.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/rod.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/rounded_cylinder.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/rod.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/circlip.scad \
-	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/scad/3dprinter-i1.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/polyholes.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/kp_pillow_block.scad
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/scad/3dprinter-i1.scad
