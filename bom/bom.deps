@@ -1,31 +1,52 @@
 openscad.echo: \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/offset.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/sector.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/ring_terminal.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/rounded_polygon.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/screws.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/core.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/geometries.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/inserts.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/rod.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/rounded_cylinder.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/offset.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/sector.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/core.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/utils/rounded_polygon.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/rounded_rectangle.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/teardrops.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/polyholes.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/scad/plates.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/scad/motors.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/leadscrew_couplers.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/vslot_connector_angle.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/vslot_connector_cube.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/vslot_connectors.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/vwheel_plates.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/vwheels.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/vwheel_gantries.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/insert.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/vwheel_gantry.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/vslot_rails.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/maths.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/clip.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/rounded_rectangle.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/scs_bearing_blocks.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/sphere.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/core.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/teardrops.scad \
-	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/v-wheels/gantry.scad \
-	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/v-wheels/v-wheels.scad \
-	scad/bom.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/bom.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/pulley.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/pulleys.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/vslot_rail.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/vwheel.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/belts.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/scad/heatbed.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/circlip.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/round.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/linear_bearing.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/quadrant.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/scs_bearing_block.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/sweep.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/polyholes.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/kp_pillow_block.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/ball_bearings.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/ring_terminals.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/stepper_motor.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/vwheel_assemblies.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/kp_pillow_block.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/belt.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/sphere.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/scs_bearing_blocks.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/ball_bearings.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/quadrant.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/sweep.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/scs_bearing_block.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/circlips.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/thread.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/sheet.scad \
@@ -35,24 +56,29 @@ openscad.echo: \
 	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/utils/core/core.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/nut.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/screw.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/linear_bearings.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/ball_bearing.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/washer.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/nuts.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/global.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/global_defs.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/extrusions.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/extrusion.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/sheets.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/tube.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/ball_bearing.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/fillet.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/stepper_motors.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/inserts.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/leadscrew_coupler.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/washers.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/screws.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/rod.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/rounded_cylinder.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/sheets.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/utils/core/rounded_rectangle.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/tube.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/vwheel_assembly.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/global_defs.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/extrusions.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/linear_bearings.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/ball_bearing.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/utils/core/polyholes.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/nuts.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/global.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/extrusion.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/scad/zap-3d-mk1.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/ball_bearing.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/rod.scad \
-	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/circlip.scad \
-	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/scad/3dprinter-i1.scad
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/ring_terminal.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/scad/screw_assemblies.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/vwheel_plate.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/bom.scad \
+	scad/bom.scad

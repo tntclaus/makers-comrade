@@ -1,2 +1,8 @@
 openscad.echo
 openscad.log
+dxfs/
+stls/
+old/
+deps/
+.DS_Store
+*.cbddlp

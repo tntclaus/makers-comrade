@@ -1,17 +1,37 @@
 Vitamins:
-  2 Lead Screw Coupler, D=30, d1=8, d2=5, L=50
-  2 Stepper motor NEMA17 x 47mm
-  1 Extrusion T2020 x 630mm
-  3 Extrusion T2020 x 800mm
-  2 Extrusion V20.40x40.22 x 800mm
-  2 Extrusion V2040 x 590mm
-  2 Extrusion ignoreMe x 800mm
-  1 KP08_18 pillow block
-  1 Leadscrew 8 x 700mm, 8mm lead, 2 starts
-  8 Screw M3 hex x 15mm
-  8 Screw M3 pan x 15mm
- 28 Screw M5 pan x 15mm
-  2 Sheet mild steel 60mm x 590mm x 3mm
- 16 Washer spring M3 x 1mm
- 28 Washer spring M5 x 1.6mm
-  8 Washer  M3 x 7mm x 0.5mm
+  3 Aliminium Flexible Shaft Ballscrew, D=19, d=8x5, L=25
+  1 Glass/Mirror w=620, h=620
+121 M5 Screw
+121 M5 V-Slot Nut
+  5 Stepper motor NEMA17 x 40mm
+  7 Openbuilds Eccentric Spacer (h=6mm)
+ 18 V Wheel
+ 36 Ball bearing 625-2RS 5mm x 16mm x 5mm
+  1 Belt GT2 x 6mm x 2890mm
+  1 Belt GT2 x 6mm x 2862mm
+  5 Extrusion E2020 x 580mm
+  9 Extrusion E2020 x 700mm
+  4 Extrusion E2020 x 800mm
+  1 Extrusion E2040 x 690mm
+  2 Extrusion E2040 x 700mm
+  6 Leadscrew 8 x 600mm, 8mm lead, 2 starts
+ 18 Nut M5 x 2.7mm 
+  2 Pulley GT2 idler 16 teeth
+ 32 Screw M3 hex x 15mm
+ 15 Screw M5 dome x 25mm
+  3 Screw M5 dome x 35mm
+ 32 Washer spring M3 x 1mm
+ 18 Washer spring M5 x 1.6mm
+ 32 Washer  M3 x 7mm x 0.5mm
+
+Printed:
+ 14 gantry_cart_spacer_6.stl
+ 24 vslot_angle20.stl
+  4 vslot_cube20.stl
+
+CNC cut:
+  1 back_plate_740x800x3.dxf
+  1 bottom_plate_740x740x3.dxf
+  1 front_plate_740x800x3.dxf
+  1 side_plate_l_740x800x3.dxf
+  1 side_plate_r_740x800x3.dxf

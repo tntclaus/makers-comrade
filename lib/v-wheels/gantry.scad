@@ -9,6 +9,9 @@
 include <NopSCADlib/utils/core/core.scad>
 include <NopSCADlib/vitamins/nuts.scad>
 include <NopSCADlib/vitamins/screws.scad>
+include <NopSCADlib/utils/rounded_polygon.scad>
+
+include <../geometries.scad>
 
 use <v-wheels.scad>
 
@@ -24,27 +27,25 @@ use <v-wheels.scad>
 //Finish: Anodized Aluminum
 //Color: Black
 
-function bb_name(type)     = type[0]; //! Part code without shield type suffix
-function bb_size(type)     = type[1]; //! Size: 20, 40, 60, 80
-function bb_thickness(type)    = type[2]; //! Thick
-function bb_material(type) = type[3]; //! Material: "aluminium", "plastic"
-function bb_color(type)   = type[4]; //! Shield colour, "silver" for metal
+//function bb_name(type)     = type[0]; //! Part code without shield type suffix
+//function bb_size(type)     = type[1]; //! Size: 20, 40, 60, 80
+//function bb_thickness(type)    = type[2]; //! Thick
+//function bb_material(type) = type[3]; //! Material: "aluminium", "plastic"
+//function bb_color(type)   = type[4]; //! Shield colour, "silver" for metal
 
 function defined(a) = a != undef; 
 
 
 function plateBySize(size) = 
       size == 20
-    ? 1 
-    : size == 20.1
-    ? 7 
+    ? 0 
     : size == 40
-    ? 4
+    ? 1
     : size == 60
-    ? 5
+    ? 1
     : size == 80
-    ? 6 
-    : 2;
+    ? 1 
+    : 1;
         
 
 delta=0.01;
@@ -52,8 +53,37 @@ tolerance = 0.2;
 
 G_PLATE_20_PRINTED = ["VSlot Gantry Plate - 20mm 65x65", 20, 6, "plastic", "green"];
 G_PLATE_20_METAL = ["VSlot Gantry Plate - 20mm 65x65", 20, 3, "aluminium", "silver"];
+G_PLATE_40_PRINTED = ["VSlot_Gantry_Plate_40mm", 40, 3, "plastic", "green"];
 
-gantry_cart_20_3(G_PLATE_20_PRINTED);
+//gantry_cart_20_3(G_PLATE_20_PRINTED);
+
+//gantry_cart_40_3(G_PLATE_40_PRINTED);
+
+//$renderGantryHoles = false;
+
+renderGantryHoles    = is_undef($renderGantryHoles)    ? false  : $renderGantryHoles; 
+
+gantryXAxis();
+
+
+
+
+
+module gantryXAxis() {
+    plateXAxis();
+    
+    translate([30,0,0]) {
+        wheel_and_spacer(6.35);
+    }
+    
+    translate([-30,30,0]) {
+        wheel_and_spacer(6.35, eccentric= false);
+    }
+    
+    translate([-30,-30,0]) {
+        wheel_and_spacer(6.35, eccentric= false);
+    }
+}
 
 module gantry_cart_20_4(plate) {
     gantry_plate(plate,center = false);
@@ -91,6 +121,23 @@ module gantry_cart_20_3(plate) {
     }
 }
 
+
+module gantry_cart_40_3(plate) {
+    gantry_plate(plate,center = false);
+    
+    translate([30,0,0]) {
+        wheel_and_spacer(6.35);
+    }
+    
+    translate([-30,30,0]) {
+        wheel_and_spacer(6.35, eccentric= false);
+    }
+    
+    translate([-30,-30,0]) {
+        wheel_and_spacer(6.35, eccentric= false);
+    }
+}
+
 module gantry_plate(type, center=true) {
     if(bb_material(type) == "plastic") {
         stl(bb_name(type));
@@ -107,56 +154,8 @@ module gantry_plate(type, center=true) {
     
 }
 
-module wheel_and_spacer(h = 6.35, eccentric = true) {
-    if(eccentric) {
-        eccentric_spacer(h);
-    } else {
-        spacer(h);
-    }
-
-    shift = eccentric ? [0.5,1,h + 10.2/2] : [0,0,h + 10.2/2];
-           
-    translate(shift){
-        wheel();
-        rotate([0,180,0])
-        translate([0,0,17.6])
-        screw(M5_hex_screw, 30);
-        translate([0,0,h-1])
-            nut(M5_nut);
-    }
-}
-
-module gantry_cart_spacer_6_35_stl() spacer();
-
-module spacer(h = 6.35) {
-    hstr = h == 6.35 ? "6_35" : str(h);
-    stl(str("gantry_cart_spacer_", hstr));
-    translate([0,0,h])
-    rotate([0,180,0])
-    difference() {
-            cylinder(h, d = 10);
-            translate([0,0,-0.1])
-            cylinder(h+0.2, d = 5);
-    }    
-}
 
 
-module eccentric_spacer(h = 6.35) {
-    vitamin(str(
-        "Openbuilds Eccentric Spacer (h=", h, "mm)"
-    ));
-    translate([0,0,h])
-    rotate([0,180,0])
-    difference() {
-            union() {
-                color("red")
-                cylinder(h, d = 10, $fn=6);
-                cylinder(h+2.5, d = 7.12);
-            }
-            translate([0,1,-0.1])
-            cylinder(h+3, d = 5);
-    }
-}
 
 
 module oval_hole(length,diameter, height){
@@ -170,10 +169,9 @@ module oval_hole(length,diameter, height){
     cylinder(h=height, d=diameter);    
 }
 
-module plate (plate_type, thickness, center = true){
-    plate = plate_spec[plate_type];
-    echo(plate[2]);
-//    plate[2] = 20;
+module plate(plate_type, thickness, center = true){
+    plate = own_plates[plate_type];
+
     plate_thickness = defined(thickness) ? thickness : plate[2]; 
     
     shift = center ? -plate_thickness/2 : -plate_thickness;
@@ -184,20 +182,68 @@ module plate (plate_type, thickness, center = true){
             translate([-(plate[0]-plate[3])/2,-(plate[1]-plate[3])/2,0])
             minkowski(){
                 cube([plate[0]-plate[3],plate[1]-plate[3],plate_thickness/2]);
-                cylinder(h=plate_thickness/2, d=plate[3]);
+                if(renderGantryHoles) {
+                    cylinder(h=plate_thickness/2, d=plate[3]);
+                }
             }
             
-            //The holes
-            for (i=[4:len(plate)-1]){
-                translate([plate[i][2],plate[i][3],-delta])
-                oval_hole(
-                    height=plate_thickness+2*delta,
-                    diameter=plate[i][0],
-                    length=plate[i][1]
-                );
+            if(renderGantryHoles) {
+                //The holes
+                for (i=[4:len(plate)-1]){
+                    translate([plate[i][2],plate[i][3],-delta])
+                    oval_hole(
+                        height=plate_thickness+2*delta,
+                        diameter=plate[i][0],
+                        length=plate[i][1]
+                    );
+                }
             }
         }
 }
+
+own_plates = [
+//20mm Gantry Plate
+[65.5,65.5,3,3.36,
+    [3,6.5,-20.146,27.7],[3,6.5,0,27.7],[3,6.5,20.146,27.7],
+    [5,0,-19.85,20],[5,20.64,0,20],[7.2,0,19.85,20],
+    [5,0,-19.85,10],[5,0,0,10],[5,0,19.85,10],
+    [5,0,-19.85,0],[5,0,-10,0],[5,0,0,0],[5,0,10,0],[7.2,0,19.85,0],
+    [5,0,-19.85,-10],[5,0,0,-10],[5,0,19.85,-10],
+    [5,0,-19.85,-20],[5,20.64,0,-20],[7.2,0,19.85,-20],
+    [3,6.5,-20.146,-27.7],[3,6.5,0,-27.7],[3,6.5,20.146,-27.7]
+],
+
+//40mm Gantry Plate
+[75.5,75.5,3,3.36,
+
+    [5,0,-29.85,30.32],[5,0,-19.85,30.32],[5,20,0,30.32],[7.2,0,19.85,30.32],[7.2,0,29.85,30.32],
+    [5,0,-29.85,20.325],[5,0,-19.85,20.325],[5,0,-10,20.325],[5,0,0,20.325],[5,0,10,20.325],[5,0,19.85,20.325],[5,0,29.85,20.325],
+    [5,0,-14.825,14.82],[5,0,14.825,14.82],
+    [5,0,-29.85,10],[5,0,-19.85,10],[5,0,0,10],[5,0,19.85,10],[5,0,29.85,10],
+    [5,0,-29.85,0],[5,0,-19.85,0],[5,0,-10,0],[5,0,0,0],[5,0,10,0],[7.2,0,19.85,0],[7.2,0,29.85,0],
+    [5,0,-29.85,-10],[5,0,-19.85,-10],[5,0,0,-10],[5,0,19.85,-10],[5,0,29.85,-10],
+    [5,0,-14.825,-14.82],[5,0,14.825,-14.82],
+    [5,0,-29.85,-20.325],[5,0,-19.85,-20.325],[5,0,-10,-20.325],[5,0,0,-20.325],[5,0,10,-20.325],[5,0,19.85,-20.325],[5,0,29.85,-20.325],
+    [5,0,-29.85,-30.32],[5,0,-19.85,-30.32],[5,20,0,-30.32],[7.2,0,19.85,-30.32],[7.2,0,29.85,-30.32],
+
+],
+
+//Universal Gantry Plate
+[127,88,3,3.36,
+    [3,6.5,-20,38.02],[3,6.5,0,38.02],[3,6.5,20,38.02],
+    [5,0,-49.85,30.32],[5,0,-39.85,30.32],[5,0,-29.85,30.32],[5,0,-19.85,30.32],[5,20,0,30.32],[7.2,0,19.85,30.32],[7.2,0,29.85,30.32],[7.2,0,39.85,30.32],[7.2,0,49.85,30.32],
+    [5,0,-49.85,20.325],[5,0,-39.85,20.325],[5,0,-29.85,20.325],[5,0,-19.85,20.325],[5,0,-10,20.325],[5,0,0,20.325],[5,0,10,20.325],[5,0,19.85,20.325],[5,0,29.85,20.325],[5,0,39.85,20.325],[5,0,49.85,20.325],
+    [5,0,-14.825,14.82],[5,0,14.825,14.82],
+    [5,0,-29.85,10],[5,0,-19.85,10],[5,0,0,10],[5,0,19.85,10],[5,0,29.85,10],
+    [5,0,-49.85,0],[5,0,-39.85,0],[5,0,-29.85,0],[5,0,-19.85,0],[5,0,-10,0],[5,0,0,0],[5,0,10,0],[7.2,0,19.85,0],[7.2,0,29.85,0],[7.2,0,39.85,0],[7.2,0,49.85,0],
+    [5,0,-29.85,-10],[5,0,-19.85,-10],[5,0,0,-10],[5,0,19.85,-10],[5,0,29.85,-10],
+    [5,0,-14.825,-14.82],[5,0,14.825,-14.82],
+    [5,0,-49.85,-20.325],[5,0,-39.85,-20.325],[5,0,-29.85,-20.325],[5,0,-19.85,-20.325],[5,0,-10,-20.325],[5,0,0,-20.325],[5,0,10,-20.325],[5,0,19.85,-20.325],[5,0,29.85,-20.325],[5,0,39.85,-20.325],[5,0,49.85,-20.325],
+    [5,0,-49.85,-30.32],[5,0,-39.85,-30.32],[5,0,-29.85,-30.32],[5,0,-19.85,-30.32],[5,20,0,-30.32],[7.2,0,19.85,-30.32],[7.2,0,29.85,-30.32],[7.2,0,39.85,-30.32],[7.2,0,49.85,-30.32],
+    [3,6.5,-20,-38.02],[3,6.5,0,-38.02],[3,6.5,20,-38.02]
+],
+];
+
 plate_spec = [
 ["width","Depth","Thickness","Corner Radius",
     ["Hole Diameter","Hole Length (0 for circle)","X translation","Y translation"]
