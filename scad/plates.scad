@@ -3,7 +3,7 @@ include <NopSCADlib/utils/core/core.scad>
 
 
 sidePlateColor = "green";
-sidePlateOpacity = 0.5;
+sidePlateOpacity = 1;
 module bottom_plate(
         width, 
         heigth, 
@@ -14,27 +14,43 @@ module bottom_plate(
     module cut_angles() {
        t = thickness + 1; 
         union() {
-        translate([0,0,-t/2]) square(21);
-        translate([20,0,-t/2]) square(20);
-        translate([0,20, -t/2]) square(20)        ;
+        translate([0,0,-t/2]) square(20);
         }
     }
-    
+        
     module diff_plate() {
         render(convexity = 2) difference() {
             t = 1;
             translate([0,0,elevation]) {
-                    difference() {
-                square([width, heigth], center=true);
-                translate([width/2, heigth/2,0]) 
-                    mirror([1,1,0]) cut_angles();
-                translate([-width/2, -heigth/2,0]) 
-                    mirror([0,0,0]) cut_angles();        
-                translate([width/2, -heigth/2,0]) 
-                    mirror([1,0,0]) cut_angles();        
-                translate([-width/2, heigth/2,0]) 
-                    mirror([0,1,0]) cut_angles();        
+                difference() {
+                    square([width, heigth], center=true);
+                    translate([width/2, heigth/2,0]) 
+                        mirror([1,1,0]) cut_angles();
+                    translate([-width/2, -heigth/2,0]) 
+                        mirror([0,0,0]) cut_angles();        
+                    translate([width/2, -heigth/2,0]) 
+                        mirror([1,0,0]) cut_angles();        
+                    translate([-width/2, heigth/2,0]) 
+                        mirror([0,1,0]) cut_angles();        
+                    
+                        stepZ = (heigth-60) / 6;
+                        listZ = [ for (i = [30 : stepZ : heigth]) i ];
+                    //    echo(listZ);
+                        stepX = (width-60) / 6;
+                        listX = [ for (i = [30 : stepX : width]) i ];
+                    //    echo(listX);
+
+                    
+                    for(i = listX) {
+                        translate([-heigth/2 + i, -width/2+ 10, 0]) m5_hole(d = 5);
+                        translate([-heigth/2 + i, width/2 - 10, 0]) m5_hole(d = 5);
                     }
+                    
+                    for(i = listZ) {
+                        translate([-heigth/2 + 10, -width/2 + i, 0]) m5_hole(d = 5);
+                        translate([heigth/2 - 10, -width/2 + i, 0]) m5_hole(d = 5);
+                    }
+                }
             }
 
             children();
@@ -43,6 +59,8 @@ module bottom_plate(
 
     diff_plate() {projection() children();};
 }
+
+//bottom_plate(700,700);
 
 module m5_hole(d) {
     vitamin(str("M",d," Screw")); 

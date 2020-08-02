@@ -14,7 +14,7 @@ module vwheel_gantry(type, center = false, mirror = false) {
     zTranslation = center ? -22.2/2 : 0;
     rotate([90,0,90])
     translate([0,0,zTranslation]) {
-        triangle_plate(plate) { children(); }
+        vslot_plate(plate) { children(); }
         
         for (i=[0:len(holes)-1]){
             translate([holes[i][2],holes[i][3],0])
@@ -26,9 +26,9 @@ module vwheel_gantry(type, center = false, mirror = false) {
         if(double) {
             translate([0,0,21.8]) rotate([180,0,0])
             if(mirror) {
-                triangle_plate(plate) {children();}
+                vslot_plate(plate) {children();}
             } else {
-                triangle_plate(plate);
+                vslot_plate(plate);
             }
         }
     }

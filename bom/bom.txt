@@ -1,37 +1,37 @@
 Vitamins:
   3 Aliminium Flexible Shaft Ballscrew, D=19, d=8x5, L=25
   1 Glass/Mirror w=620, h=620
-121 M5 Screw
-121 M5 V-Slot Nut
+ 28 M5 Screw
+ 28 M5 V-Slot Nut
   5 Stepper motor NEMA17 x 40mm
   7 Openbuilds Eccentric Spacer (h=6mm)
- 18 V Wheel
- 36 Ball bearing 625-2RS 5mm x 16mm x 5mm
+ 15 V Wheel
+ 30 Ball bearing 625-2RS 5mm x 16mm x 5mm
   1 Belt GT2 x 6mm x 2890mm
   1 Belt GT2 x 6mm x 2862mm
   5 Extrusion E2020 x 580mm
   9 Extrusion E2020 x 700mm
   4 Extrusion E2020 x 800mm
+  3 Extrusion E2040 x 60mm
   1 Extrusion E2040 x 690mm
   2 Extrusion E2040 x 700mm
+  3 Leadscrew nut 8 x 8 RobotDigg
   6 Leadscrew 8 x 600mm, 8mm lead, 2 starts
- 18 Nut M5 x 2.7mm 
+ 15 Nut M5 x 2.7mm 
   2 Pulley GT2 idler 16 teeth
- 32 Screw M3 hex x 15mm
- 15 Screw M5 dome x 25mm
+ 20 Screw M3 hex x 15mm
+ 12 Screw M5 dome x 25mm
   3 Screw M5 dome x 35mm
- 32 Washer spring M3 x 1mm
- 18 Washer spring M5 x 1.6mm
- 32 Washer  M3 x 7mm x 0.5mm
+ 20 Washer spring M3 x 1mm
+ 15 Washer spring M5 x 1.6mm
+ 20 Washer  M3 x 7mm x 0.5mm
 
 Printed:
- 14 gantry_cart_spacer_6.stl
+ 11 gantry_cart_spacer_6.stl
  24 vslot_angle20.stl
   4 vslot_cube20.stl
 
 CNC cut:
-  1 back_plate_740x800x3.dxf
   1 bottom_plate_740x740x3.dxf
-  1 front_plate_740x800x3.dxf
-  1 side_plate_l_740x800x3.dxf
-  1 side_plate_r_740x800x3.dxf
+  3 gantry_sq_plate_40x65x3_3.dxf
+  2 gantry_sq_plate_75x75x3_45.dxf

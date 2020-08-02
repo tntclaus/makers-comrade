@@ -72,7 +72,7 @@ cubeConnectorColor = "orange";
     
 module main_assembly() {
     echo(str(baseFrontSize, " ", portalWidth));
-    case(400);
+    case(50);
 }
 
 
@@ -223,7 +223,7 @@ module case(positionZ = 0) {
 
     base();
     
-    walls();
+//    walls();
             
     top(positionZ,positionZ);
 }

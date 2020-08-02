@@ -13,7 +13,9 @@ openscad.echo: \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/rounded_rectangle.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/teardrops.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/polyholes.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/scad/axes/x-axis.scad \
 	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/scad/plates.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/leadnuts.scad \
 	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/scad/motors.scad \
 	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/leadscrew_couplers.scad \
 	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/vslot_connector_angle.scad \
@@ -28,6 +30,7 @@ openscad.echo: \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/maths.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/core/clip.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/pulley.scad \
+	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/scad/axes/z-axis.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/pulleys.scad \
 	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/vslot_rail.scad \
 	/Users/klaus/git/zap/3d-printers-and-cnc/3dprinter-i1/lib/vwheel.scad \
@@ -49,6 +52,7 @@ openscad.echo: \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/scs_bearing_block.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/circlips.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/utils/thread.scad \
+	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/leadnut.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/sheet.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/github/NopSCADlib/vitamins/nuts.scad \
 	/Users/klaus/Documents/OpenSCAD/libraries/NopSCADlib/vitamins/kp_pillow_blocks.scad \

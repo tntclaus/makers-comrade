@@ -25,9 +25,6 @@ module extrusion_w_angle(type, size, sides = [1,0,0,0], spacing = 0, center = tr
 }
 
 module vslot_rail(type, l, pos = 10, mirror = false, angles = false) {
-
-    
-    
     gantry = type[1];
     extrusion = type[2];
     length = l;
@@ -35,7 +32,11 @@ module vslot_rail(type, l, pos = 10, mirror = false, angles = false) {
     
     plate = gantry[1][0];
 
-    translate([0,0,plate[0]/2 + position]) vwheel_gantry(gantry, center=true, mirror = mirror) children();
+    translate([0,0,plate[0]/2 + position]) 
+        vwheel_gantry(gantry, center=true, mirror = mirror) 
+            children();
+    
+    
     
     exHeigth = extrusion_height(extrusion);
     
