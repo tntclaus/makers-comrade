@@ -5,5 +5,6 @@ stls/
 bom/
 old/
 deps/
+svgs/
 .DS_Store
 *.cbddlp
