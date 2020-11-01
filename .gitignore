@@ -2,6 +2,7 @@ openscad.echo
 openscad.log
 dxfs/
 stls/
+bom/
 old/
 deps/
 .DS_Store

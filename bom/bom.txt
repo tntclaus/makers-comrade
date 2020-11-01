@@ -3,35 +3,56 @@ Vitamins:
   1 Glass/Mirror w=620, h=620
  28 M5 Screw
  28 M5 V-Slot Nut
+  1 Stepper motor NEMA17 x 23mm
   5 Stepper motor NEMA17 x 40mm
   7 Openbuilds Eccentric Spacer (h=6mm)
- 15 V Wheel
- 30 Ball bearing 625-2RS 5mm x 16mm x 5mm
-  1 Belt GT2 x 6mm x 2890mm
-  1 Belt GT2 x 6mm x 2862mm
+ 18 V Wheel
+ 36 Ball bearing 625-2RS 5mm x 16mm x 5mm
+  1 Belt GT2 x 6mm x 2992mm
+  1 Belt GT2 x 6mm x 2992mm
+  1 Hot end E3D V6 direct 1.75mm
   5 Extrusion E2020 x 580mm
   9 Extrusion E2020 x 700mm
   4 Extrusion E2020 x 800mm
   3 Extrusion E2040 x 60mm
   1 Extrusion E2040 x 690mm
   2 Extrusion E2040 x 700mm
+ 24 Extrusion corner bracket 20
+  1 Fan 40mm x 11mm
   3 Leadscrew nut 8 x 8 RobotDigg
   6 Leadscrew 8 x 600mm, 8mm lead, 2 starts
- 15 Nut M5 x 2.7mm 
+  4 Nut M3 x 2.4mm nyloc
+ 14 Nut M4 x 3.2mm 
+ 18 Nut M5 x 2.7mm 
+  2 RAMPS Endstop Switch
   2 Pulley GT2 idler 16 teeth
+  8 Pulley GT2 idler smooth 12mm
+  4 Screw M3 dome x 20mm
  20 Screw M3 hex x 15mm
- 12 Screw M5 dome x 25mm
+ 48 Screw M4 cap x  8mm
+  2 Screw М4 DIN 965/ГОСТ 17475 x 20mm
+  4 Screw М4 DIN 965/ГОСТ 17475 x 40mm
+ 15 Screw M5 dome x 25mm
   3 Screw M5 dome x 35mm
+ 48 Nut M4 sliding T
  20 Washer spring M3 x 1mm
- 15 Washer spring M5 x 1.6mm
- 20 Washer  M3 x 7mm x 0.5mm
+  6 Washer spring M4 x 1.2mm
+ 18 Washer spring M5 x 1.6mm
+ 24 Washer  M3 x 7mm x 0.5mm
+ 66 Washer  M4 x 9mm x 0.8mm
 
 Printed:
- 11 gantry_cart_spacer_6.stl
- 24 vslot_angle20.stl
+  1 endstop_x_mount.stl
+  1 endstop_y_mount.stl
+ 14 gantry_cart_spacer_6.stl
   4 vslot_cube20.stl
 
 CNC cut:
   1 bottom_plate_740x740x3.dxf
-  3 gantry_sq_plate_40x65x3_3.dxf
-  2 gantry_sq_plate_75x75x3_45.dxf
+  2 gantry_poly_plate_xx3_10.dxf
+  2 gantry_sq_plate_75x75x3_48.dxf
+  3 gantry_sq_plate_90x65x3_22.dxf
+  1 heatbed_bottom_plate_620x620.dxf
+  2 motor_mount_plate.dxf
+  8 pulley_corner_plate.dxf
+  3 z_holder_plug_plate.dxf

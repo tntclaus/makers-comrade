@@ -20,11 +20,14 @@ include <../lib/vslot_rails.scad>
 include <../lib/vslot_connectors.scad>
 include <../lib/leadscrew_couplers.scad>
 
+include <pulley_and_motor_plates.scad>
+
 use <heatbed.scad>
 include <motors.scad>
-include <plates.scad>
+include <case_plates.scad>
 include <axes/z-axis.scad>
 include <axes/x-axis.scad>
+include <axes/y-axis.scad>
 
 
 V2020 = E2020;
@@ -40,13 +43,13 @@ motorModel = NEMA17M;
 
 workingSpaceSize = 600;
 
-workingSpaceSizeMaxZ = workingSpaceSize - 30;
-workingSpaceSizeMinZ = 0;
+workingSpaceSizeMaxZ = workingSpaceSize - 10;
+workingSpaceSizeMinZ = 20;
 
-workingSpaceSizeMaxX = workingSpaceSize - 30;
-workingSpaceSizeMinX = 0;
-workingSpaceSizeMaxY = workingSpaceSize;
-workingSpaceSizeMinY = 0;
+workingSpaceSizeMaxX = workingSpaceSize - 18;
+workingSpaceSizeMinX = 12;
+workingSpaceSizeMaxY = workingSpaceSize + 20;
+workingSpaceSizeMinY = 70;
 
 baseFrontSize = workingSpaceSize+40*2+20;
 
@@ -55,6 +58,10 @@ legElevation = 60;
 // Основание
 baseLength = baseFrontSize/2+10;
 portalWidth = baseFrontSize + 40;
+
+// Стенки
+wallThickness = 4;
+topElevation = 160;
 
 echo(str(
     "Build volume = ",
@@ -68,11 +75,12 @@ frontPlateThickness = 3;
 
 //colors
 cubeConnectorColor = "orange";
-
+//wallColor = "#33aaee99";
+wallColor = "#6633ff";
     
 module main_assembly() {
     echo(str(baseFrontSize, " ", portalWidth));
-    case(50);
+    case(75);
 }
 
 
@@ -90,7 +98,7 @@ module extrusion_w_cube(type, size) {
 module extrusion_w_cube_angles(type, size, spacing, sides = [1,0,0,0]) {
     extrusion_w_angle(type, size, sides = sides);
     translate([0, 0, -size/2-10]) color(cubeConnectorColor)
-        vslot_connector_cube(VCUBE_20);
+        vslot_connector_cube(VCUBE_20);        
 }
 
 
@@ -120,99 +128,115 @@ module case(positionZ = 0) {
                     extrusion_w_angle(V2020, sizeWithLegs, sides = [0,0,0,0]);
         }
         
-//        translate([-baseLength+70, 0,0 ]) zAxisMotor();
-//        translate([baseLength-70, 0,0 ]) zAxisMotor();
-//        mirror([0,1,0])        zAxisMotor();
     }
     
-    module top(posX, posY) {
+    module top(posXinc, posY) {
+        posX = 
+    posXinc > workingSpaceSizeMaxX 
+        ? workingSpaceSizeMaxX : 
+        posXinc < workingSpaceSizeMinX ? workingSpaceSizeMinX :
+        posXinc;
+        
+        
         elevation = baseFrontSize + 30;
+        
+        module corner_elevation_assembly(baseWAxialShift) {
+            corner3 = [baseWAxialShift+10, -baseWAxialShift+30,10];
+            translate(corner3) rotate([0,0,180]) 
+                 color("silver") linear_extrude(3)
+                    pulley_corner_plate();
+        }
         //todo уголки для соединения 
         translate([0,0,elevation]) {
-            motorAxialShift = 10;
+            motorAxialShiftY = 31+wallThickness;
+            motorAxialShiftX = baseLength;
+            beltsSpacing = 18;
             translate([0,-baseLength,0]) {
                 rotate([0,90,0])
                     extrusion_w_angle(E2020, baseFrontSize, sides = [0,1,1,0]);
                 
-                translate([-baseLength+motorAxialShift, 10, 45]) xyAxisMotor();
-                translate([baseLength-motorAxialShift, 10, 60]) xyAxisMotor();
+                translate([-baseLength, -motorAxialShiftY, 10]) xyAxisMotor(left = true);
+                translate([baseLength, -motorAxialShiftY, 10+beltsSpacing]) xyAxisMotor(left = false);
             }
 
          
             translate([0,baseLength,0]) {
                 rotate([0,90,0])
                     extrusion_w_angle(E2020, baseFrontSize, sides = [1,1,0,0]);
-            
-
             }
-            baseWAxialShift = baseLength - motorAxialShift;
+
+            baseWAxialShift = baseLength;
+            idler = GT2x20_plain_idler;
+            
+            
+            corner1 = [-baseWAxialShift-10, baseWAxialShift-30,10];
+            corner2 = [baseWAxialShift-30, baseWAxialShift+10,10];
+
+            
+            translate(corner1) corner_pulley_block(6, 26);
+            translate(corner2) {
+                rotate([0,0,-90]) corner_pulley_block(6, 26);
+                translate([-10,-31,-5])
+                rotate([0,-90,180]) endstop_y();
+            }
+    
+            corner_elevation_assembly(baseWAxialShift);
+            translate_z(3) corner_elevation_assembly(baseWAxialShift);
+            translate_z(6) corner_elevation_assembly(baseWAxialShift);
+            translate_z(9) corner_elevation_assembly(baseWAxialShift);
+            translate_z(12) corner_elevation_assembly(baseWAxialShift);
+            translate_z(15) corner_elevation_assembly(baseWAxialShift);
+
+            adjAdjY = 5;
+            caretThick = 3 * 2 + 6*2 + 11;
+            beltThick = belt_thickness(GT2x6);
+            pulleyPR = pulley_pr(idler);
+            adjPosY = baseLength - (posY - pulleyPR) - 0.5 + adjAdjY;
+            adjPosY1 = baseLength - (posY + caretThick + beltThick) + adjAdjY;
+            adjPosY2 = baseLength - (posY + pulleyPR + beltThick + caretThick) + adjAdjY;
+            
+            adjPosX = posX+75;
+            
             path1 = [ 
                 //motor
-                [baseWAxialShift, -baseWAxialShift, pulley_pr(GT2x16_toothed_idler)],
-                [baseWAxialShift, -baseWAxialShift + posY + 37, pulley_pr(GT2x16_plain_idler)],
-                [-baseWAxialShift, -baseWAxialShift + posY + 37, pulley_pr(GT2x16_plain_idler)],            
-                [-baseWAxialShift, baseWAxialShift, pulley_pr(GT2x16_plain_idler)],
-                [baseWAxialShift, baseWAxialShift, pulley_pr(GT2x16_plain_idler)],
-//                [baseLength, posY, pulley_pr(GT2x16_plain_idler)],
-                //                [-baseLength, -baseLength, pulley_pr(GT2x16_plain_idler)],
-
+                [motorAxialShiftX, -baseWAxialShift-motorAxialShiftY, pulley_pr(GT2x16_toothed_idler)],
+                [baseWAxialShift-12, adjPosY2, -pulley_pr(idler)],
+                [-baseWAxialShift+adjPosX, adjPosY1, 1],
+                [-baseWAxialShift+adjPosX-75/2, adjPosY - pulleyPR + beltThick, 1],
+                [-baseWAxialShift-1, adjPosY, pulley_pr(idler)],
+                [-baseWAxialShift-1, baseWAxialShift+1, pulley_pr(GT2x20_plain_idler)],
+                [baseWAxialShift+1, baseWAxialShift+1, pulley_pr(GT2x20_plain_idler)],
             ];
+            
+
+            echo(caretThick, belt_thickness(GT2x6));
+            
             path2 = [ 
                 //motor
-                [-baseWAxialShift, -baseWAxialShift, pulley_pr(GT2x16_toothed_idler)],
-                [-baseWAxialShift, -baseWAxialShift + posY + 60, pulley_pr(GT2x16_plain_idler)],
-                [baseWAxialShift, -baseWAxialShift + posY + 60, pulley_pr(GT2x16_plain_idler)],            
-                [baseWAxialShift, baseWAxialShift, pulley_pr(GT2x16_plain_idler)],
-                [-baseWAxialShift, baseWAxialShift, pulley_pr(GT2x16_plain_idler)],
-//                [baseLength, posY, pulley_pr(GT2x16_plain_idler)],
-                //                [-baseLength, -baseLength, pulley_pr(GT2x16_plain_idler)],
-
+                [-motorAxialShiftX, -baseWAxialShift-motorAxialShiftY, pulley_pr(GT2x16_toothed_idler)],
+                [-baseWAxialShift-1, baseWAxialShift+1, pulley_pr(idler)],
+                [baseWAxialShift+1, baseWAxialShift+1, pulley_pr(idler)],
+                [baseWAxialShift+1, adjPosY, pulley_pr(idler)],
+                [-baseWAxialShift+adjPosX, adjPosY - pulleyPR + beltThick, 1],
+                [-baseWAxialShift+adjPosX-75/2, adjPosY1, 1],                
+                [-baseWAxialShift+12, adjPosY2 , -pulley_pr(idler)],
             ];
-            translate([0,0,60-15])
-                color("red") belt(GT2x6, path1);
+            translate([0,0,24.1+beltsSpacing])
+                color("#ff000099") belt(GT2x6, path1);
                 
                 
-            translate([0,0,60-25])
-                color("green") belt(GT2x6, path2);
+            translate([0,0,24.1])
+                color("#00ff0099") belt(GT2x6, path2);
 
         }
     }
     
-        
-    
-    
-    
+
+    // Y/X AXIS
     xAxisLength = baseFrontSize-10;
-    
-    module yAxisRails(position = 0, mirrored = false) {
-        positionAdj = 
-            position > workingSpaceSizeMaxY 
-                ? workingSpaceSizeMaxY : 
-                position < workingSpaceSizeMinY ? workingSpaceSizeMinY :
-                position;
-        
-        elevation = baseFrontSize + 20;
-        
-        translate([baseLength, -baseLength+10, elevation]) rotate([90,180,180]) {
-                vslot_rail(
-                    VSLOT_RAIL_2040_S, 
-                    baseFrontSize, 
-                    pos = positionAdj+15, 
-                    mirror = true
-                ) {
-                    if(mirrored) translate([0, 0, xAxisLength/2]) 
-                        rotate([90,90,-90]) 
-                            xAxisRails(positionAdj, xAxisLength);
-                }
-            }
-        
-
-    }
-    
-    
-
-    yAxisRails(positionZ);
-    mirror([1,0,0]) yAxisRails(positionZ, mirrored = true);
+    yAxisRails(positionZ, baseFrontSize, baseLength);
+    mirror([1,0,0]) 
+        yAxisRails(positionZ, baseFrontSize, baseLength, xAxisLength, mirrored = true);
     
     bottom_plate_740x740x3_dxf(
         false
@@ -223,6 +247,7 @@ module case(positionZ = 0) {
 
     base();
     
+//    color(wallColor) 
 //    walls();
             
     top(positionZ,positionZ);
@@ -270,7 +295,7 @@ module bottom_plate_740x740x3_dxf(dxf = true) {
         color(sidePlateColor, sidePlateOpacity)    
         render(convexity = 2)  
             translate([0,0,-3])
-                linear_extrude(3) 
+                linear_extrude(wallThickness) 
                     bottom_plate(
                         portalWidth, 
                         portalWidth
@@ -280,77 +305,122 @@ module bottom_plate_740x740x3_dxf(dxf = true) {
     }
 }
 
-module back_plate_740x800x3_dxf(dxf = true) {
-    if(dxf)
+module back_plate_740x800x4_dxf(dxf = true) {
+    module side() {
         back_plate(
             portalWidth, 
             portalWidth + legElevation, 
-            legElevation);
+            legElevation,
+            wallThickness,
+            topElevation);
+    }
+    
+    if(dxf)
+        side();
     else {
         color(sidePlateColor, sidePlateOpacity)    
         render(convexity = 2)  
-                linear_extrude(3) 
-                    back_plate(
-                        portalWidth, 
-                        portalWidth + legElevation, 
-                        legElevation);
+                linear_extrude(wallThickness) 
+                    side();
     }
 }
 
-module front_plate_740x800x3_dxf(dxf = true) {
-    if(dxf)
+module front_plate_740x800x4_dxf(dxf = true) {
+    module side() {
         front_plate(
             portalWidth, 
             portalWidth + legElevation, 
-            legElevation);
+            legElevation,
+            wallThickness,
+            topElevation);
+    }
+    if(dxf)
+        side();
     else {
         color(sidePlateColor, sidePlateOpacity)    
         render(convexity = 2)  
-            linear_extrude(3) 
-                front_plate(
-                    portalWidth, 
-                    portalWidth + legElevation, 
-                    legElevation);
+            linear_extrude(wallThickness) 
+                side();
+        
+        translate([0,0,-1.5]) 
+        plastic_doors(
+            portalWidth, 
+            portalWidth + legElevation, 
+            legElevation, 4, angle = 90);
     }
 }
 
-module side_plate_l_740x800x3_dxf(dxf = true) {
-    if(dxf)
+module side_plate_l_740x800x4_dxf(dxf = true) {
+    module side() {
         side_plate_l(
             portalWidth, 
             portalWidth + legElevation, 
-            legElevation);
+            legElevation,
+            wallThickness,
+            topElevation);
+    }
+    if(dxf)
+        side();
     else {
         color(sidePlateColor, sidePlateOpacity)   
         render(convexity = 2)  
             rotate([90,0,0]) 
-                linear_extrude(3) 
-                    side_plate_l(
-                        portalWidth, 
-                        portalWidth + legElevation, 
-                        legElevation);
+                linear_extrude(wallThickness) 
+                    side();
+        
+        rotate([90,0,0]) 
+        translate([0, 0, 4]) 
+            plastic_window(portalWidth + legElevation, legElevation, 3);
     }
 }
 
-module side_plate_r_740x800x3_dxf(dxf = true) {
+module plastic_window_800x60x3_stl() {
+    $fn = 90;
+    plastic_window(800, 60, 3);
+}
+
+module side_plate_r_740x800x4_dxf(dxf = true) {
+    module side() {
+        difference() {
+            side_plate_r(
+                portalWidth, 
+                portalWidth + legElevation, 
+                legElevation,
+                workingSpaceSize/2-20,
+                wallThickness,
+                topElevation
+            );
+            translate([-5,portalWidth + legElevation+10,0]) {
+                hull() {
+                circle(d = 10);
+                translate([10,0,0]) circle(d = 10);
+                }
+            }
+            
+            
+            translate([30,portalWidth + legElevation+25,0]) {
+                hull() {
+                circle(d = 10);
+                translate([0,10,0]) circle(d = 10);
+                }
+            }
+            
+        }
+    }
     if(dxf)
-        side_plate_r(
-            portalWidth, 
-            portalWidth + legElevation, 
-            legElevation,
-            workingSpaceSize/2-20
-        );
+        side();
     else {
         color(sidePlateColor, sidePlateOpacity)    
         render(convexity = 2)  
             rotate([90,0,0]) 
-                linear_extrude(3) 
-                    side_plate_r(
-                        portalWidth, 
-                        portalWidth + legElevation, 
-                        legElevation,
-                        workingSpaceSize/2-20
-                    );  
+                linear_extrude(wallThickness) 
+                    side();
+        rotate([90,0,0]) {
+            translate([workingSpaceSize/2-20, 0, -4]) 
+                    plastic_window(portalWidth + legElevation, legElevation, 3);
+            translate([-workingSpaceSize/2+20, 0, -4]) 
+                plastic_window(portalWidth + legElevation, legElevation, 3);
+        }
     }
 }
 
@@ -359,40 +429,45 @@ module walls() {
     //back
     translate([portalWidth/2,0,-legElevation]) 
         rotate([90,0,90])
-            back_plate_740x800x3_dxf(false);
+            back_plate_740x800x4_dxf(false);
 
     //front
-    translate([-portalWidth/2-3,0,-legElevation]) 
-        rotate([90,0,90])
-            front_plate_740x800x3_dxf(false);
+    translate([-portalWidth/2-wallThickness,0,-legElevation]) 
+        rotate([90,0,90]) {
+            front_plate_740x800x4_dxf(false);
+        }
     
     //left
-    translate([0,-portalWidth/2,-legElevation]) 
-            side_plate_l_740x800x3_dxf(false);
+    translate([0,-portalWidth/2,-legElevation])  {
+            side_plate_l_740x800x4_dxf(false);
+    }
     
+//    translate([portalWidth/2,-portalWidth/2,portalWidth+topElevation+10])
+//    mirror([1,0,0])
+//    extrusion_corner_bracket(
+//        E20_corner_bracket
+//    , 
+//        screw_type = M5_cs_cap_cross_screw, 
+//        nut_type = M5_nut
+//    );
     
     //right
-    translate([0,portalWidth/2+3,-legElevation]) 
-        side_plate_r_740x800x3_dxf(false);   
+    translate([0,portalWidth/2+wallThickness,-legElevation]) 
+        side_plate_r_740x800x4_dxf(false);   
 }
 
 
 
-//
-//module screwM5x15(rotation = [0,90,0]) {
-//    rotate(rotation) {
-//        screw(M5_pan_screw, 15);
-//        translate([0,0,-2]) spring_washer(M5_washer);
-//    }
-//}
-//
-//
-//
-//
-//
-//
-module xyAxisMotor() {
-    rotate([0,90,0]) motorPulley(6, NEMA17M, GT2x16_toothed_idler, 11);
+module xyAxisMotor(left = false) {
+    color("silver") if(left) {
+        linear_extrude(3) mirror([0,1,0]) 
+            motorMountPlate(NEMA17M, wallThickness); 
+    } else {
+        linear_extrude(3) mirror([1,0,0]) mirror([0,1,0]) 
+            motorMountPlate(NEMA17M, wallThickness);
+    }
+    
+    rotate([0,-90,0]) motorPulley(6, NEMA17M, GT2x16_toothed_idler, 11);
 //    motorPulley(6, NEMA17M, GT2x16_toothed_idler, 4);
 }
 
@@ -425,23 +500,3 @@ module zAxisMotor(motorTranslation = 0, diff = false) {
         );
     }
 }
-//
-//
-//module xAxisMotorHolder(motor) {
-//
-//    thickness = 3;
-//    offsetW = 0;
-//    offsetD = 0;
-//    
-//    width = NEMA_width(motor) + offsetW;
-//    depth = NEMA_width(motor) + offsetD;
-//    color("blue") translate([-offsetD/2,offsetW/2,thickness/2]) difference() {
-//        rounded_rectangle([depth,width,thickness], thickness, center = true);
-//
-//        translate([offsetD/2,-offsetW/2,0])
-//        drill(NEMA_boss_radius(motor), thickness+2);
-//        
-////        translate([0,22,0])
-////        slot(3, depth/2, h = thickness+2);
-//    }
-//}

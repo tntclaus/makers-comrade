@@ -101,6 +101,7 @@ module heatBed(width, depth, padding) {
             heatBedHeater(width, depth, padding);
             translate([0,0,5/2]) color("SteelBlue", 0.5)
                 heatBedGlass(width+padding, depth+padding);
+            heatBedBottomPlate(width, depth, padding);
         }
         co = [[1,1],[-1,1], [-1,-1], [1,-1]];
         for(i= [0:3]) {
@@ -113,3 +114,39 @@ module heatBed(width, depth, padding) {
     }
 
 }
+
+module heatbed_bottom_plate_620x620_dxf() {
+    width = 620;
+    heigth = 620;
+    offs = 20;
+    stepY = (heigth-20) / 8;
+    listY = [ for (i = [10 : stepY : heigth]) i ];
+//    echo(listZ);
+    stepX = (width-20) / 8;
+    listX = [ for (i = [10 : stepX : width]) i ];
+        
+    function firstOrLast(cX, cY) = 
+            cX == 10 ? true : 
+            cX == width - 10 ? true :
+            cY == 10 ? true :
+            cY == heigth - 10 ? true :
+            false;
+    
+    difference() {
+        rounded_square([620, 620], r = 3, center=true);
+        for(y = listY)
+            for(x = listX)
+                translate([x-width/2, y-heigth/2, 0]) 
+                    if(firstOrLast(x, y))
+                        circle(d = 5);        
+                    else 
+                        circle(d = 3);        
+    }
+}
+
+module heatBedBottomPlate(width, depth, padding) {
+    dxf(str("heatbed_bottom_plate_", width + padding,"x", depth + padding));
+    translate_z(-4) render() linear_extrude(4) heatbed_bottom_plate_620x620_dxf();
+}
+
+//heatBedBottomPlate(500,500,10);

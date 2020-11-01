@@ -1,41 +1,35 @@
 include <NopSCADlib/utils/core/core.scad>
+include <NopSCADlib/vitamins/screws.scad>
 include <NopSCADlib/vitamins/extrusions.scad>
+include <NopSCADlib/vitamins/hot_ends.scad>
+
+include <NopSCADlib/vitamins/pcbs.scad>
 
 include <../screw_assemblies.scad>
 include <../../lib/leadscrew_couplers.scad>
 include <../../lib/vwheel_gantries.scad>
 include <../../lib/vslot_rails.scad>
+include <../endstops_xy.scad>
 
-//workingSpaceSizeMaxX  = 1000;
-//workingSpaceSizeMinX = 0;
+use <../mk8_hot_end.scad>
 
-
-
-MOUNTS = [[5,0,-29.85,30.32],[5,0,-19.85,30.32],[5,20,0,30.32],[7.2,0,19.85,30.32],[7.2,0,29.85,30.32],
-    [5,0,-29.85,20.325],[5,0,-19.85,20.325],[5,0,-10,20.325],[5,0,0,20.325],[5,0,10,20.325],[5,0,19.85,20.325],[5,0,29.85,20.325],
-    [5,0,-14.825,14.82],[5,0,14.825,14.82],
-    [5,0,-29.85,10],[5,0,-19.85,10],[5,0,0,10],[5,0,19.85,10],[5,0,29.85,10],
-    [5,0,-29.85,0],[5,0,-19.85,0],[5,0,-10,0],[5,0,0,0],[5,0,10,0],[7.2,0,19.85,0],[7.2,0,29.85,0],
-    [5,0,-29.85,-10],[5,0,-19.85,-10],[5,0,0,-10],[5,0,19.85,-10],[5,0,29.85,-10],
-    [5,0,-14.825,-14.82],[5,0,14.825,-14.82],
-    [5,0,-29.85,-20.325],[5,0,-19.85,-20.325],[5,0,-10,-20.325],[5,0,0,-20.325],[5,0,10,-20.325],[5,0,19.85,-20.325],[5,0,29.85,-20.325],
-    [5,0,-29.85,-30.32],[5,0,-19.85,-30.32],[5,20,0,-30.32],[7.2,0,19.85,-30.32],[7.2,0,29.85,-30.32],
-];
-
-X_PLATE = [[75,75], 5,      3,        VW_HOLES_40x3,  MOUNTS];
-
-UNIVERSAL_75x75_GANTRY = ["", X_PLATE, [  D_XTREME_VW_SPACER,
-                                          D_XTREME_VW_ECCENT,
-                                          D_XTREME_VW_SPACER], 40];
+use <../extruder_mount.scad>
 
 
-X_RAIL = ["", UNIVERSAL_75x75_GANTRY, E2040];
 
-module gantry_sq_plate_75x75x3_45_dxf() {
+include <carets.scad>
+include <../fan_duct/fan_duct.scad>
+
+
+
+
+module gantry_sq_plate_75x75x3_48_dxf() {
     projection()     vslot_plate(X_PLATE);
 }
 
-//gantry_sq_plate_75x75x3_3_dxf();
+//gantry_sq_plate_75x75x3_48_dxf();
+
+
 
 module xAxisRails(position = 0, xAxisLength) {
     positionAdj = 
@@ -48,10 +42,38 @@ module xAxisRails(position = 0, xAxisLength) {
         vslot_rail(
                 X_RAIL, 
                 xAxisLength, 
-                pos = positionAdj+15, 
-                mirror = true
-            );
+                pos = positionAdj, 
+                mirror = false
+            ) {
+//                translate([0,0,20]) rotate([-90,0,90]) mk8_hot_end_assembly();
+
+                translate([5.25,-4.4,25])
+                rotate([90,0,-90])
+                    titan_extruder_assembly();
+                    
+                rotate([90,0,-90])
+                translate([4.4,25,-64]) {
+                    translate([17,-53.5,54])
+                    rotate([90,0,0])
+                    screw(M6_cap_screw, 4);
+                    
+                    translate([-14.4,-53.5,63.9])
+                    rotate([90,0,0])
+                    screw(M6_cap_screw, 4);
+                    
+                    fanduct();
+                }
+                
+
+                
+                translate([33,35.2,-28])
+                rotate([0,180,0])
+                endstop_x();
+            }
     }
 }
 
-//xAxisRails(0, 1000);
+
+//workingSpaceSizeMaxX  = 1000;
+//workingSpaceSizeMinX = 0;
+//xAxisRails(20, 150);
