@@ -26,7 +26,6 @@ use <heatbed.scad>
 include <motors.scad>
 include <case_plates.scad>
 include <axes/z-axis.scad>
-include <axes/x-axis.scad>
 include <axes/y-axis.scad>
 
 
@@ -201,8 +200,8 @@ module case(positionZ = 0) {
                 //motor
                 [motorAxialShiftX, -baseWAxialShift-motorAxialShiftY, pulley_pr(GT2x16_toothed_idler)],
                 [baseWAxialShift-12, adjPosY2, -pulley_pr(idler)],
-                [-baseWAxialShift+adjPosX, adjPosY1, 1],
-                [-baseWAxialShift+adjPosX-75/2, adjPosY - pulleyPR + beltThick, 1],
+                [baseWAxialShift-adjPosX+75/2, adjPosY1, 1],
+                [baseWAxialShift-adjPosX, adjPosY - pulleyPR + beltThick, 1],
                 [-baseWAxialShift-1, adjPosY, pulley_pr(idler)],
                 [-baseWAxialShift-1, baseWAxialShift+1, pulley_pr(GT2x20_plain_idler)],
                 [baseWAxialShift+1, baseWAxialShift+1, pulley_pr(GT2x20_plain_idler)],
@@ -217,8 +216,8 @@ module case(positionZ = 0) {
                 [-baseWAxialShift-1, baseWAxialShift+1, pulley_pr(idler)],
                 [baseWAxialShift+1, baseWAxialShift+1, pulley_pr(idler)],
                 [baseWAxialShift+1, adjPosY, pulley_pr(idler)],
-                [-baseWAxialShift+adjPosX, adjPosY - pulleyPR + beltThick, 1],
-                [-baseWAxialShift+adjPosX-75/2, adjPosY1, 1],                
+                [baseWAxialShift-adjPosX+75/2, adjPosY - pulleyPR + beltThick, 1],
+                [baseWAxialShift-adjPosX, adjPosY1, 1],                
                 [-baseWAxialShift+12, adjPosY2 , -pulley_pr(idler)],
             ];
             translate([0,0,24.1+beltsSpacing])
@@ -234,7 +233,7 @@ module case(positionZ = 0) {
 
     // Y/X AXIS
     xAxisLength = baseFrontSize-10;
-    yAxisRails(positionZ, baseFrontSize, baseLength);
+    yAxisRails(positionZ, baseFrontSize, baseLength, xAxisLength);
     mirror([1,0,0]) 
         yAxisRails(positionZ, baseFrontSize, baseLength, xAxisLength, mirrored = true);
     

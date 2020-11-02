@@ -15,10 +15,8 @@ use <../mk8_hot_end.scad>
 
 use <../extruder_mount.scad>
 
-
-
 include <carets.scad>
-include <../fan_duct/fan_duct.scad>
+use <../fan_duct/fan_duct.scad>
 
 
 
@@ -60,7 +58,8 @@ module xAxisRails(position = 0, xAxisLength) {
                     translate([-14.4,-53.5,63.9])
                     rotate([90,0,0])
                     screw(M6_cap_screw, 4);
-                    
+
+                    translate([0,-10,0]) 
                     fanduct();
                 }
                 

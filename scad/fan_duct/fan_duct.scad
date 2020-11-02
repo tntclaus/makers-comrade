@@ -312,7 +312,7 @@ module fanduct(part)
     
 
     color("teal")
-//    render()
+    render()
     mirrorcopy(X)
     {
         duct(A=A, fanduct_wallthick=fanduct_wallthick, N=$fn, $debug_mode=true);
@@ -353,4 +353,4 @@ if(false)
    $debug_mode=true;
    fanduct();
 }
-fanduct();
+//fanduct();

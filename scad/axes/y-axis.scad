@@ -48,7 +48,7 @@ module yAxisRails(position = 0, size, baseLength, xAxisLength, mirrored = false)
                     pos = positionAdj, 
                     mirror = true
                 ) {
-                    if(mirrored) { 
+                    if(!mirrored) { 
                         translate([-xAxisLength/2-15, 0, 20])  
                                 xAxisRails(position, xAxisLength);
                     }
