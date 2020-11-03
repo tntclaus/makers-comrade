@@ -51,15 +51,15 @@ module xAxisRails(position = 0, xAxisLength) {
                     
                 rotate([90,0,-90])
                 translate([4.4,25,-64]) {
-                    translate([17,-53.5,54])
-                    rotate([90,0,0])
-                    screw(M6_cap_screw, 4);
-                    
-                    translate([-14.4,-53.5,63.9])
-                    rotate([90,0,0])
-                    screw(M6_cap_screw, 4);
+//                    translate([17,-53.5,54])
+//                    rotate([90,0,0])
+//                    screw(M6_cap_screw, 4);
+//                    
+//                    translate([-14.4,-53.5,63.9])
+//                    rotate([90,0,0])
+//                    screw(M6_cap_screw, 4);
 
-                    translate([0,-10,0]) 
+                    translate([0,-1,0]) 
                     fanduct();
                 }
                 
@@ -73,6 +73,6 @@ module xAxisRails(position = 0, xAxisLength) {
 }
 
 
-//workingSpaceSizeMaxX  = 1000;
-//workingSpaceSizeMinX = 0;
-//xAxisRails(20, 150);
+workingSpaceSizeMaxX  = 1000;
+workingSpaceSizeMinX = 0;
+xAxisRails(20, 150);
