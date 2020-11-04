@@ -82,6 +82,66 @@ module fanduct_placed(stl = false) {
                 
 }
 
+module cableChainHolder_stl() {
+    cableChainHolder();
+}
+
+module cableChainHolder() {
+
+    stl("cableChainHolder");
+    
+    difference() {
+        translate([0.1,0,12]) 
+        color("blue")
+        union() {
+            translate_z(-10) 
+            cube([12,10,40]);
+            translate_z(-10) 
+            cube([24,4,60]);
+            translate_z(3) 
+            cube([33,4,47]);
+        }
+        
+        color("red")
+        translate([-40,4.5,31.2]) {
+            rotate([0,90,0]) {
+                cylinder(d = 4.2, h = 58);
+                translate([0,0,52])
+                nut_trap(M4_cap_screw, M4_nut, depth = 6, h = 6);
+            }
+        }
+        
+        color("red")        
+        translate([17.1,2,10])
+        rotate([-90,0,0])
+        cylinder(d = 10,h = 20);
+        
+        color("red")        
+        translate([17.1,-1,10])
+        rotate([-90,0,0])
+        cylinder(d = 5,h = 20);
+
+        color("red")        
+        translate([7.1,-2,20])
+        rotate([-90,0,0])
+        cylinder(d = 5.2,h = 20);
+
+
+        color("red")        
+        translate([27.1,-2,20])
+        rotate([-90,0,0])
+        cylinder(d = 5.2,h = 20);
+        
+        color("red")        
+        translate([27.1,-2,30])
+        rotate([-90,0,0])
+        cylinder(d = 5.2,h = 20);        
+
+
+        
+    }
+}
+
 
 module xAxisRails(position = 0, xAxisLength) {
     positionAdj = 
@@ -106,6 +166,11 @@ module xAxisRails(position = 0, xAxisLength) {
                 fanduct_placed();
                 
                 endstop_x_placed();
+                
+                rotate([90,180,-90])
+                translate([3.1,27.9])
+
+                cableChainHolder();
             }
     }
 }
