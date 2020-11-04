@@ -6,13 +6,17 @@ fanduct_wallthick=1.2;
 fanduct_throat_size=[15.3,19.5];
 fanduct_throat_size_withwall = fanduct_throat_size+[fanduct_wallthick, fanduct_wallthick];
 
-
+include <thing_libutils/system.scad>
+include <thing_libutils/units.scad>
 
 use <scad-utils/transformations.scad>
 use <scad-utils/lists.scad>
 use <scad-utils/shapes.scad>
-use <sweep.scad>
-use <skin.scad>
+//use <sweep.scad>
+//use <skin.scad>
+use <list-comprehension-demos/sweep.scad>
+use <list-comprehension-demos/skin.scad>
+
 use <thing_libutils/misc.scad>
 use <thing_libutils/splines.scad>
 use <thing_libutils/sweep.scad>
@@ -20,8 +24,8 @@ use <thing_libutils/transforms.scad>
 use <thing_libutils/shapes.scad>
 use <thing_libutils/attach.scad>
 use <thing_libutils/naca_sweep.scad>
-use <thing_libutils/fan_5015S.scad>
-include <thing_libutils/fan_5015S.h>
+//use <thing_libutils/fan_5015S.scad>
+//include <thing_libutils/fan_5015S.h>
 
 // helper functions to work on headered-arrays (where first entry is column headers)
 function nSpline_header(S, N) =
@@ -212,7 +216,7 @@ module mirrorcopy(axis)
     children();
 }
 
-module fanduct_throat(throat_seal_h)
+module fanduct_throat(throat_seal_h, onlyEar = false)
 {
     seal_height = 4;
     
@@ -233,95 +237,105 @@ module fanduct_throat(throat_seal_h)
             cylinder(d = dia, h = wallthick*2, $fn = 45);
         }
     }
+    
+    module connectionEars(holes = true) {
+        dia = holes ? 6.1 : 0;
+        
+        ty(1.5) {
+            tz(6)
+            tx(-24.8)
+            earmount(fanduct_wallthick, 16.2, dia);
 
-    difference()
-    {
-        union()
+            tz(6)
+            tx(15.9)
+            mirror(X)
+            earmount(fanduct_wallthick, 7.5, dia);
+        }
+    }
+    
+    if(onlyEar) {
+        connectionEars(false);
+    } else {
+        connectionEars();
+        
+        difference()
         {
-            hull()
+            union()
             {
-                ty((fanduct_throat_size_withwall.y)/2)
-                cubea([fanduct_throat_size.x,fanduct_throat_size.y,throat_seal_h]+XY*fanduct_wallthick,align=Z-Y);
+                hull()
+                {
+                    ty((fanduct_throat_size_withwall.y)/2)
+                    cubea([fanduct_throat_size.x,fanduct_throat_size.y,throat_seal_h]+XY*fanduct_wallthick,align=Z-Y);
 
-                tz(seal_height)
+                    tz(seal_height)
+                    ty(fanduct_throat_size.y/2 - 47)
+                    tz(11.34/2)
+                    cylindera(h=fanduct_throat_size_withwall.x, d=7, orient=X);
+                }
+                
+            }
+
+            tz(-.1)
+            cubea([fanduct_throat_size.x,fanduct_throat_size.y,1000],align=Z);
+
+            
+            tz(seal_height)
+            {
+                ty((fanduct_throat_size.y)/2)
+                cubea([fanduct_throat_size.x,1000,1000],align=Z-Y, extra_size=.1*Y, extra_align=-Z);
+
+                ty(-(fanduct_throat_size_withwall.y)/2)
+                tz(-5)
+                cubea([fanduct_throat_size.x,1000,1000],align=Z-Y, extra_size=.1*Y, extra_align=-Z);
+
+                // прорезь
+//                shift = 3.8;
+//                tx(shift)
+                tz(-seal_height+2*mm)
+                cubea([3.8,1000,1000],align=Z+Y);
+
                 ty(fanduct_throat_size.y/2 - 47)
                 tz(11.34/2)
-                cylindera(h=fanduct_throat_size_withwall.x, d=7, orient=X);
+                cylindera(h=1000, d=3.65, orient=X, $fn=45);
             }
-            
         }
-
-        tz(-.1)
-        cubea([fanduct_throat_size.x,fanduct_throat_size.y,1000],align=Z);
+        
 
         
-        tz(seal_height)
-        {
-            ty((fanduct_throat_size.y)/2)
-            cubea([fanduct_throat_size.x,1000,1000],align=Z-Y, extra_size=.1*Y, extra_align=-Z);
 
-            ty(-(fanduct_throat_size_withwall.y)/2)
-            tz(-5)
-            cubea([fanduct_throat_size.x,1000,1000],align=Z-Y, extra_size=.1*Y, extra_align=-Z);
-
-
-//            shift = 5.75;
-//            tx(shift/2)
-//            tz(-seal_height+2*mm)
-//            cubea([3.8+shift,1000,1000],align=Z+Y);
-
-            ty(fanduct_throat_size.y/2 - 47)
-            tz(11.34/2)
-            cylindera(h=1000, d=3.65, orient=X);
-        }
+        ry(45)
+        cubea([fanduct_wallthick/sqrt(2),fanduct_throat_size_withwall.y,fanduct_wallthick/sqrt(2)]);
     }
-
-    ty(1.5) {
-        tz(6)
-        tx(-24.8)
-        earmount(fanduct_wallthick, 16.2);
-
-        tz(6)
-        tx(15.9)
-        mirror(X)
-        earmount(fanduct_wallthick, 7.5);
-    }
-    
-
-    ry(45)
-    cubea([fanduct_wallthick/sqrt(2),fanduct_throat_size_withwall.y,fanduct_wallthick/sqrt(2)]);
-    
-//    rx(45)
-//    rz(90)
-//    cubea([fanduct_wallthick/sqrt(2),fanduct_throat_size_withwall.x,fanduct_wallthick/sqrt(2)]);
 }
 
-module fanduct(part)
+module fanduct(onlyEar = false)
 {
     /*$fn=is_build?$fn:48;*/
 
     A = fanduct_data;
+    throat_seal_h = 15*mm;
     
-
-    color("teal")
-//    render() 
-    {
-        mirrorcopy(X)
-        {
-            duct(A=A, fanduct_wallthick=fanduct_wallthick, N=$fn);
-        }
-
+    module throat(onlyEar) {
         tx(-geth(A,"Tx",0))
         t(geth(A,["Tx","Ty","Tz"],0))
         r(geth(A,["Rx","Ry","Rz"],0))
         {
-            throat_seal_h = 15*mm;
-
-    //        material(Mat_Plastic)
-            color("teal")
-    //        render()
             rz(0)
-            fanduct_throat(throat_seal_h);
+            fanduct_throat(throat_seal_h, onlyEar);
+        }
+    }
+    
+    if(onlyEar) {
+        throat(onlyEar);
+    } else {
+        color("teal")
+        render() 
+        {
+            mirrorcopy(X) {
+                duct(A=A, fanduct_wallthick=fanduct_wallthick, N=$fn);
+            }
+
+            throat(false);
         }
     }
 }
@@ -332,17 +346,17 @@ module fanduct_assembly() {
     A = fanduct_data;
     
     
-    tx(-geth(A,"Tx",0))
-    t(geth(A,["Tx","Ty","Tz"],0))
-    r(geth(A,["Rx","Ry","Rz"],0))
-    {
-        fanduct_conn_fan = [N,-Z];
-        rz(0)
-        ty(-1.5)
-        tz(2)
-        attach(fanduct_conn_fan, fan_5015S_conn_flowoutput, 0)
-        fan_5015S();    
-    }
+//    tx(-geth(A,"Tx",0))
+//    t(geth(A,["Tx","Ty","Tz"],0))
+//    r(geth(A,["Rx","Ry","Rz"],0))
+//    {
+//        fanduct_conn_fan = [N,-Z];
+//        rz(0)
+//        ty(-1.5)
+//        tz(2)
+//        attach(fanduct_conn_fan, fan_5015S_conn_flowoutput, 0)
+//        fan_5015S();    
+//    }
 }
 
 module part_fanduct()

@@ -42,6 +42,7 @@ Vitamins:
  66 Washer  M4 x 9mm x 0.8mm
 
 Printed:
+  1 endstop_x.stl
   1 endstop_x_mount.stl
   1 endstop_y_mount.stl
  14 gantry_cart_spacer_6.stl

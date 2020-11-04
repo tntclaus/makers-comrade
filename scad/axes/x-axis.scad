@@ -28,6 +28,60 @@ module gantry_sq_plate_75x75x3_48_dxf() {
 //gantry_sq_plate_75x75x3_48_dxf();
 
 
+module endstop_x_stl() {
+    render()
+        translate([25,-30,-28])
+    rotate([0, -180, 0])
+    endstop_x_placed(stl = true);
+}
+
+module endstop_x_placed(stl = false) {
+    stl("endstop_x");
+    
+    module connection_ear() {
+        fanduct_placed(stl);
+    }
+    
+    
+    difference() {
+        translate([33,35.2,-28])
+        rotate([0,180,0])
+        if(stl) {
+            render()
+            endstop_x_mount_stl();
+        } else
+            endstop_x();
+
+        translate([0,0,-0.35])
+        fanduct_placed(stl);
+        
+        fanduct_placed(stl);
+
+    }
+}
+
+module fanduct_placed(stl = false) {
+    rotate([90,0,-90])
+    translate([4.4,25,-64]) {
+//                    translate([17,-53.5,54])
+//                    rotate([90,0,0])
+//                    screw(M6_cap_screw, 4);
+//                    
+//                    translate([-14.4,-53.5,63.9])
+//                    rotate([90,0,0])
+//                    screw(M6_cap_screw, 4);
+
+        translate([0,-1,0]) 
+        if(stl) {
+            fanduct(onlyEar = true);
+        } else {
+            fanduct_assembly();
+        }        
+        children();
+    }
+                
+}
+
 
 module xAxisRails(position = 0, xAxisLength) {
     positionAdj = 
@@ -49,30 +103,16 @@ module xAxisRails(position = 0, xAxisLength) {
                 rotate([90,0,-90])
                     titan_extruder_assembly();
                     
-                rotate([90,0,-90])
-                translate([4.4,25,-64]) {
-//                    translate([17,-53.5,54])
-//                    rotate([90,0,0])
-//                    screw(M6_cap_screw, 4);
-//                    
-//                    translate([-14.4,-53.5,63.9])
-//                    rotate([90,0,0])
-//                    screw(M6_cap_screw, 4);
-
-                    translate([0,-1,0]) 
-                    fanduct();
-                }
+                fanduct_placed();
                 
-
-                
-                translate([33,35.2,-28])
-                rotate([0,180,0])
-                endstop_x();
+                endstop_x_placed();
             }
     }
 }
 
 
-workingSpaceSizeMaxX  = 1000;
-workingSpaceSizeMinX = 0;
-xAxisRails(20, 150);
+//workingSpaceSizeMaxX  = 1000;
+//workingSpaceSizeMinX = 0;
+//xAxisRails(20, 150);
+
+//endstop_x_stl();
