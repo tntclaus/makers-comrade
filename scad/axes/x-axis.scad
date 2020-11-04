@@ -103,7 +103,7 @@ module cableChainHolder() {
         }
         
         color("red")
-        translate([-40,4.5,31.2]) {
+        translate([-40,5.5,31.2]) {
             rotate([0,90,0]) {
                 cylinder(d = 4.2, h = 58);
                 translate([0,0,52])
@@ -176,8 +176,8 @@ module xAxisRails(position = 0, xAxisLength) {
 }
 
 
-//workingSpaceSizeMaxX  = 1000;
-//workingSpaceSizeMinX = 0;
-//xAxisRails(20, 150);
+workingSpaceSizeMaxX  = 1000;
+workingSpaceSizeMinX = 0;
+xAxisRails(20, 150);
 
 //endstop_x_stl();
