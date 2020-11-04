@@ -22,10 +22,13 @@ use <thing_libutils/splines.scad>
 use <thing_libutils/sweep.scad>
 use <thing_libutils/transforms.scad>
 use <thing_libutils/shapes.scad>
-use <thing_libutils/attach.scad>
 use <thing_libutils/naca_sweep.scad>
-//use <thing_libutils/fan_5015S.scad>
-//include <thing_libutils/fan_5015S.h>
+
+include <NopSCADlib/core.scad>
+include <NopSCADlib/vitamins/screws.scad>
+include <NopSCADlib/vitamins/blowers.scad>
+//include <>
+
 
 // helper functions to work on headered-arrays (where first entry is column headers)
 function nSpline_header(S, N) =
@@ -308,9 +311,13 @@ module fanduct_throat(throat_seal_h, onlyEar = false)
     }
 }
 
+module fanduct_stl() {
+    fanduct(onlyEar = false);
+}
+
 module fanduct(onlyEar = false)
 {
-    /*$fn=is_build?$fn:48;*/
+    stl("fanduct");
 
     A = fanduct_data;
     throat_seal_h = 15*mm;
@@ -341,22 +348,24 @@ module fanduct(onlyEar = false)
 }
 
 
-module fanduct_assembly() {
+module fanduct_assembly(blowerType = RB5015) {
     fanduct();
     A = fanduct_data;
     
     
-//    tx(-geth(A,"Tx",0))
-//    t(geth(A,["Tx","Ty","Tz"],0))
-//    r(geth(A,["Rx","Ry","Rz"],0))
-//    {
+    tx(-geth(A,"Tx",0))
+    t(geth(A,["Tx","Ty","Tz"],0))
+    r(geth(A,["Rx","Ry","Rz"],0))
+    {
 //        fanduct_conn_fan = [N,-Z];
-//        rz(0)
-//        ty(-1.5)
-//        tz(2)
+        ty(blower_width(blowerType)/2 - blower_bore(blowerType)/2)
+        tx(blower_depth(blowerType)/2)
+        tz(2)
 //        attach(fanduct_conn_fan, fan_5015S_conn_flowoutput, 0)
-//        fan_5015S();    
-//    }
+        rx(90)
+        ry(-90)
+        blower(blowerType);
+    }
 }
 
 module part_fanduct()
@@ -375,5 +384,5 @@ if(false)
 }
 
 $debug_mode = false;
-//fanduct_assembly();
-fanduct();
+fanduct_assembly();
+//fanduct();

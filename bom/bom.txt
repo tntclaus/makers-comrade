@@ -10,6 +10,7 @@ Vitamins:
  36 Ball bearing 625-2RS 5mm x 16mm x 5mm
   1 Belt GT2 x 6mm x 2992mm
   1 Belt GT2 x 6mm x 2992mm
+  3 Blower Runda RB5015
   1 Hot end E3D V6 direct 1.75mm
   5 Extrusion E2020 x 580mm
   9 Extrusion E2020 x 700mm
@@ -45,6 +46,7 @@ Printed:
   1 endstop_x.stl
   1 endstop_x_mount.stl
   1 endstop_y_mount.stl
+  3 fanduct.stl
  14 gantry_cart_spacer_6.stl
   4 vslot_cube20.stl
 
