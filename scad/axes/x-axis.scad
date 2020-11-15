@@ -157,9 +157,7 @@ module xAxisRails(position = 0, xAxisLength) {
                 pos = positionAdj, 
                 mirror = false
             ) {
-//                translate([0,0,20]) rotate([-90,0,90]) mk8_hot_end_assembly();
-
-                translate([5.25,-4.4,25])
+                translate([5.25,-4.4,22.5])
                 rotate([90,0,-90])
                     titan_extruder_assembly();
                     
@@ -169,7 +167,6 @@ module xAxisRails(position = 0, xAxisLength) {
                 
                 rotate([90,180,-90])
                 translate([3.1,27.9])
-
                 cableChainHolder();
             }
     }

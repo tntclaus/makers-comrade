@@ -13,6 +13,23 @@ include <NopSCADlib/vitamins/pcbs.scad>
 include <NopSCADlib/vitamins/rockers.scad>
 include <NopSCADlib/vitamins/iecs.scad>
 
+include <NopSCADlib/vitamins/psus.scad>
+use <NopSCADlib/utils/rounded_polygon.scad>
+
+
+LCD12864PCB = ["", "", 78, 70, 1.65, 3, 3, 0, "mediumblue", false, [[3, 3], [-3, 3], [-3, -3], [3, -3]],
+    [ [2.75 + 1.27, 37, 90, "2p54header", 20, 2]
+    ],
+    []];
+
+LCD12864 = ["LCD12864", "LCD display 12864\"", 68, 44, 3.4, LCD12864PCB,
+        [0, 0, 0],
+        [[-68 / 2, -22], [68 / 2, 22, 0.5]],
+        [[-68 / 2, -44 / 2 + 1], [68 / 2, 44 / 2 + 1, 1]],
+        0,
+        [[0, -34.5], [12, -31.5]],
+        ];
+
 
 ArduinoMega = [
     "ArduinoMega", 
@@ -75,19 +92,139 @@ RAMPS_1_4 = [
     M2p5_pan_screw
    ];
 
-module cncController() {
-    pcb(ArduinoMega);
-    translate_z(12) pcb(RAMPS_1_4);
+module RAMPS(stl = false) {
+    translate([50,-30,0])
+    if(!stl) {
+        pcb_assembly(ArduinoMega, 4, 4);
+        translate_z(16) 
+        pcb(RAMPS_1_4);
+    } else {
+        translate_z(-4)
+        pcb_base(ArduinoMega, 8, 4);    
+    }
+}
+
+module RPI(cutouts = false, stl = false) {
+    translate([-52,72,0])
+    rotate([0,0,180]) {
+        if(cutouts) {
+            translate_z(4)
+            difference() {
+                pcb_cutouts(RPI3);
+                translate([-100,10,0])
+                cube([1000,100,1000]);
+                
+                translate([-100,200,0])
+                cube([200,1000,1000]);
+
+                translate([-180,-200,0])
+                cube([200,1000,1000]);
+            }
+        } else {
+            if(!stl) {
+                pcb_assembly(RPI3, 4, 4);    
+            } else {
+                translate_z(-4)
+                pcb_base(RPI3, 8, 4);
+            }
+
+        }
+    }
+}
+
+module electronics_case() {
+    r = 5;
+    points = [
+        [-132,  48,   r],
+        [-132,   62-r,  r],
+        [-102-r, 62+r, -r],
+        [-102+r,  352,  r],
+        [122,352, r],
+        [122,-62, r],
+        [-2,-62, r],
+    ];
+
+    points2 = [
+        [-130,  50,   r],
+        [-130,   60-r,  r],
+        [-100-r, 60+r, -r],
+        [-100+r,  350,  r],
+        [120,350, r],
+        [120,-60, r],
+        [0,-60, r],
+    ];
+
+    difference() {
+        translate_z(-4)
+        linear_extrude(60)
+        rounded_polygon(points);
+
+        translate_z(-2)
+        linear_extrude(60)
+//        resize([250 + 2*r - 4, 410  + 2*r - 6, 0])
+        rounded_polygon(points2);
+        
+//        caseLCD(true);
+        RPI(true);
+        
+        mains_inlet(cutouts = true);
+    }
+    
+    RPI(stl = true);
+    RAMPS(stl = true);
+}
+
+module caseLCD(cutouts = false) {
+    translate([-135, -110, 40])
+    rotate([90,90,90]) {
+        if(cutouts) {
+            display_aperture(LCD12864, 0, true);
+        } else {
+            display(LCD12864);
+        }
+    }
+}
+
+module mains_inlet(cutouts = false) {
+    translate([125,335,25])
+    rotate([0,90,0])
+    if(!cutouts) {
+    iec_assembly(IEC_inlet_atx, 4);
+    } else {
+        iec_holes(IEC_inlet_atx);
+    }
+}
+
+module electronics_case_assembly() {
+    electronics_case();
+    
+    RAMPS();
+    RPI();
+
+    translate([5,160,0])
+    rotate([0,0,180])
+    psu(PD_150_12);
+
+    translate([5,270,0])
+    rotate([0,0,180])
+    psu(PD_150_12);
+    
+    mains_inlet();
 }
 
 
-//cncController();
+
+//case_assembly();
+
+electronics_case();
+
+//caseLCD();
 
 //sliding_t_nut(M5_sliding_t_nut);
 //display(SSD1963_4p3);
 
-rocker(small_rocker);
+//rocker(small_rocker);
 
-translate([50,0,0]) iec_assembly(IEC_inlet_atx, 4);
+
 
 //extrusion_corner_bracket_assembly(E20_corner_bracket, grub_screws = true);

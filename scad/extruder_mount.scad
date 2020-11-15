@@ -1,12 +1,9 @@
 
-//include <NopSCADlib/vitamins/nuts.scad>
-//include <NopSCADlib/vitamins/screws.scad>
+
 include <NopSCADlib/vitamins/hot_end.scad>
 include <NopSCADlib/vitamins/hot_ends.scad>
 
-//import("../libstl/titan_vslot_bltouch_noctua_v2/Fan_duct.stl");
-//import("../libstl/titan_vslot_bltouch_noctua_v2/Bras_fan.stl");
-//import("../libstl/titan_vslot_bltouch_noctua_v2/Attache_cable.stl");
+use <../lib/e3d_titan/e3d_titan_extruder.scad>
 
 include <NopSCADlib/vitamins/fans.scad>
 include <NopSCADlib/vitamins/stepper_motors.scad>
@@ -65,15 +62,22 @@ module titan_extruder_assembly() {
     rotate([0,-90,0])
     fan_assembly(fan40x11, 6);
     
-    translate([-10.6,17,12.1])
-    rotate([90,0,0])
-    NEMA(NEMA17HS4023);
+//    translate([-10.6,17,12.1])
+//    rotate([90,0,0])
+//    NEMA(NEMA17HS4023);
+    
+    translate([-10.55,13.5,12.15])
+    rotate([0,0,180]) {
+        titan_extruder();
+        titan_hot_end_position() e3d_hot_end(E3Dv6, 1.75, naked = true);
+        titan_stepper_position(3.5) NEMA(NEMA17HS4023);
+    }
 
-    e3d_hot_end(E3Dv6, 1.75, naked = true);
+//    e3d_hot_end(E3Dv6, 1.75, naked = true);
 
     translate([-23.3,-0.0,-14.2])
     bltouch();
 
 }
 
-//titan_extruder_assembly();
+titan_extruder_assembly();

@@ -28,6 +28,7 @@ include <case_plates.scad>
 include <axes/z-axis.scad>
 include <axes/y-axis.scad>
 
+use <electronics_box.scad>
 
 V2020 = E2020;
 V2040 = E2040;
@@ -247,7 +248,7 @@ module case(positionZ = 0) {
     base();
     
 //    color(wallColor) 
-//    walls();
+    walls();
             
     top(positionZ,positionZ);
 }
@@ -451,8 +452,12 @@ module walls() {
 //    );
     
     //right
-    translate([0,portalWidth/2+wallThickness,-legElevation]) 
+    translate([0,portalWidth/2+wallThickness,-legElevation]) {
         side_plate_r_740x800x4_dxf(false);   
+        translate([-112,2,830])
+        rotate([-90,0,0])
+        electronics_case_assembly();
+    }
 }
 
 
