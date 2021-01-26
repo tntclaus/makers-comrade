@@ -50,7 +50,7 @@ module yAxisRails(position = 0, size, baseLength, xAxisLength, mirrored = false)
                 ) {
                     if(!mirrored) { 
                         translate([-xAxisLength/2-15, 0, 20])  
-                                xAxisRails(position, xAxisLength);
+                                xAxisRails(position, xAxisLength, 35);
                     }
                  
                     if(mirrored) {
@@ -70,9 +70,9 @@ module yAxisRails(position = 0, size, baseLength, xAxisLength, mirrored = false)
             }
     }
 
-//workingSpaceSizeMaxY  = 1000;
-//workingSpaceSizeMinY = 0;
-//baseFrontSize = 50;
-//xAxisLength = 50;
-//baseLength = 500;
-//yAxisRails(20, 200, 10, 200, 1);
+workingSpaceSizeMaxY  = 1000;
+workingSpaceSizeMinY = 0;
+baseFrontSize = 50;
+xAxisLength = 50;
+baseLength = 500;
+yAxisRails(20, 200, 10, 200, 0);

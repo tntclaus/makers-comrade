@@ -1,20 +1,21 @@
 include <NopSCADlib/utils/core/core.scad>
-include <NopSCADlib/utils/core/polyholes.scad>
 include <geometries.scad>
+include <utils.scad>
 
 function vslot_plate_size(geometry) = geometry[0];
 
-module vslot_plate(geometry, center = false) {
+module vslot_plate(geometry, center = false, mirror_plate = [0,0,0]) {
     verticles = len(vslot_plate_size(geometry));
-    
-    if(verticles == 3) {
-        triangle_plate(geometry, center) children();
-    } else if (verticles == 2) {
-        square_plate(geometry, center) children();
-    } else if (verticles > 3) {    
-        polygon_plate(geometry, center) children();
-    } else {
-        assert(false, str("Unsupported plate size: ", verticles));
+    mirror(mirror_plate) {
+        if(verticles == 3) {
+            triangle_plate(geometry, center) children();
+        } else if (verticles == 2) {
+            square_plate(geometry, center) children();
+        } else if (verticles > 3) {    
+            polygon_plate(geometry, center) children();
+        } else {
+            assert(false, str("Unsupported plate size: ", verticles));
+        }
     }
 }
 
@@ -141,49 +142,4 @@ module polygon_plate(geometry, center = false) {
             drillHoles(mountHoles, plate_thickness);
         }
     } 
-}
-
-module drillHoles(holes, plate_thickness) {
-    
-    module drillHole(hole) {
-                translate([hole[2],hole[3],0])
-        color("red")
-        if(hole[1]==0) {
-            drill(
-                hole[0]/2,
-                plate_thickness*2
-            );
-            if(plate_thickness > 3) {
-                translate([0,0,-3])
-                drill(
-                    hole[0]/2+3,
-                    (plate_thickness)
-                );
-            }
-        } else {
-            echo("can't drill");
-        }
-    }
-    
-    module drillHull(hole) {
-        hullType = hole[2][0];
-        hullGeom = hole[2][1];
-        color("green") hull() {
-            for(vertex = hullGeom) {
-                translate([vertex.x,vertex.y,0])
-                    drill(hole[0]/2, plate_thickness*2);
-            }
-        }
-    }
-    
-    
-    
-    for (hole = holes){
-        if(Len(hole) == 4) {
-            drillHole(hole);
-        } else if(Len(hole) == 3) {
-            drillHull(hole);
-        }
-        
-    }
 }

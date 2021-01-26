@@ -11,6 +11,6 @@ VSLOT_RAIL_2040_D = ["", D_40_TRIANGLE_GANTRY, E2040];
 
 use <vslot_rail.scad>
 
-//vslot_rail(VSLOT_RAIL_2040_SH, 200)   {
+//vslot_rail(VSLOT_RAIL_2020_S, 200, mirror_plate = [1,0,0])   {
 //    translate([0,0,10]) cube(20, center=true);
 //}

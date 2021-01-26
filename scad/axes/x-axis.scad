@@ -143,25 +143,27 @@ module cableChainHolder() {
 }
 
 
-module xAxisRails(position = 0, xAxisLength) {
+module xAxisRails(position = 0, xAxisLength, railsWidth = 30) {
     positionAdj = 
     position > workingSpaceSizeMaxX 
         ? workingSpaceSizeMaxX : 
         position < workingSpaceSizeMinX ? workingSpaceSizeMinX :
         position;
     
-    translate([xAxisLength/2,0,0]) rotate([-90,0,90]) {
+    railsAdjustedWidth = railsWidth + 10;
+    
+    translate([xAxisLength/2,railsAdjustedWidth,0]) rotate([-90,0,90]) {
         vslot_rail(
                 X_RAIL, 
                 xAxisLength, 
                 pos = positionAdj, 
                 mirror = false
             ) {
-                translate([5.25,-4.4,22.5])
-                rotate([90,0,-90])
+                translate([0,1.55,30])
+                rotate([90,90,-90])
                     titan_extruder_assembly();
-                    
-                fanduct_placed();
+//                    
+//                fanduct_placed();
                 
                 endstop_x_placed();
                 
@@ -170,11 +172,22 @@ module xAxisRails(position = 0, xAxisLength) {
                 cableChainHolder();
             }
     }
+    
+        translate([xAxisLength/2,-railsAdjustedWidth,0]) rotate([-90,0,90]) {
+        vslot_rail(
+                X_RAIL, 
+                xAxisLength, 
+                pos = positionAdj, 
+                mirror_plate = [1,0,0]
+            ) {
+
+            }
+    }
 }
 
 
-workingSpaceSizeMaxX  = 1000;
-workingSpaceSizeMinX = 0;
-xAxisRails(20, 150);
+//workingSpaceSizeMaxX  = 1000;
+//workingSpaceSizeMinX = 0;
+//xAxisRails(20, 400);
 
 //endstop_x_stl();
