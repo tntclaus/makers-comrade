@@ -5,24 +5,53 @@ include <NopSCADlib/vitamins/hot_ends.scad>
 
 function titan_extruder_width() = 46.5;
 function titan_extruder_heigth() =60.5;
-function titan_extruder_depth() = 28;
+function titan_extruder_depth() = 24.9;
 
-module titan_extruder() {
-    color("#eaeaea", 0.3)
-    import("e3d_titan_cover.stl");
-    
-    color("#414141")
-    import("e3d_titan_base.stl");
+function titan_extruder_translate() = [10.9,-13.6,8];
+function t_e_t() = titan_extruder_translate();
+
+function titan_extruder_cover_hole1() = [t_e_t().x-15.525,t_e_t().y-15.48,0];
+function titan_extruder_cover_hole2() = [t_e_t().x+15.525,t_e_t().y-15.48,0];
+function titan_extruder_cover_hole3() = [t_e_t().x+15.525,t_e_t().y+15.48,0];
+function titan_extruder_cover_hole4() = [t_e_t().x-21.7,  t_e_t().y+14.7,0];
+
+function titan_extruder_cover_holes_coords() = [
+        titan_extruder_cover_hole1(),
+        titan_extruder_cover_hole2(),
+        titan_extruder_cover_hole3(),
+        titan_extruder_cover_hole4()
+    ];
+
+
+module titan_extruder(cover = true) {
+    if(cover) {
+        color("#eaeaea", 0.3)
+        titan_extruder_cover();
+    }
+
+    translate(titan_extruder_translate()) {        
+        color("#414141")
+        import("e3d_titan_base.stl");
+    }
 }
+
+module titan_extruder_cover() {
+    color("white")
+    translate(titan_extruder_translate())
+    import("e3d_titan_cover.stl");
+}
+
+
 
 module titan_stepper_position(offset = 3) {
     translate([0,-offset,0])
-    rotate([-90,0,0])
+    translate(titan_extruder_translate())
+    rotate([-90,0,0])    
     children();
 }
 
 module titan_hot_end_position() {
-    translate([-10.9,13.6,-11.65])
+    translate([t_e_t().x-10.9,t_e_t().y+13.6,t_e_t().z-11.65])
     children();
 }
 
@@ -97,8 +126,20 @@ module titan_extruder_hull(
     }
 }
 
+module titan_extruder_cover_hole(index) {
+        translate([0,titan_extruder_depth(),0])
+        rotate([-90,0,0])
+        translate(titan_extruder_cover_holes_coords()[index]) children();    
+}
+
+module titan_extruder_cover_holes() {
+    for(hole = titan_extruder_cover_holes_coords())
+        translate([0,titan_extruder_depth(),0])
+        rotate([-90,0,0])
+        translate(hole) children();
+}
+//titan_extruder();
 //titan_stepper_position() NEMA(NEMA17S);
-//
 //titan_hot_end_position() hot_end(E3Dv6, 1.75, naked = true);
 //
 //include <NopSCADlib/utils/core/rounded_rectangle.scad>
@@ -106,5 +147,9 @@ module titan_extruder_hull(
 //
 //
 //
-titan_extruder_hull();
-titan_extruder();
+//titan_extruder_hull();
+//titan_extruder_cube();
+//titan_extruder_cover();
+//titan_extruder_cover_holes() 
+//    color("red")
+//    cylinder(d = 3, h = 20);

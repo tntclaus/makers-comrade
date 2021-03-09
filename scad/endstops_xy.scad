@@ -33,8 +33,8 @@ module endstop_x_mount_stl() {
         union() {
             translate([4.5,-1,1.5])
             rounded_rectangle([30,20,3], r=3.5, center = true);
-            translate([13,-15,1.5])
-            rounded_rectangle([34,14,3], r=3.5, center = true);
+//            translate([13,-15,1.5])
+//            rounded_rectangle([34,14,3], r=3.5, center = true);
             pcb_screw_positions(RAMPSEndstop){
                 cylinder(d = 7, h = 6);
             }
@@ -45,12 +45,12 @@ module endstop_x_mount_stl() {
             translate_z(-1) cylinder(d = 3, h = 11);
             nut_trap(M3_cap_screw, M3_nut, depth = 4);
         }
-        hull() {
-            translate([3,-15,0])
-                cylinder(d1 = 6.2, d2 = 12, h = 3);
-            translate([23,-15,0])
-                cylinder(d1 = 6.2, d2 = 12, h = 3);        
-        }
+//        hull() {
+//            translate([3,-15,0])
+//                cylinder(d1 = 6.2, d2 = 12, h = 3);
+//            translate([23,-15,0])
+//                cylinder(d1 = 6.2, d2 = 12, h = 3);        
+//        }
     }
 }
 
