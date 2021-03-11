@@ -18,6 +18,7 @@ use <../extruder_mount.scad>
 include <carets.scad>
 use <../fan_duct/fan_duct.scad>
 
+use <../../lib/spindle_775/spindle_775.scad>
 
 
 
@@ -83,7 +84,7 @@ module fanduct_placed(stl = false) {
 }
 
 
-module xAxisRails(position = 0, xAxisLength, railsWidth = 20) {
+module xAxisRails(position = 0, xAxisLength, railsWidth = 25) {
     positionAdj = 
     position > workingSpaceSizeMaxX 
         ? workingSpaceSizeMaxX : 
@@ -103,8 +104,12 @@ module xAxisRails(position = 0, xAxisLength, railsWidth = 20) {
 
 
                 translate([-43,0,railsWidth+1.87])
-                rotate([90,0,-90])
-                    titan_extruder_assembly(railsWidth);
+                rotate([90,0,-90]) {
+//                    titan_extruder_assembly(railsWidth);
+
+                    translate_z(-63)
+                    spindle_rs_775_er11_assembly();
+                }
 //                    
 //                fanduct_placed();
                 
@@ -299,8 +304,8 @@ module x_caret_1_stl(stl = true) {
 //x_caret_1_stl();
 //x_caret_2_stl();
 
-//workingSpaceSizeMaxX  = 1000;
-//workingSpaceSizeMinX = 0;
-//xAxisRails(200, 400);
+workingSpaceSizeMaxX  = 1000;
+workingSpaceSizeMinX = 0;
+xAxisRails(200, 400);
 
 //endstop_x_stl();
