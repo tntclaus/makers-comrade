@@ -74,6 +74,8 @@ module SPINDLE_mount_positions(type) {
 
 
 module SPINDLE_motor(type) {
+    vitamin(str(SPINDLE_motor_name(type), " DC Motor"));
+
     color("#a6a6a6")
     if(SPINDLE_motor_name(type) == "RS775") {
         rotate([90,0,0])
@@ -93,11 +95,14 @@ module SPINDLE_ER11_drill_bit() {
 
 module SPINDLE_ER11_chuck() {
     color("silver")
+    vitamin("ER11 chuck");
+    vitamin("ER11 collet");    
     rotate([90,0,0])
     import("C16-ER11-35L 5mm Shank Chuck Collet.stl");
 }
 
 module SPINDLE_ER11_nut() {
+    vitamin("ER11 Nut");    
     color("#333333")
     rotate([90,0,0])
     import("C16-ER11-35L 5mm Nut.stl");
