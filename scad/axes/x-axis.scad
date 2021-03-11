@@ -18,7 +18,7 @@ use <../extruder_mount.scad>
 include <carets.scad>
 use <../fan_duct/fan_duct.scad>
 
-use <../../lib/spindle_775/spindle_775.scad>
+include <../../lib/spindle/spindles.scad>
 
 
 
@@ -108,7 +108,7 @@ module xAxisRails(position = 0, xAxisLength, railsWidth = 25) {
 //                    titan_extruder_assembly(railsWidth);
 
                     translate_z(-63)
-                    spindle_rs_775_er11_assembly();
+                    SPINDLE_ER11_assembly(RS895);
                 }
 //                    
 //                fanduct_placed();
