@@ -94,9 +94,9 @@ module SPINDLE_ER11_drill_bit() {
 }
 
 module SPINDLE_ER11_chuck() {
-    color("silver")
     vitamin("ER11 chuck");
     vitamin("ER11 collet");    
+    color("silver")
     rotate([90,0,0])
     import("C16-ER11-35L 5mm Shank Chuck Collet.stl");
 }

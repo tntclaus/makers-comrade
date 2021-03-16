@@ -309,10 +309,10 @@ module e3d_fan_duct() {
 }
 
 module titan_extruder_vitamins_assembly() {
-//        rotate([0,0,-107]) 
+        rotate([0,0,-90]) 
     {
             titan_extruder();
-            titan_stepper_position(0) NEMA(NEMA17M);
+            titan_stepper_position(0) NEMA(NEMA17S);
         }
         titan_hot_end_position() { 
             translate([0,0,-23]) // precision piezzo offset
