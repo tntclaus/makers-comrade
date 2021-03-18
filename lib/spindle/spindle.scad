@@ -31,38 +31,37 @@ function SPINDLE_motor_mount_dia(type) = type[13];
 function SPINDLE_assembly_z_offset() = 19.5;
 
 
-module SPINDLE_cutouts(type, h = 10, d = 4, d_collar_off = 0, fn = 45) {
+module SPINDLE_cutouts(type, h = 10, d = 4, d_collar_off = 0) {
     d_collar = SPINDLE_shaft_collar_diameter(type) + d_collar_off;
-    SPINDLE_vent_cutouts(type, h, d, fn);
-    SPINDLE_mount_cutouts(type, h, fn);
-    SPINDLE_shaft_collar_cutout(type, h, d_collar, fn);
+    SPINDLE_vent_cutouts(type, d);
+    SPINDLE_mount_cutouts(type);
+    SPINDLE_shaft_collar_cutout(type, d_collar);
 }
 
-module SPINDLE_vent_cutout(type, h = 10, d = 4, fn = 45) {
+module SPINDLE_vent_cutout(type, d = 4) {
     rotate([180,0,90])
-    linear_extrude(h) {
-        arc(radius = SPINDLE_motor_vent_holes_offset(type)-d/2, angles = [23, 68], width = d, fn = fn);
-    }
+    arc(radius = SPINDLE_motor_vent_holes_offset(type)-d/2, angles = [23, 68], width = d);
+
 }
 
-module SPINDLE_shaft_collar_cutout(type, h = 10, d = 4, fn = 45) {
+module SPINDLE_shaft_collar_cutout(type, d = 4) {
     rotate([0,180,0])
-    cylinder(d = d, h = h);
+    circle(d = d);
 }
 
-module SPINDLE_vent_cutouts(type, h = 10, d = 4, fn = 45) {
-    SPINDLE_vent_cutout(type, h, d, fn);
+module SPINDLE_vent_cutouts(type, d = 4) {
+    SPINDLE_vent_cutout(type, d);
     rotate([0,0,90])
-    SPINDLE_vent_cutout(type, h, d, fn);
+    SPINDLE_vent_cutout(type, d);
     rotate([0,0,180])
-    SPINDLE_vent_cutout(type, h, d, fn);
+    SPINDLE_vent_cutout(type, d);
     rotate([0,0,270])
-    SPINDLE_vent_cutout(type, h, d, fn);
+    SPINDLE_vent_cutout(type, d);
 
 }
 
-module SPINDLE_mount_cutouts(type, h = 10, fn = 45) {
-    SPINDLE_mount_positions(type) cylinder(d = SPINDLE_motor_mount_dia(type), h = h, $fn=fn);
+module SPINDLE_mount_cutouts(type) {
+    SPINDLE_mount_positions(type) circle(d = SPINDLE_motor_mount_dia(type));
 }
 
 module SPINDLE_mount_positions(type) {

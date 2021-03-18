@@ -1,15 +1,22 @@
 Vitamins:
   1 Micro SD card
   3 Aliminium Flexible Shaft Ballscrew, D=19, d=8x5, L=25
+  1 ER11 Nut
+  1 ER11 chuck
+  1 ER11 collet
   1 Glass/Mirror w=620, h=620
 165 M5 Screw
 165 M5 V-Slot Nut
+ 16 Magnet N35UH_10x3_3x7
   5 Stepper motor NEMA17 x 40mm
+  1 Stepper motor NEMA17 x 34mm
   7 Openbuilds Eccentric Spacer (h=6mm)
+  1 RS895 DC Motor
  21 V Wheel
  42 Ball bearing 625-2RS 5mm x 16mm x 5mm
   1 Belt GT2 x 6mm x 2992mm
   1 Belt GT2 x 6mm x 2992mm
+  1 Hot end E3D Volcano direct 1.75mm
   5 Extrusion E2020 x 580mm
   2 Extrusion E2020 x 690mm
   9 Extrusion E2020 x 700mm
@@ -34,10 +41,13 @@ Vitamins:
   4 Screw M2.5 cap x 16mm
   6 Screw M2.5 pan x 16mm
   2 Screw M3 cs cap x 16mm
+ 16 Screw M3 cs cap x  5mm
  20 Screw M3 hex x 15mm
+  4 Screw M4 cap x 35mm
  48 Screw M4 cap x  8mm
-  2 Screw М4 DIN 965/ГОСТ 17475 x 20mm
-  4 Screw М4 DIN 965/ГОСТ 17475 x 40mm
+  2 Screw М4 DIN 965/ГОСТ 17475 x 20.5mm
+  2 Screw М4 DIN 965/ГОСТ 17475 x 37.5mm
+  2 Screw М4 DIN 965/ГОСТ 17475 x 40mm
  21 Screw M5 dome x 25mm
  48 Nut M4 sliding T
  20 Washer spring M3 x 1mm
@@ -49,20 +59,33 @@ Vitamins:
   4 Петля ПН5-40
 
 Printed:
+  1 e3d_fan_duct_left.stl
+  1 e3d_fan_duct_right.stl
   1 endstop_y_mount.stl
  14 gantry_cart_spacer_6.stl
-  2 gantry_poly_plate_xx5_0.stl
+  2 motor_collet_W44xL100xH29_RS895.stl
   4 pcb_spacer2540.stl
   6 pcb_spacer2540_2.stl
+  1 piezo_shield_25.stl
   3 plastic_window_800x60x3.stl
+  1 toolhead_titan_extruder_mount_60x80x42_NEMA17S_5.stl
   4 vslot_cube20.stl
 
 CNC cut:
+  1 D16T_motor_mount_bottom_plate_W60xL100_IL80_ID8_CH8_VH11_RS895.dxf
+  1 D16T_motor_mount_top_plate_W60xL100_IL80_CH8_VH11_RS895.dxf
+  1 D16T_toolhead_extruder_bottom_plate_W60xL100_IL80_ID8.dxf
+  1 D16T_toolhead_extruder_top_plate_W60xL100_IL80.dxf
+  1 D16T_x_caret.dxf
+  2 D16T_x_caret_connector_lock_26x23_6.dxf
+  2 D16T_x_caret_connector_w60_eh8_ed3.dxf
+  1 D16T_x_caret_with_cable_chain.dxf
+  2 D16T_y_caret_60.dxf
+  4 STEEL_toolhead_support_bottom_3mm.dxf
+  2 STEEL_toolhead_support_top_3mm.dxf
   1 back_plate_740x800x4.dxf
   1 bottom_plate_740x740x3.dxf
   1 front_plate_740x800x4.dxf
-  2 gantry_poly_plate_xx3_10.dxf
-  3 gantry_sq_plate_90x65x3_22.dxf
   1 heatbed_bottom_plate_620x620.dxf
   2 motor_mount_plate.dxf
   3 plastic_window_l0_800x60.dxf

@@ -18,29 +18,9 @@ include <brackets.scad>
 include <carets.scad>
 
 
-
-
-
-module gantry_poly_plate_xx3_10_dxf() {
-    projection() polygon_plate(GET_Y_PLATE());
-}
-
-
-module y_caret_60_dwg() {
-    projection() vslot_plate(GET_Y_RAIL(60)[1][1]);
-}
-
-module y_caret_60_stl(stl = true) {
-
-    module addons() {
-
-    }
-
-    if (stl) {
-        vslot_plate(GET_Y_RAIL(w = 60)[1][1]);
-    } else {
-        vslot_plate(GET_Y_RAIL(w = 60)[1][1]) addons();
-    }
+module D16T_y_caret_60_dxf() {
+    $fn = 180;
+    projection() vslot_plate(GET_Y_PLATE(w = 60));
 }
 
 module y_pulley_block(length, plate_thickness) {
@@ -50,7 +30,9 @@ module y_pulley_block(length, plate_thickness) {
     translate_z(length-14) pulley(Y_PULLEY);
 }
 
-module yAxisRails(position = 0, size, baseLength, xAxisLength, railSpacing = 40, mirrored = false) {
+module yAxisRails(position = 0, size, baseLength, xAxisLength, railSpacing = 60, mirrored = false) {
+        dxf(str("D16T_y_caret_", railSpacing));
+    
         positionAdj = 
             position > workingSpaceSizeMaxY 
                 ? workingSpaceSizeMaxY : 
@@ -59,6 +41,7 @@ module yAxisRails(position = 0, size, baseLength, xAxisLength, railSpacing = 40,
         
         elevation = size + 30;
         
+    
         translate([baseLength, baseLength-10, elevation]) rotate([-90,90,180]) {
                 vslot_rail(
                     GET_Y_RAIL(railSpacing), 
@@ -72,11 +55,11 @@ module yAxisRails(position = 0, size, baseLength, xAxisLength, railSpacing = 40,
                     }
                  
                     if(!mirrored) {
-                        translate([0,PULLEY_Y_COORDINATE,0]) y_pulley_block(40, 3);
-                        translate([-PULLEY2_X_COORDINATE,-PULLEY_Y_COORDINATE,0]) y_pulley_block(20, 3);
+                        translate([0,PULLEY_Y_COORDINATE2,0]) y_pulley_block(37.5, 3);
+                        translate([-PULLEY2_X_COORDINATE,-PULLEY_Y_COORDINATE,0]) y_pulley_block(20.5, 3);
                     } else {
-                        translate([0,PULLEY_Y_COORDINATE,0]) y_pulley_block(20, 3);
-                        translate([-PULLEY2_X_COORDINATE,-PULLEY_Y_COORDINATE,0]) y_pulley_block(40, 3);                        
+                        translate([0,PULLEY_Y_COORDINATE2,0]) y_pulley_block(20.5, 3);
+                        translate([-PULLEY2_X_COORDINATE,-PULLEY_Y_COORDINATE,0]) y_pulley_block(37.5, 3);                        
                     }
                     
                     if(mirrored) {
@@ -90,11 +73,13 @@ module yAxisRails(position = 0, size, baseLength, xAxisLength, railSpacing = 40,
 //y_caret_stl();
 //y_caret_60_dwg();
 
-workingSpaceSizeMaxX  = 1000;
-workingSpaceSizeMinX = 0;
-workingSpaceSizeMaxY  = 1000;
-workingSpaceSizeMinY = 0;
-baseFrontSize = 50;
-xAxisLength = 50;
-baseLength = 500;
-yAxisRails(100, 200, 10, 300, 40);
+//workingSpaceSizeMaxX  = 1000;
+//workingSpaceSizeMinX = 0;
+//workingSpaceSizeMaxY  = 1000;
+//workingSpaceSizeMinY = 0;
+//baseFrontSize = 50;
+//xAxisLength = 50;
+//baseLength = 500;
+//yAxisRails(65, 200, 10, 300);
+    
+//gantry_poly_plate_xx3_15_dxf();

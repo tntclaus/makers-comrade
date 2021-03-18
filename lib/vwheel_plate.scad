@@ -29,25 +29,25 @@ module square_plate(geometry, center = false) {
     mountHoles = geometry[4];
     zTranslate = center ? 0 : -plate_thickness/2;
 
-    if(plate_thickness <= 3) {
-        dxf(str("gantry_sq_plate_",
-            geom[0],
-            "x",
-            geom[1],
-            "x",
-            plate_thickness,
-            "_",
-            len(mountHoles)));
-    } else {
-        stl(str("gantry_sq_plate_",
-            geom[0],
-            "x",
-            geom[1],
-            "x",
-            radius,
-            "_",
-            len(mountHoles)));
-    }
+//    if(plate_thickness <= 3) {
+//        dxf(str("gantry_sq_plate_",
+//            geom[0],
+//            "x",
+//            geom[1],
+//            "x",
+//            plate_thickness,
+//            "_",
+//            len(mountHoles)));
+//    } else {
+//        stl(str("gantry_sq_plate_",
+//            geom[0],
+//            "x",
+//            geom[1],
+//            "x",
+//            radius,
+//            "_",
+//            len(mountHoles)));
+//    }
     
     rotate([180,0,0])  translate([0,0,plate_thickness])  children();
     translate([0,0,zTranslate]) difference() {
@@ -94,52 +94,32 @@ module triangle_plate(geometry, center = false) {
     }
 }
 
-
-module polygon_plate(geometry, center = false) {
+module polygon_plate_sketch(geometry, center = false) {
     geom = geometry[0];
     radius = geometry[1];
-    plate_thickness = geometry[2];
 
     
     wheelHoles = geometry[3];
     mountHoles = geometry[4];
-    zTranslate = center ? 0 : -plate_thickness;
 
-    if(plate_thickness <= 3) {
-        dxf(str("gantry_poly_plate_",
-//            geom[0][0],
-            "x",
-//            geom[1][0],
-            "x",
-            plate_thickness,
-            "_",
-            len(mountHoles)));
-    } else {
-        stl(str("gantry_poly_plate_",
-//            geom[0][0],
-            "x",
-//            geom[1][0],
-            "x",
-            radius,
-            "_",
-            len(mountHoles)));
-    }
-    
-    rotate([180,0,0])  translate([0,0,plate_thickness])  children();
-    translate([0,0,zTranslate]) difference() {
-        translate([0,0,0]) rotate([0,0,-90]) {
-            if(plate_thickness > 0)
-                linear_extrude(plate_thickness) rounded_polygon(geom);
-            else 
-                rounded_polygon(geom);
+
+
+    difference() {
+        rotate([0,0,-90]) {
+            rounded_polygon(geom);
         }
         
+        drillHoles(wheelHoles, 0);
+        drillHoles(mountHoles, 0);
+    }
+}
 
-        renderGantryHoles = true;
+module polygon_plate(geometry, center = false) {
+    plate_thickness = geometry[2];
+    zTranslate = center ? 0 : -plate_thickness;
 
-        if(renderGantryHoles) {
-            drillHoles(wheelHoles, plate_thickness);
-            drillHoles(mountHoles, plate_thickness);
-        }
-    } 
+    rotate([180,0,0])  translate([0,0,plate_thickness])  children();
+    translate_z(zTranslate) 
+    linear_extrude(plate_thickness)
+    polygon_plate_sketch(geometry, center);
 }

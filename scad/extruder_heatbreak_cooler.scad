@@ -384,7 +384,7 @@ module e3d_hot_end_cooler_assembly() {
     translate([0,0,-40])
         e3d_fan_duct();
     
-    nozzle_cooler(E3DVulcano);
+//    nozzle_cooler(E3DVulcano);
 }
 
 
@@ -443,7 +443,7 @@ module volcano_heater_block(type, naked = false, resistor_wire_rotate = [0,0,0])
 }
 
 //e3d_hot_end_cooler_assembly();
-nozzle_cooler_top_stl(true);
+//nozzle_cooler_top_stl(true);
 //nozzle_cooler_bottom_stl(true);
 
 //nozzle_cooler_stl(false);

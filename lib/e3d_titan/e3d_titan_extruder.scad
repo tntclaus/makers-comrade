@@ -44,7 +44,7 @@ module titan_extruder_cover() {
 
 
 module titan_stepper_position(offset = 3) {
-    translate([0,-offset,0])
+    translate([0,-offset,0.5])
     translate(titan_extruder_translate())
     rotate([-90,0,0])    
     children();

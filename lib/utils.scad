@@ -62,9 +62,11 @@ module drillHoles(holes, plate_thickness, extra_size = 0) {
     }
 }
 
-module sector(radius, angles, fn = 24) {
-    r = radius / cos(180 / fn);
-    step = -360 / fn;
+module sector(radius, angles) {
+    step_devisor = $fn == 0 ? 24 : $fn;
+    
+    r = radius / cos(180 / step_devisor);
+    step = -360 / step_devisor;
 
     points = concat([[0, 0]],
         [for(a = [angles[0] : step : angles[1] - 360]) 
@@ -74,15 +76,15 @@ module sector(radius, angles, fn = 24) {
     );
 
     difference() {
-        circle(radius, $fn = fn);
+        circle(radius, $fn = step_devisor);
         polygon(points);
     }
 }
 
-module arc(radius, angles, width = 1, fn = 24) {
+module arc(radius, angles, width = 1) {
     difference() {
-        sector(radius + width, angles, fn);
-        sector(radius, angles, fn);
+        sector(radius + width, angles);
+        sector(radius, angles);
     }
 } 
 

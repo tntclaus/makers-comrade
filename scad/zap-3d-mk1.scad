@@ -43,15 +43,16 @@ motorModel = NEMA17M;
 
 workingSpaceSize = 600;
 
-workingSpaceSizeMaxZ = workingSpaceSize - 10;
+workingSpaceSizeMaxX = 600 - 18;
+workingSpaceSizeMinX = 12;
+
+workingSpaceSizeMaxZ = 600 - 10;
 workingSpaceSizeMinZ = 20;
 
-workingSpaceSizeMaxX = workingSpaceSize - 18;
-workingSpaceSizeMinX = 12;
-workingSpaceSizeMaxY = workingSpaceSize + 20;
+workingSpaceSizeMaxY = 600 + 20;
 workingSpaceSizeMinY = 70;
 
-baseFrontSize = workingSpaceSize+40*2+20;
+baseFrontSize = 600+40*2+20;
 
 legElevation = 60;
 

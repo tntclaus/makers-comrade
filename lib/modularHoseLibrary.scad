@@ -232,19 +232,19 @@ module hose_flat_nozzle(mhBore,mhNozzleWidth,mhNozzleThickness) {
 	modularHoseSocket(mhBore) modular_hose_flat_nozzle_tip(mhBore, mhNozzleWidth,mhNozzleThickness);
 }
 
-module hose_base_plate_drill_holes(mhBore, mhPlateHeight, plate_width, mhThreadDia=3, screw_offset = 6) {
+module hose_base_plate_drill_holes(mhBore, plate_width, mhThreadDia=3, screw_offset = 6) {
 	mhWaistOD = 1.58 * mhBore;
 	mhScrewOffset=plate_width/2 - screw_offset;
 
     // remove central bore (perhaps to feed cables through?)
-    translate([0,0,-0.01]) cylinder(h=mhPlateHeight+0.02,d=mhBore);
+    circle(d=mhBore);
 			
 	
     // remove screw holes
     for ( x = [-1, 1]) {
         for ( y = [-1, 1]) {
-            translate([x * mhScrewOffset,y * mhScrewOffset,-1]) 
-                    cylinder(h=mhPlateHeight+2,r=mhThreadDia/2);
+            translate([x * mhScrewOffset, y * mhScrewOffset, 0]) 
+                    circle(d=mhThreadDia);
         }
     }    
 }
@@ -268,7 +268,9 @@ module hose_base_plate(mhBore, plate_width = 0, mhThreadDia=3, screw_offset = 6)
                 rounded_rectangle([mhPlateWidth,mhPlateWidth,mhPlateHeight], r = 2, center = true);				
 	
 			// remove screw holes
-			hose_base_plate_drill_holes(mhBore, mhPlateHeight, mhPlateWidth, mhThreadDia, screw_offset);
+            translate_z(-1)
+            linear_extrude(mhPlateHeight+2)
+			hose_base_plate_drill_holes(mhBore, mhPlateWidth, mhThreadDia, screw_offset);
 		}
 	}
     translate_z(mhPlateHeight+mhBore)

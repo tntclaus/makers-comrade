@@ -12,6 +12,9 @@ include <../../lib/vslot_rails.scad>
 
 X_CARET_THICKNESS = 6 + 6*2 + 3*2;
 
+X_CARET_PLATE_GAP = 3 + 1.2; 
+X_CARET_PLATE_GAP_RAIL_CENTER = X_CARET_PLATE_GAP + 10;
+
 BELT_H_YS = -10.2; //Belt hole Y shift
 BELT_H_X = 41.5;
 BELT_H_Y1 = 13;
@@ -116,7 +119,7 @@ X_MOUNTS = [
     
     
     // отверстие под провод датчика автоуровня
-    [5, 0, 0, 0],
+    [5, 0, -10, 0],
 
     // отверстия для вставки поперечных пластин
     [3, 0,["square",[[X_PLATE_CONNECTOR_MOUNT_Y1, X_PLATE_CONNECTOR_MOUNT_X], [X_PLATE_CONNECTOR_MOUNT_Y2, X_PLATE_CONNECTOR_MOUNT_X]]]],
@@ -221,6 +224,7 @@ Y_VW_HOLES = [
 Y_PULLEY = GT2x20_plain_idler;
 
 PULLEY_Y_COORDINATE = X_CARET_THICKNESS/2  - belt_thickness(GT2x6) + pulley_pr(Y_PULLEY);
+PULLEY_Y_COORDINATE2 = PULLEY_Y_COORDINATE - GT2x6[5];
 PULLEY2_X_COORDINATE = pulley_od(Y_PULLEY) - belt_thickness(GT2x6);
 
 //Y_MOUNTS = [
@@ -231,30 +235,30 @@ PULLEY2_X_COORDINATE = pulley_od(Y_PULLEY) - belt_thickness(GT2x6);
 //];
 
 function GET_Y_MOUNTS(w) = [
-    [5.05,0,-38,-16-w/2],  
-    [5.05,0,-38, 16+w/2],        
-    [4.05,0,-PULLEY2_X_COORDINATE, PULLEY_Y_COORDINATE],  [4,0,0, PULLEY_Y_COORDINATE],
-    [4.05,0,-PULLEY2_X_COORDINATE,-PULLEY_Y_COORDINATE],  [4,0,0,-PULLEY_Y_COORDINATE],
+    [5.05,0,["circle", [[-45,-X_CARET_PLATE_GAP_RAIL_CENTER-w/2], [-40,-X_CARET_PLATE_GAP_RAIL_CENTER-w/2]]]],  
+    [5.05,0,["circle", [[-45, X_CARET_PLATE_GAP_RAIL_CENTER+w/2], [-40, X_CARET_PLATE_GAP_RAIL_CENTER+w/2]]]],  
+    [4.05,0,-PULLEY2_X_COORDINATE, PULLEY_Y_COORDINATE],  [4,0,0, PULLEY_Y_COORDINATE2],
+    [4.05,0,-PULLEY2_X_COORDINATE,-PULLEY_Y_COORDINATE],  [4,0,0,-PULLEY_Y_COORDINATE2],
 ];
 
 function GET_Y_VW_HOLES(w) = [
-    [5.05,  0,-19.85, 16+w/2],
+    [5.05,  0,-19.85, X_CARET_PLATE_GAP_RAIL_CENTER+w/2],
     [7.25,  0, 19.85,  0],
-    [5.05,  0,-19.85,-16-w/2]
+    [5.05,  0,-19.85,-X_CARET_PLATE_GAP_RAIL_CENTER-w/2]
 ];
 
 function GET_Y_PLATE_POLY(w) = [
-    [-16-w/2,-20,10],
-    [0,20,10],
-    [16+w/2,-20,10],
+    [-X_CARET_PLATE_GAP-w/2-10,-20,10],
+    [                            0, 20,10],
+    [ X_CARET_PLATE_GAP+w/2+10,-20,10],
 
-    [20+w/2,-43,3],
-    [10+w/2,-43,3],
-    [4+w/2,-25,-3],
+    [ X_CARET_PLATE_GAP+w/2+17,-50,3],
+    [ X_CARET_PLATE_GAP+w/2+3,-50,3],
+    [ X_CARET_PLATE_GAP+w/2-3,-25,-3],
     
-    [-4-w/2,-25,-3],
-    [-10-w/2,-43,3], 
-    [-20-w/2,-43,3],
+    [-X_CARET_PLATE_GAP-w/2+3,-25,-3],
+    [-X_CARET_PLATE_GAP-w/2-3,-50,3], 
+    [-X_CARET_PLATE_GAP-w/2-17,-50,3],
 //    [-40,-40,3], 
 //    [  7,-22,3], 
 //    [ -7,-22,3], 
@@ -266,7 +270,7 @@ function GET_Y_PLATE_POLY(w) = [
 //                            S_XTREME_VW_ECCENT,
 //                            S_XTREME_VW_SPACER], 20];
 
-function GET_Y_PLATE(w) = [GET_Y_PLATE_POLY(w), 5, 5, GET_Y_VW_HOLES(w), GET_Y_MOUNTS(w)];
+function GET_Y_PLATE(w) = [GET_Y_PLATE_POLY(w), 5, 3, GET_Y_VW_HOLES(w), GET_Y_MOUNTS(w)];
 function GET_Y_GANTRY(w, profile = 20) = ["", GET_Y_PLATE(w), [  S_XTREME_VW_SPACER,
                             S_XTREME_VW_ECCENT,
                             S_XTREME_VW_SPACER], profile];

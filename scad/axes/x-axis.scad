@@ -22,67 +22,21 @@ use <../fan_duct/fan_duct.scad>
 use <../spindle_mount.scad>
 
 
+use <../../lib/opto_endstop.scad>
 
-module gantry_sq_plate_75x75x3_48_dxf() {
-    projection()     vslot_plate(X_PLATE);
+
+module D16T_x_caret_dxf() {
+    $fn = 180;
+    polygon_plate_sketch(X_PLATE);
 }
 
-//gantry_sq_plate_75x75x3_48_dxf();
+//D16T_x_caret_dxf();
 
-
-module endstop_x_stl() {
-    render()
-        translate([25,-30,-28])
-    rotate([0, -180, 0])
-    endstop_x_placed(stl = true);
+module D16T_x_caret_with_cable_chain_dxf() {
+    $fn = 180;
+    x_caret_with_cable_chain_sketch();
 }
-
-module endstop_x_placed(stl = false) {
-    stl("endstop_x");
-    
-//    module connection_ear() {
-//        fanduct_placed(stl);
-//    }
-    
-    
-    difference() {
-//        translate([33,35.2,-28])
-        rotate([0,180,0])
-        if(stl) {
-            render()
-            endstop_x_mount_stl();
-        } else
-            endstop_x(); 
-
-//        translate([0,0,-0.35])
-//        fanduct_placed(stl);
-//        
-//        fanduct_placed(stl);
-
-    }
-}
-
-module fanduct_placed(stl = false) {
-    rotate([90,0,-90])
-    translate([4.4,25,-64]) {
-//                    translate([17,-53.5,54])
-//                    rotate([90,0,0])
-//                    screw(M6_cap_screw, 4);
-//                    
-//                    translate([-14.4,-53.5,63.9])
-//                    rotate([90,0,0])
-//                    screw(M6_cap_screw, 4);
-
-        translate([0,-1,0]) 
-        if(stl) {
-            fanduct(onlyEar = true);
-        } else {
-            fanduct_assembly();
-        }        
-        children();
-    }
-                
-}
+//D16T_x_caret_with_cable_chain_dxf();
 
 
 module xAxisRails(position = 0, xAxisLength, railsWidth = 30) {
@@ -108,17 +62,24 @@ module xAxisRails(position = 0, xAxisLength, railsWidth = 30) {
 
                 translate([-43,0,railsAdjustedWidth+1.87-16])
                 rotate([90,0,-90]) {
-//                    translate_z(-29)
-//                    titan_extruder_assembly(railsWidth);
+                    rotate([0,0,180])
+                    translate_z(-48.15)
+                    titan_extruder_assembly(
+                        width =	railsWidth*2, 
+                        length = 100, 
+                        inset_length =	80, 	
+                        inset_depth =	8, 
+                        heigth =	29
+                    );
 
-//                    translate_z(-48.15)
-//                    spindle_assembly(
-//                        width =	railsWidth*2, 
-//                        length = 100, 
-//                        inset_length =	80, 	
-//                        inset_depth =	6, 
-//                        heigth =	29
-//                    );
+                    translate_z(-48.15)
+                    spindle_assembly(
+                        width =	railsWidth*2, 
+                        length = 100, 
+                        inset_length =	80, 	
+                        inset_depth =	8, 
+                        heigth =	29
+                    );
                 }
 //                    
 //                fanduct_placed();
@@ -134,14 +95,14 @@ module xAxisRails(position = 0, xAxisLength, railsWidth = 30) {
                 pos = positionAdj, 
                 mirror_plate = [1,0,0]
             ) {
-                x_caret_1_stl(stl = false) {
+                x_caret_1_assembly() {
                     translate([-8.85-1,-X_PLATE_CONNECTOR_MOUNT_X,railsWidth])
                     rotate([90,90,0])
                     x_caret_connector(width = railsWidth*2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH);
 
                     translate([-8.85-1,X_PLATE_CONNECTOR_MOUNT_X,railsWidth])
                     rotate([90,90,0])
-                    x_caret_connector(width = railsWidth*2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH);
+                    x_caret_connector(width = railsWidth*2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH, endstop = true);
                 }
 
 //                translate([25,-48,0]) 
@@ -198,9 +159,6 @@ module piezo_shield(d = 25) {
 
 
     }
-//                translate([-120/2,0,120/2])
-//                cube([120,3,120], center = true);
-
 }
 
 
@@ -221,12 +179,12 @@ module toolhead_support_top_3mm_drawing() {
     }
 }
 
-module toolhead_support_bottom_3mm_dxf() {
+module STEEL_toolhead_support_bottom_3mm_dxf() {
     $fn = 180;
     toolhead_support_bottom_3mm_drawing();
 }
 
-module toolhead_support_top_3mm_dxf() {
+module STEEL_toolhead_support_top_3mm_dxf() {
     $fn = 180;
     toolhead_support_top_3mm_drawing();
 }
@@ -268,14 +226,14 @@ module toolhead_support_bottom_3mm_drawing() {
 }
 
 module toolhead_support_top() {
-    dxf("toolhead_support_top_3mm");
+    dxf("STEEL_toolhead_support_top_3mm");
     
     linear_extrude(3)
     toolhead_support_top_3mm_drawing();
 }
 
 module toolhead_support_bottom() {
-    dxf("toolhead_support_bottom_3mm");
+    dxf("STEEL_toolhead_support_bottom_3mm");
     
     translate([0,X_PLATE_SUPPORT_A_LENGTH/2,0])
     linear_extrude(3)
@@ -297,36 +255,23 @@ module toolhead_supports() {
     }
 
 }
-
-module x_caret_1_stl() {
-
-    module cable_chain_connector() {
-        // todo: заменить на оптический концевик
-//        translate([24.5,-52,0]) 
-//        rotate([180,0,0])
-//        linear_extrude(3) projection() endstop_x_placed(true);
-
-
-        
+module x_caret_with_cable_chain_sketch() {
+    module cable_chain_connector() {        
         // колонна держателя кабельной цепи
         color("#effe00")                
         difference() {
             hull() {
-                translate([-20,0,-1.5])
-                cube([1,22,3], center = true);
+                translate([-20,0,0])
+                square([1,22], center = true);
                 
-                translate([-100,0,-1.5])
-                cube([10,30,3], center = true);
+                translate([-100,0,0])
+                square([10,30], center = true);
             }
             translate([-80,0,-10]) {
-                cylinder(d = 4, h=100);
-                translate_z(14.5)
-                nut_trap(M3_cap_screw, M3_nut, depth = 3, h = 6);
+                circle(d = 4);
             }
             translate([-40,0,-10]) {
-                cylinder(d = 4, h=100);
-                translate_z(14.5)
-                nut_trap(M3_cap_screw, M3_nut, depth = 3, h = 6);
+                circle(d = 4);
             }
         }
             
@@ -335,18 +280,26 @@ module x_caret_1_stl() {
         color("#effe90")
         translate([-115,0,-1.5]) {
             difference() {
-                cube([20,30,3], center = true);        
-                translate([0,6,-10]) cylinder(d = 2.3, h = 100);
-                translate([0,-6,-10]) cylinder(d = 2.3, h = 100);
+                square([20,30], center = true);        
+                translate([0,6,0]) circle(d = 2.3);
+                translate([0,-6,0]) circle(d = 2.3);
             }
         }
     }
-
-//    translate([0,-13,0])
+    
+    polygon_plate_sketch(X_RAIL[1][1]);
     cable_chain_connector();
+}
+module x_caret_with_cable_chain() {
+    dxf("D16T_x_caret_with_cable_chain");
+    translate_z(-X_RAIL[1][1][2])
+    linear_extrude(X_RAIL[1][1][2]) x_caret_with_cable_chain_sketch();
+}
+//x_caret_with_cable_chain();
 
+module x_caret_1_assembly() {
+    x_caret_with_cable_chain();
 
-//    cube([20,20,5]);
     // стальные опоры
     toolhead_supports();
     
@@ -354,7 +307,7 @@ module x_caret_1_stl() {
 }
     
 module x_caret_2_stl(stl = true) {
-
+    dxf("D16T_x_caret");
     
     module addons() {
 //        x_caret_strnghteners();
@@ -387,14 +340,54 @@ module x_caret_2_stl(stl = true) {
 //    []];
 
 
-module x_caret_connector_dxf()  {
-    assert("TODO");
+module D16T_x_caret_connector_w60_eh8_ed3_dxf()  {
+    $fn = 180;
+    x_caret_connector_sketch(width = 60, heigth = 27.85,ear_heigth=8,ear_depth=3);
+}
+
+module x_caret_connector_lock_sketch(width, heigth, line_width = 6) {
+
+    difference() {
+        union() {
+            rounded_square([line_width,heigth], r = 1);
+
+            translate([-width/4, -(heigth/2-line_width/2)])
+            rounded_square([width/2,line_width], r = 1);
+
+            translate([width/4, heigth/2-line_width/2])
+            rounded_square([width/2,line_width], r = 1);
+        }
+        translate([0,-0.5])
+        circle(d = 3.01);
+    }
+}
+
+module D16T_x_caret_connector_lock_26x23_6_dxf() {
+    $fn = 180;
+    x_caret_connector_lock_sketch(width = 26, heigth = 23, line_width = 6);
+}
+
+module x_caret_connector_lock(width, heigth, line_width = 6) {
+    dxf_name = str(
+        "D16T_x_caret_connector_lock", "_",
+        width, "x",
+        heigth, "_",
+        line_width
+    );
+    dxf(dxf_name);
+    linear_extrude(3)
+    x_caret_connector_lock_sketch(width, heigth, line_width);
 }
 
 module x_caret_connector_sketch(width, heigth,ear_heigth=8,ear_depth=3) {
-    dxf(str(
-        "x_caret_connector"
-    ));
+    name = str(
+        "D16T_x_caret_connector", "_",
+         "w", width, "_",
+        "eh", ear_heigth, "_",
+        "ed", ear_depth
+    );
+
+    dxf(name);
     
     r = 1;
     w = width/2 - r;
@@ -420,17 +413,57 @@ module x_caret_connector_sketch(width, heigth,ear_heigth=8,ear_depth=3) {
         [  (w+r),         (l-ear_heigth+r), 0],
     ];
     
-    rounded_polygon(polygon_path);
+    bh1 = heigth/2-4-1;
+    bh2 = heigth/2-4-18;    
+    bo = 10;
+    
+    difference() {
+        union() {
+            rounded_polygon(polygon_path);
+            translate([-width/2+10,14.25,0])
+            square([10,17], center = true);
+        }
+        projection()
+        drillHoles([
+            [BELT_H_D, 0, ["square", [[-bo,bh1-2], [-bo,bh1+2]]]],
+            [BELT_H_D, 0, ["square", [[ bo,bh1-2], [ bo,bh1+2]]]],
+            [BELT_H_D, 0, ["square", [[-bo,bh2-2], [-bo,bh2+2]]]],
+            [BELT_H_D, 0, ["square", [[ bo,bh2-2], [ bo,bh2+2]]]],
+        
+            [BELT_H_D, 0, ["square", [[ 0,bh1-2], [ 0,bh1+2]]]],
+            [BELT_H_D, 0, ["square", [[ 0,bh2-2], [ 0,bh2+2]]]],
+
+            [2.3, 0, 0, 0],
+            [2.3, 0, bo/2, bh1],
+            [2.3, 0, bo/2, bh2],
+            [2.3, 0,-bo/2, bh1],
+            [2.3, 0,-bo/2, bh2],        
+        
+        
+            // opto endstop
+            [2.3, 0,-width/2+10, heigth/2-14],
+            [2.3, 0,-width/2+10, heigth/2+19-14],        
+        ], 3);
+    }
+    
 }
 
-module x_caret_connector(width, heigth, thickness = 3) {
+module x_caret_connector(width, heigth, thickness = 3, endstop = false) {
+    translate_z(-thickness/2) {
+        color("#a3b3a3")
+        linear_extrude(thickness)
+        x_caret_connector_sketch(width, heigth);
 
-    color("#a3b3a3")
-    translate_z(-thickness/2)
-    linear_extrude(thickness)
-    x_caret_connector_sketch(width, heigth);
-//    rounded_rectangle([width,heigth,thickness], r = 3, center=true);
-//    cube()
+    
+        translate([0,0.5,-thickness])
+        x_caret_connector_lock(26,23,6);
+    }
+    
+    if(endstop) {
+        translate([-width/2+10,14.25,-thickness])
+        rotate([180,0,0])
+        opto_endstop();
+    }
 }
 
 //rotate([0,0,-90])
@@ -438,18 +471,23 @@ module x_caret_connector(width, heigth, thickness = 3) {
 //    railsWidth = 30;
 //                    translate([-8.85-1,-X_PLATE_CONNECTOR_MOUNT_X,railsWidth])
 //                    rotate([90,90,0])
-//                    x_caret_connector(width = railsWidth*2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH);
+//                    x_caret_connector(width = railsWidth*2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH, endstop = false);
 //
-//                    translate([-8.85,X_PLATE_CONNECTOR_MOUNT_X,railsWidth])
+//                    translate([-8.85-1,X_PLATE_CONNECTOR_MOUNT_X,railsWidth])
 //                    rotate([90,90,0])
-//                    x_caret_connector(width = railsWidth*2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH);
+//                    x_caret_connector(width = railsWidth*2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH, endstop = true);
 //}
 
 ////x_caret_2_stl();
+//railsWidth = 30;
+//x_caret_connector(width = railsWidth*2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH, endstop = true);
 
-workingSpaceSizeMaxX  = 1000;
-workingSpaceSizeMinX = 0;
-xAxisRails(200, 400);
+//D16T_x_caret_connector_lock_26x23_6();
+
+
+//workingSpaceSizeMaxX  = 1000;
+//workingSpaceSizeMinX = 0;
+//xAxisRails(200, 400);
 
 //piezo_shield_25_stl();
 //endstop_x_stl();
