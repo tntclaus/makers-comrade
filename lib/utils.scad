@@ -44,7 +44,11 @@ module drillHoles(holes, plate_thickness, extra_size = 0) {
                 if(hullType == "circle")
                     drill(hole[0]/2 + extra_size, plate_thickness*2);
                 else if(hullType == "square")
-                    cube([hole[0], hole[0], plate_thickness*2], center = true);
+                    if(plate_thickness > 0) {
+                        cube([hole[0], hole[0], plate_thickness*2], center = true);
+                    } else {
+                        square([hole[0], hole[0]], center = true);
+                    }
                 }
             }
         }

@@ -278,7 +278,7 @@ module x_caret_with_cable_chain_sketch() {
         
         // держатель кабельной цепи
         color("#effe90")
-        translate([-115,0,-1.5]) {
+        translate([-115,0]) {
             difference() {
                 square([20,30], center = true);        
                 translate([0,6,0]) circle(d = 2.3);
@@ -467,7 +467,7 @@ module x_caret_connector(width, heigth, thickness = 3, endstop = false) {
 }
 
 //rotate([0,0,-90])
-//x_caret_1_stl() {
+//x_caret_1_assembly() {
 //    railsWidth = 30;
 //                    translate([-8.85-1,-X_PLATE_CONNECTOR_MOUNT_X,railsWidth])
 //                    rotate([90,90,0])
