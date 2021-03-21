@@ -45,16 +45,35 @@ PTFE_TUBE_DIA = 4.18;
 coolant_hose_size = 11;
 hose_hole_y_shift = -12;
 
+TOOLHEAD_EXTRUDER_PLASTIC_COLOR = "#3377ff";
+
+TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNT_X = 26;
+TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNT_Y = 18;
 
 function coolant_hose_position(length, y_shift = 0) = [length/2-coolant_hose_size/2-4.5,y_shift,0];
 function vacuum_hose_position(length, y_shift = 0) = [-length/2+coolant_hose_size/2+4.5,y_shift,0];
 
-function TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS(x = 26, y = 18) = [
+function TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS(
+    x = TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNT_X, 
+    y = TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNT_Y
+) = [
     [ x,  y],
     [ x, -y],
     [-x,  y],
     [-x, -y],
 ];
+
+function TOOLHEAD_EXTRUDER_SQUARE_MOUNTS(groove_mounts) = [
+    [-groove_mounts,  groove_mounts],
+    [-groove_mounts, -groove_mounts],
+    [ groove_mounts, -groove_mounts],
+    [ groove_mounts,  groove_mounts],
+];
+
+module toolhead_xtruder_groove_collet_mounts() {
+    for(point = TOOLHEAD_EXTRUDER_SQUARE_MOUNTS(groove_mounts = 28/2))
+        translate(point) children();
+}
 
 module precision_piezzon_pcb_v2_75() {
     rotate([90,-90,0])
@@ -128,15 +147,10 @@ module toolhead_extruder_bottom_plate_sketch(
     inset_depth,
     type
 ) {
-    groove_mounts = 28/2;
-     
     difference() {
         toolhead_bottom_plate_sketch(width, length, inset_length, inset_depth);
         circle(d = 16.05);
-        for(x = [1, -1])
-            for(y = [1, -1])
-                translate([x*groove_mounts,y*groove_mounts,0])
-                    circle(d = 3.05);
+        toolhead_xtruder_groove_collet_mounts() circle(d = 3.05);
 
         toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
             circle(d = 3.01);
@@ -187,6 +201,13 @@ module toolhead_extruder_bottom_plate(
         
     plate_corner_position(width, length, 10)
     mount_magnet();
+    
+    groove_collet_width = width-inset_depth*2;
+    
+    toolhead_titan_extruder_groove_collet(groove_collet_width);
+    rotate([0,0,180]) 
+    toolhead_titan_extruder_groove_collet(groove_collet_width);
+    
 }
 
 //module titan_adapt_carriage() {
@@ -218,6 +239,53 @@ module toolhead_extruder_bottom_plate(
 //    precision_piezzon_pcb_v2_75();
 //}
 
+
+module toolhead_titan_extruder_groove_collet_44_stl() {
+    toolhead_titan_extruder_groove_collet(
+        44
+    );
+}
+
+module toolhead_titan_extruder_groove_collet(
+    width
+) {
+    length = (TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNT_X + 3.5) * 2;
+    
+    stl_name = str(
+    "toolhead_titan_extruder_groove_collet", "_",
+    width
+    );
+//    echo(stl_name);
+    stl(stl_name);
+    
+    heigth = hot_end_groove(E3DVulcano);
+    screw_mount_column_h = (29-heigth)/2;
+    
+    translate_z(heigth/2)
+    color(TOOLHEAD_EXTRUDER_PLASTIC_COLOR)
+    difference() {
+        union() {
+            rounded_rectangle([length, width, heigth], r=3, center = true);
+            translate([-length/2+4,0,screw_mount_column_h+heigth/2])
+                rounded_rectangle([8, width, 29-heigth], r=3, center = true);
+
+        }
+        cylinder(d = hot_end_groove_dia(E3DVulcano), h = heigth+1, center = true);
+
+        toolhead_xtruder_groove_collet_mounts()
+            translate_z(-heigth) cylinder(d = 4.01, h = heigth*4);
+        
+        toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
+            translate_z(-heigth) cylinder(d = 4.01, h = 1000);
+        
+        translate([length, 0, 0])
+            cube([length*2, width*2, heigth*4], center = true);
+    }
+    
+    
+    
+}
+
 module toolhead_titan_extruder_mount_60x80x42_NEMA17S_5_stl() {
     toolhead_titan_extruder_mount(
         width, 
@@ -247,7 +315,7 @@ module toolhead_titan_extruder_mount(
 //    echo(stl_name);
     stl(stl_name); 
     
-    color("#3377ff")
+    color(TOOLHEAD_EXTRUDER_PLASTIC_COLOR)
     translate_z(3-1.5) { 
         linear_extrude(3) difference() {
             square([inset_length - padding, width - padding], center = true); 
@@ -292,7 +360,7 @@ module titan_extruder_vitamins_assembly(heigth, motor_type) {
         rotate([0,0,90]) {
             translate_z(0.75) {
                 titan_extruder();
-                titan_stepper_position(2) NEMA(motor_type);
+//                titan_stepper_position(2) NEMA(motor_type);
             }
         }
         translate_z(-16.5) 
@@ -311,7 +379,6 @@ module titan_extruder_assembly(
         inset_depth, 
         heigth,
         motor_type = NEMA17S) {
-    translate([0,0,0])
     titan_extruder_vitamins_assembly(heigth, motor_type)
         toolhead_titan_extruder_mount(
             width = width, 
