@@ -9,7 +9,6 @@ Vitamins:
 165 M5 V-Slot Nut
  16 Magnet N35UH_10x3_3x7
   5 Stepper motor NEMA17 x 40mm
-  1 Stepper motor NEMA17 x 34mm
   7 Openbuilds Eccentric Spacer (h=6mm)
   1 RS895 DC Motor
  21 V Wheel
@@ -68,6 +67,7 @@ Printed:
   6 pcb_spacer2540_2.stl
   1 piezo_shield_25.stl
   3 plastic_window_800x60x3.stl
+  2 toolhead_titan_extruder_groove_collet_44.stl
   1 toolhead_titan_extruder_mount_60x80x42_NEMA17S_5.stl
   4 vslot_cube20.stl
 
