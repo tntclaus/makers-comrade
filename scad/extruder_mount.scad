@@ -258,14 +258,13 @@ module toolhead_titan_extruder_groove_collet(
     width, "x",
     heigth
     );
-    echo(stl_name);
+//    echo(stl_name);
     stl(stl_name);
     
     groove_collet_heigth = hot_end_groove(E3DVulcano);
     screw_mount_column_h = (heigth-groove_collet_heigth)/2;
     
     groove_dia = hot_end_groove_dia(E3DVulcano);
-    echo(hot_end_insulator_diameter(E3DVulcano));
     
     translate_z(groove_collet_heigth/2)
     color(TOOLHEAD_EXTRUDER_PLASTIC_COLOR)
@@ -307,7 +306,7 @@ module toolhead_titan_extruder_groove_collet_top(
     width, "x",
     heigth
     );
-    echo(stl_name);
+//    echo(stl_name);
     stl(stl_name);
     
     length = (TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNT_X - 5) * 2;
@@ -363,7 +362,7 @@ module toolhead_titan_extruder_mount(
         motor_type[0],"_",
         padding
     );
-    echo(stl_name);
+//    echo(stl_name);
     stl(stl_name); 
     
     color(TOOLHEAD_EXTRUDER_PLASTIC_COLOR)
