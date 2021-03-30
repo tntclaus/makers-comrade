@@ -113,9 +113,10 @@ module modularHoseSocket(mhBore) {
 	}
 }
 
-module modularHoseWaist(mhBore, mhWaistHeight) {
+module modularHoseWaist(mhBore, mhWaistHeight, waist_od = 0) {
+    function mh_waist_od(od) = od == 0 ? 1.58 * mhBore : od;
 
-	mhWaistOD = 1.58 * mhBore;
+	mhWaistOD = mh_waist_od(waist_od);
 
 	union() {
 		translate([0,0,mhWaistHeight]) children(0);
@@ -249,20 +250,22 @@ module hose_base_plate_drill_holes(mhBore, plate_width, mhThreadDia=3, screw_off
     }    
 }
 
-module hose_base_plate(mhBore, plate_width = 0, mhThreadDia=3, screw_offset = 6) {
+module hose_base_plate(mhBore, plate_width = 0, mhThreadDia=3, screw_offset = 6, has_ball = true) {
     stl(
         str("hose_base_plate", "_",
         "bore_", mhBore, "_",
         "dia_", mhThreadDia)
     );
     
-	mhWaistOD = 1.58 * mhBore;
-	mhPlateHeight = 0.5 * mhBore;
+	mhWaistOD = 12;
+	mhPlateHeight = 3;
 	mhPlateWidth = plate_width != 0 ? plate_width : mhWaistOD + 4*mhThreadDia;
 
 	union() {
-		translate([0,0,1 + mhPlateHeight*2]) modularHoseBall(mhBore);
-		translate([0,0,1]) modularHoseWaist(mhBore, mhPlateHeight*2) sphere(d=0);
+        if(has_ball)
+            translate([0,0,1 + mhPlateHeight*2]) modularHoseBall(mhBore);
+        
+		translate([0,0,1]) modularHoseWaist(mhBore, mhPlateHeight*2.5, mhWaistOD) sphere(d=0);
 		difference() {
 			translate([0,0,mhPlateHeight/2]) 
                 rounded_rectangle([mhPlateWidth,mhPlateWidth,mhPlateHeight], r = 2, center = true);				

@@ -50,6 +50,19 @@ module xAxisRails(position = 0, xAxisLength, railsWidth = 30) {
     
     railsAdjustedWidth = railsWidth + materialsThinkness;
     
+    
+    // endstop y
+    translate([xAxisLength/2-2, railsWidth+materialsThinkness,0]) 
+    rotate([180,90,0])
+    x_caret_endstop_anchor();
+
+    // endstop x
+    translate([xAxisLength/2-2, -railsWidth-materialsThinkness,0]) 
+    rotate([180,90,0])
+    x_caret_endstop_anchor();
+
+    
+    
     translate([xAxisLength/2,railsAdjustedWidth,0]) rotate([-90,0,90]) {
         vslot_rail(
                 X_RAIL, 
@@ -303,6 +316,15 @@ module x_caret_1_assembly() {
     // стальные опоры
     toolhead_supports();
     
+    translate([-48.1,0,-3]) {
+        rotate([0,180,180]) {
+            color("blue")
+            precision_piezo_holder_stl();
+            translate([8.2,0,3])
+            screw(M5_pan_screw, 5);
+        }
+    }
+    
     children();
 }
     
@@ -478,6 +500,41 @@ module x_caret_connector(width, heigth, thickness = 3, endstop = false) {
 //                    x_caret_connector(width = railsWidth*2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH, endstop = true);
 //}
 
+module precision_piezo_holder_stl() {
+    stl("precision_piezo_holder");
+    difference() {
+        translate([-100,-10,-1.5])
+        import("../../libstl/pp_uni_2.75_holder.stl");
+        translate_z(-2)
+        cube([100,100,4], center = true);
+    }
+}
+
+module x_caret_endstop_anchor_stl() {
+    x_caret_endstop_anchor();
+}
+
+module x_caret_endstop_anchor() {
+    stl("x_caret_endstop_anchor");
+    heigth = 7;
+    anchor_width = 30;
+    color("blue")
+//    render()
+    difference() {
+        union() {
+            rounded_rectangle([20,20,heigth], r = 1.4);
+            translate([-0.3,anchor_width/2,heigth/2])
+            cube([1.6,anchor_width,heigth*2], center = true);
+        }
+        translate_z(heigth/2+2)
+        extrusion(E2020, heigth*2);
+        translate_z(heigth+0.5)
+        cube([21,21,heigth+1], center = true);
+    }
+}
+
+//x_caret_endstop_anchor_stl();
+
 ////x_caret_2_stl();
 //railsWidth = 30;
 //x_caret_connector(width = railsWidth*2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH, endstop = true);
@@ -487,7 +544,7 @@ module x_caret_connector(width, heigth, thickness = 3, endstop = false) {
 
 //workingSpaceSizeMaxX  = 1000;
 //workingSpaceSizeMinX = 0;
-//xAxisRails(200, 400);
+//xAxisRails(80, 400);
 
 //piezo_shield_25_stl();
 //endstop_x_stl();

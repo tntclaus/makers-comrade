@@ -266,55 +266,37 @@ module e3d_fan_duct_half() {
     fan_x_offset = rad_dia / 2;
     
     external_face_w = 20;
-    color("DeepSkyBlue")
-    render() difference() {
-        union(){
-            hull() {
-                hull() {
-                    translate([0, -internal_face_w / 2, 0])
-                        cube([eps, internal_face_w, 26]);
 
-                    translate([fan_x_offset+4, -external_face_w / 2, 0])
-                        cube([eps, external_face_w, external_face_w]);
-                    }
-                translate_z(8/2)
-                rotate([0,90,0])
-                    translate_z(20)
-                        cylinder(d = 8, h = 1);
-            }
-            translate_z(8/2)
-            rotate([0,90,0]) translate_z(20) difference() {
-                cylinder(d = 8, h = 10);
-                translate_z(-0.5)
-                cylinder(d = 6.2, h = 11);
-            }
-        }
-        
-        translate([0,0,36])
-        cylinder(h = 70, d = rad_dia + 0.2, center = true); // For rad
-        cylinder(h = 70, d = rad_dia - 2, center = true); // For rad
-
+//    render() 
+    difference() {
+//        color("DeepSkyBlue")
         hull() {
-            translate_z(12.5)
-                rotate([0, 90, 0])
-                    translate_z(0)
-                    cylinder(d = rad_dia, h = 1);
-            
-            translate_z(8/2)
-                rotate([0, 90, 0])
-                    translate_z(20)
-                    cylinder(d = 6.2, h = 1);
+            translate_z(33.4-3)
+            resize([80, 40, 1])
+            cylinder(d = 40, h = 1);
+                
+//            translate_z(1)
+            cylinder(d = 27, h = 1);
         }
-    }   
+        translate_z(30-14)
+        color("red")
+        cylinder(d = 25, h=30, center = true);
+
+        translate_z(0)
+        cylinder(d = 16, h=10, center = true);
+        
+        //разрез
+        cube([200,200,200]);
+    }
 }
 
 module e3d_fan_duct_left_stl() {
-    color("DeepSkyBlue")
+//    color("DeepSkyBlue")
     render() difference() {
-        e3d_fan_duct_half();
-        mount_holes();
-        mirror([0,1,0])
-        mount_holes();
+//        e3d_fan_duct_half();
+//        mount_holes();
+//        mirror([0,1,0])
+//        mount_holes();
     }
 
     module mount_holes() {
@@ -341,10 +323,10 @@ module e3d_fan_duct_right_stl() {
     color("DeepSkyBlue")
     
     render() mirror([1,0,0]) difference() {
-        e3d_fan_duct_half();
-        mount_holes();
-        mirror([0,1,0])
-        mount_holes();
+//        e3d_fan_duct_half();
+//        mount_holes();
+//        mirror([0,1,0])
+//        mount_holes();
     }
 
     module mount_holes() {
@@ -369,13 +351,13 @@ module e3d_fan_duct_right_stl() {
 
 
 module e3d_fan_duct() {
-    stl("e3d_fan_duct_left");
-    stl("e3d_fan_duct_right");    
+//    stl("e3d_fan_duct_left");
+//    stl("e3d_fan_duct_right");    
 //    translate([26.35,0,-49])
 //    rotate([-90,0,90])
 //    color("#00aaff")
-    e3d_fan_duct_right_stl();
-    e3d_fan_duct_left_stl();
+//    e3d_fan_duct_right_stl();
+//    e3d_fan_duct_left_stl();
 }
 
 module e3d_hot_end_cooler_assembly() {
@@ -442,7 +424,7 @@ module volcano_heater_block(type, naked = false, resistor_wire_rotate = [0,0,0])
     }
 }
 
-//e3d_hot_end_cooler_assembly();
+e3d_hot_end_cooler_assembly();
 //nozzle_cooler_top_stl(true);
 //nozzle_cooler_bottom_stl(true);
 

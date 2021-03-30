@@ -178,7 +178,8 @@ module toolhead_extruder_bottom_plate(
     length, 
     inset_length, 
     inset_depth, 
-    type, 
+    type,
+    heigth,
     thickness = 3
 ) {
     dxf_name = str(
@@ -204,41 +205,22 @@ module toolhead_extruder_bottom_plate(
     
     groove_collet_width = width-inset_depth*2;
     
-    toolhead_titan_extruder_groove_collet(groove_collet_width, 29);
+    toolhead_titan_extruder_groove_collet(groove_collet_width, heigth);
     rotate([0,0,180]) 
-    toolhead_titan_extruder_groove_collet(groove_collet_width, 29);
+    toolhead_titan_extruder_groove_collet(groove_collet_width, heigth);
+
+    translate_z(hot_end_groove(E3DVulcano))
+    toolhead_titan_extruder_groove_collet_top(groove_collet_width, heigth);    
     
+    translate(vacuum_hose_position(length))
+    hose_base_plate(10, 20, 4, 3.45, false);
 }
 
-//module titan_adapt_carriage() {
-//    titan_adapt_carriage_stl();
-//
-//    translate_z(-11)
-//    titan_hot_end_position()
-//    precision_piezon_mount_holes([0,0,90]) {
-//        translate_z(-1)
-//        nut(M3_nut);
-//    }
-//
-//    titan_extruder_cover_hole(0)
-//        screw(M3_cap_screw, 35);
-//    
-//    titan_extruder_cover_hole(1)
-//        screw(M3_cap_screw, 35);
-//
-//    titan_extruder_cover_hole(2)
-//        translate_z(2) screw(M3_cap_screw, 35);
-//
-//    titan_extruder_cover_hole(3)
-//        translate_z(2) screw(M3_cap_screw, 20);
-//
-//    rotate([0,-14,0])
-//    translate([-47,7.3,14])
-//    color("green")
-//    rotate([0,180,0])
-//    precision_piezzon_pcb_v2_75();
-//}
 
+module cooler_stl() {
+    $fn = 180;
+    hose_base_plate(10, 20, 4, 3.45, false);
+}
 
 module toolhead_titan_extruder_groove_collet_44x29_stl() {
     toolhead_titan_extruder_groove_collet(
@@ -308,18 +290,18 @@ module toolhead_titan_extruder_groove_collet_top(
     );
 //    echo(stl_name);
     stl(stl_name);
-    
     length = (TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNT_X - 5) * 2;
     
-    
-    
+    ptfe_cylinder_heigth = heigth - groove_collet_top_heigth;
+
+        
     translate_z(groove_collet_top_heigth/2)
     color(TOOLHEAD_EXTRUDER_PLASTIC_COLOR) {
         difference() {
 
             rounded_rectangle([length, width, groove_collet_top_heigth], r=3, center = true);
 
-            cylinder(d = 16, h = heigth+1, center = true);
+            cylinder(d = 16.2, h = heigth+1, center = true);
 
             toolhead_xtruder_groove_collet_mounts()
                 translate_z(-heigth) cylinder(d = 4.01, h = heigth*4);
@@ -329,10 +311,10 @@ module toolhead_titan_extruder_groove_collet_top(
             
         }
 
-        translate([0,0,(groove_collet_top_heigth+heigth)/2]) 
+        translate([0,0,(groove_collet_top_heigth+ptfe_cylinder_heigth)/2]) 
         difference() {
-            cylinder(d1 = 18, d2 = 8, h = heigth, center = true);
-            cylinder(d1 = 16, d2 = 4, h = heigth+.1, center = true);
+            cylinder(d1 = 18, d2 = 8, h = ptfe_cylinder_heigth, center = true);
+            cylinder(d1 = 16, d2 = 4, h = ptfe_cylinder_heigth+.1, center = true);
         }
     }
 }
@@ -412,8 +394,73 @@ module toolhead_titan_extruder_mount(
     
 }
 
+module titan_extruder_heatbreak_cooler_100_stl() {
+    $fn = 180;
+    titan_extruder_heatbreak_cooler(length = 100);
+}
 
-module titan_extruder_vitamins_assembly(heigth, motor_type) {
+module titan_extruder_heatbreak_cooler(
+    length
+) {
+    stl(str("titan_extruder_heatbreak_cooler", "_", length));
+    
+    external_face_w = 20;
+    
+    zero_level = 33.4-3;
+
+//    render() 
+    color(TOOLHEAD_EXTRUDER_PLASTIC_COLOR)
+    difference() {
+        hull() {
+            translate_z(zero_level)
+            resize([94, 40, 0.7])
+            cylinder(d = 40, h = 0.5);
+
+
+            cylinder(d = 27, h = 1);
+        }
+        translate_z(30-6)
+        color("red")
+        cylinder(d = 25, h=44, center = true);
+
+        translate_z(0)
+        cylinder(d = 16, h=10, center = true);
+        
+        hull() {
+            translate_z(zero_level)
+            translate(coolant_hose_position(length))
+            cylinder(d = 11, h = 1);
+            translate_z(1)
+            cylinder(d = 25, h = 1);
+        }
+        
+        hull() {
+            translate_z(zero_level)
+            translate(vacuum_hose_position(length))
+            cylinder(d = 11, h = 1);
+            translate_z(1)
+            cylinder(d = 25, h = 1);
+        }
+        
+        
+        toolhead_xtruder_groove_collet_mounts()
+                translate_z(-1) cylinder(d = 3.6, h = 1000);
+            
+            toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
+                translate_z(-1) cylinder(d = 4.01, h = 1000);
+        
+        
+//        translate(vacuum_hose_position(length))   
+//        linear_extrude(100) 
+//        hose_base_plate_drill_holes(coolant_hose_size, 25, 3.05); 
+        
+        //разрез
+        translate([-100,0,0])
+        cube([200,200,200]);
+    }
+}
+
+module titan_extruder_vitamins_assembly(length, heigth, motor_type) {
 //    translate([10,0,0])
     translate_z(heigth+15+3) {
         rotate([0,0,90]) {
@@ -428,6 +475,8 @@ module titan_extruder_vitamins_assembly(heigth, motor_type) {
     translate_z(9.7)
     titan_hot_end_position() { 
         e3d_hot_end_cooler_assembly();
+        translate_z(-40)
+        titan_extruder_heatbreak_cooler(length);
     }
 }
 
@@ -438,7 +487,10 @@ module titan_extruder_assembly(
         inset_depth, 
         heigth,
         motor_type = NEMA17S) {
-    titan_extruder_vitamins_assembly(heigth, motor_type)
+    titan_extruder_vitamins_assembly(
+            length = length, 
+            heigth = heigth, 
+            motor_type = motor_type)
         toolhead_titan_extruder_mount(
             width = width, 
             length = length,
@@ -449,20 +501,27 @@ module titan_extruder_assembly(
     
     translate_z(heigth)
     toolhead_extruder_top_plate(
-        width = width, length = length, inset_length = inset_length
-   );
+        width = width, 
+        length = length, 
+        inset_length = inset_length
+    );
             
     toolhead_extruder_bottom_plate(        
         width = width, 
         length = length, 
         inset_length = inset_length,
-        inset_depth = inset_depth
+        inset_depth = inset_depth,
+        heigth = heigth
     );    
 }
 
 //titan_extruder_assembly(60, 100, 80, 8, 29);
+cooler_stl();
 
-toolhead_titan_extruder_groove_collet_top_44x29_stl();
+//render()
+//titan_extruder_heatbreak_cooler_100_stl();
+
+//toolhead_titan_extruder_groove_collet_top_44x29_stl();
 
 //toolhead_titan_extruder_mount_60x100x80_NEMA17S_5_stl();
 //toolhead_titan_extruder_groove_collet_44_stl();
