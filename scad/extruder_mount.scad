@@ -11,7 +11,7 @@ include <NopSCADlib/vitamins/stepper_motors.scad>
 include <../lib/utils.scad>
 
 use <extruder_heatbreak_cooler.scad>
-use <toolhead_utils.scad>
+include <toolhead_utils.scad>
 
 use <../lib/modularHoseLibrary.scad>
 
@@ -42,16 +42,22 @@ E3DVulcano= ["E3D Volcano", e3d, "E3D Volcano direct",  62,  3.7, 16,  42.7, "si
 
 PTFE_TUBE_DIA = 4.18;
 
-coolant_hose_size = 11;
-hose_hole_y_shift = -12;
+coolant_hose_size = 20;
+coolant_hose_size_out = coolant_hose_size+4;
+coolant_hose_out_wall_dia = coolant_hose_size_out+2;
+hose_hole_y_shift = 0;
 
 TOOLHEAD_EXTRUDER_PLASTIC_COLOR = "#3377ff";
 
 TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNT_X = 26;
 TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNT_Y = 18;
 
-function coolant_hose_position(length, y_shift = 0) = [length/2-coolant_hose_size/2-4.5,y_shift,0];
-function vacuum_hose_position(length, y_shift = 0) = [-length/2+coolant_hose_size/2+4.5,y_shift,0];
+TOOLHEAD_EXTRUDER_GROOVE_MOUNT_X = 15/2;
+TOOLHEAD_EXTRUDER_HEATBREAK_MOUNT_X = 28/2;
+
+//function coolant_hose_position_mirror(length, y_shift = 0) = [length/2-coolant_hose_size/2-4.5-TOOLHEAD_PLATES_BELT_INSET,y_shift,0];
+
+function coolant_hose_position(length, y_shift = 0, m = -1) = [m*(length/2-coolant_hose_size/2-4.5-TOOLHEAD_PLATES_BELT_INSET),y_shift,0];
 
 function TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS(
     x = TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNT_X, 
@@ -70,22 +76,30 @@ function TOOLHEAD_EXTRUDER_SQUARE_MOUNTS(groove_mounts) = [
     [ groove_mounts,  groove_mounts],
 ];
 
-module toolhead_xtruder_groove_collet_mounts() {
-    for(point = TOOLHEAD_EXTRUDER_SQUARE_MOUNTS(groove_mounts = 28/2))
+module toolhead_extruder_groove_collet_mounts() {
+    for(point = TOOLHEAD_EXTRUDER_SQUARE_MOUNTS(groove_mounts = TOOLHEAD_EXTRUDER_GROOVE_MOUNT_X))
         translate(point) children();
 }
 
-module precision_piezzon_pcb_v2_75() {
-    rotate([90,-90,0])
-    translate([-111,0,0])
-    import("../libstl/precision-piezo-uniboard2.75.stl");
+module toolhead_extruder_heatbreak_cooler_mounts() {
+    for(point = TOOLHEAD_EXTRUDER_SQUARE_MOUNTS(groove_mounts = TOOLHEAD_EXTRUDER_HEATBREAK_MOUNT_X))
+        translate(point) children();
 }
 
+//module precision_piezzon_pcb_v2_75() {
+//    rotate([90,-90,0])
+//    translate([-111,0,0])
+//    import("../libstl/precision-piezo-uniboard2.75.stl");
+//}
 
-
-//COVER_MOUNT_1 = [-29,8,3.2];
-//COVER_MOUNT_2 = [22,8,3.2];
-//COVER_MOUNT_3 = [22,8,57];
+module wires_window(width) {
+    translate([0,-width/2]) hull() {
+        translate([-6,0])
+        circle(d = 12);
+        translate([6,0])
+        circle(d = 12);
+    }
+}
 
 module toolhead_extruder_top_plate_sketch(
         width, length, inset_length
@@ -96,19 +110,22 @@ module toolhead_extruder_top_plate_sketch(
         toolhead_top_plate_sketch(width, inset_length);
         circle(d = PTFE_TUBE_DIA);
         
+        wires_window(width);
+
+        
         toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
             circle(d = 4.01);
         
         translate(coolant_hose_position(length, hose_hole_y_shift)) hull() {
-            circle(d = coolant_hose_size+6);
-            translate([coolant_hose_size, 0, 0])
-            circle(d = coolant_hose_size+6);
+            circle(d = coolant_hose_out_wall_dia+.1);
+            translate([-coolant_hose_size, 0, 0])
+            circle(d = coolant_hose_out_wall_dia+.1);
         }
                 
-        translate(vacuum_hose_position(length, hose_hole_y_shift)) hull() {   
-            circle(d = coolant_hose_size+6);
-            translate([-coolant_hose_size, 0, 0])
-            circle(d = coolant_hose_size+6);
+        translate(coolant_hose_position(length, hose_hole_y_shift, 1)) hull() {   
+            circle(d = coolant_hose_out_wall_dia);
+            translate([coolant_hose_size, 0, 0])
+            circle(d = coolant_hose_out_wall_dia);
         }
     }    
 }
@@ -119,8 +136,10 @@ module D16T_toolhead_extruder_top_plate_W60xL100_IL80_dxf() {
 }
 
 module toolhead_extruder_top_plate(
-        width, length, inset_length,
-        thickness = 3
+    width, 
+    length, 
+    inset_length,
+    thickness = 3
 ) {
     dxf_name =         str(
         "D16T_toolhead_extruder_top_plate","_",
@@ -134,10 +153,6 @@ module toolhead_extruder_top_plate(
     toolhead_extruder_top_plate_sketch(
         width, length, inset_length
     );
-        
-    plate_corner_position(width, inset_length, 10)
-    translate_z(thickness)
-    mount_magnet();
 }
 
 module toolhead_extruder_bottom_plate_sketch(
@@ -149,17 +164,22 @@ module toolhead_extruder_bottom_plate_sketch(
 ) {
     difference() {
         toolhead_bottom_plate_sketch(width, length, inset_length, inset_depth);
-        circle(d = 16.05);
-        toolhead_xtruder_groove_collet_mounts() circle(d = 3.05);
+        circle(d = 16.01);
+        translate([0,8])
+        circle(d = 3.01);
+
+        toolhead_extruder_groove_collet_mounts() circle(d = 2.3);
 
         toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
             circle(d = 3.01);
+        
+        toolhead_extruder_heatbreak_cooler_mounts() circle(d = 3.01);
             
         translate(coolant_hose_position(length))
-        hose_base_plate_drill_holes(coolant_hose_size, 25, 3.05);
+        circle(d = coolant_hose_size); 
                     
-        translate(vacuum_hose_position(length))    
-        hose_base_plate_drill_holes(coolant_hose_size, 25, 3.05); 
+        translate(coolant_hose_position(length, 0, 1))    
+        circle(d = coolant_hose_size); 
     }
 }
 
@@ -200,47 +220,89 @@ module toolhead_extruder_bottom_plate(
         inset_depth,
         type);
         
-    plate_corner_position(width, length, 10)
-    mount_magnet();
+//    plate_corner_position(width, length, 10)
+//    mount_magnet();
     
     groove_collet_width = width-inset_depth*2;
     
-    toolhead_titan_extruder_groove_collet(groove_collet_width, heigth);
+    toolhead_titan_extruder_groove_collet(groove_collet_width, heigth, length);
+
     rotate([0,0,180]) 
-    toolhead_titan_extruder_groove_collet(groove_collet_width, heigth);
+    toolhead_titan_extruder_groove_collet(groove_collet_width, heigth, length);
 
     translate_z(hot_end_groove(E3DVulcano))
     toolhead_titan_extruder_groove_collet_top(groove_collet_width, heigth);    
     
-    translate(vacuum_hose_position(length))
-    hose_base_plate(10, 20, 4, 3.45, false);
 }
 
 
-module cooler_stl() {
-    $fn = 180;
-    hose_base_plate(10, 20, 4, 3.45, false);
+module toolhead_titan_extruder_groove_collet_44x29_100_stl() {
+    toolhead_titan_extruder_groove_collet(
+        44,
+        29,
+        100
+    );
 }
 
-module toolhead_titan_extruder_groove_collet_44x29_stl() {
+
+
+module toolhead_titan_extruder_groove_collet_44_dxf() {
     toolhead_titan_extruder_groove_collet(
         44,
         29
     );
 }
 
+//module toolhead_titan_extruder_groove_collet_sketch(
+//    width
+//) {
+////    rounded_square([length, width, groove_collet_heigth], r=3, center = true);
+//    length = (TOOLHEAD_EXTRUDER_GROOVE_MOUNT_X + 5) * 2;
+//    smallest_width = width < length ? width : length;
+//    
+//    groove_dia = hot_end_groove_dia(E3DVulcano) - 0.1;
+//    
+//    
+//    
+//    difference() {
+//        rounded_square([length, smallest_width], r=3, center = true);
+//        circle(d = groove_dia);
+//
+//        toolhead_extruder_groove_collet_mounts()
+//            circle(d = 3.01);
+//        
+//        toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
+//            circle(d = 4.01);
+//        
+//        toolhead_extruder_heatbreak_cooler_mounts() circle(d = 3.01);
+//        
+//        translate([length-1, 0, 0])
+//            square([length*2, smallest_width*2], center = true);
+//    }
+//}
+
 module toolhead_titan_extruder_groove_collet(
     width,
-    heigth
+    heigth,
+    plate_length
 ) {
     length = (TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNT_X + 3.5) * 2;
+
+    m4_grover_uncompressed_heigth=1.75;
+    m4_grover_half_compressed_heigth=1.6;    
+    m4_grover_compressed_heigth=1.1;
+    
+    m4_washer_heigth = 0.9;
+    
+    m4_washer_grover_assembly_h = m4_washer_heigth + m4_grover_half_compressed_heigth;
     
     stl_name = str(
     "toolhead_titan_extruder_groove_collet", "_",
     width, "x",
-    heigth
+    heigth, "_",
+    plate_length
     );
-//    echo(stl_name);
+    
     stl(stl_name);
     
     groove_collet_heigth = hot_end_groove(E3DVulcano);
@@ -253,26 +315,68 @@ module toolhead_titan_extruder_groove_collet(
     difference() {
         union() {
             rounded_rectangle([length, width, groove_collet_heigth], r=3, center = true);
-            translate([-length/2+4,0,screw_mount_column_h+groove_collet_heigth/2])
-                rounded_rectangle([8, width, heigth-groove_collet_heigth], r=3, center = true);
+            translate([-length/2+4,0,screw_mount_column_h+groove_collet_heigth/2-m4_washer_grover_assembly_h/2])
+                rounded_rectangle([8, width, heigth-groove_collet_heigth-m4_washer_grover_assembly_h], r=3, center = true);
+
+            translate_z(-groove_collet_heigth/2)
+            translate(coolant_hose_position(plate_length)) 
+                cylinder(d = coolant_hose_out_wall_dia, h = heigth+groove_collet_heigth/2);
 
         }
         cylinder(d = groove_dia, h = groove_collet_heigth+1, center = true);
 
-        toolhead_xtruder_groove_collet_mounts()
-            translate_z(-groove_collet_heigth) cylinder(d = 4.01, h = groove_collet_heigth*4);
+//        toolhead_extruder_groove_collet_mounts()
+//            translate_z(-groove_collet_heigth) cylinder(d = 4.01, h = groove_collet_heigth*4);
         
         toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
             translate_z(-groove_collet_heigth) cylinder(d = 4.01, h = 1000);
         
         translate([length, 0, 0])
             cube([length*2, width*2, groove_collet_heigth*4], center = true);
+        
+        toolhead_extruder_groove_collet_mounts()
+            cylinder(d = 3.01, h = 1000, center = true);
+        
+        toolhead_extruder_heatbreak_cooler_mounts() cylinder(d = 3.01, h = 1000, center = true);
+        
+        translate_z(-groove_collet_heigth)
+        translate(coolant_hose_position(plate_length)) 
+            cylinder(d = coolant_hose_size, h = 1000);
+        
+
+        translate_z(heigth-groove_collet_heigth-10)
+        translate(coolant_hose_position(plate_length)) 
+            cylinder(d = coolant_hose_size_out, h = 1000);
+        
+
     }
+
+
+//    dxf_name = str(
+//    "toolhead_titan_extruder_groove_collet", "_",
+//    width
+//    );
+//    dxf(dxf_name);
+//    echo(stl_name);
+
+//    linear_extrude(3)
+//    toolhead_titan_extruder_groove_collet_sketch(width);
 }
 
-module toolhead_titan_extruder_groove_collet_top_44x29_stl() {
+module toolhead_titan_extruder_groove_collet_top_part1_44x29_stl() {
     $fn=180;
-    toolhead_titan_extruder_groove_collet_top(44,29);
+    toolhead_titan_extruder_groove_collet_top_part1(44, 29);
+}
+
+module toolhead_titan_extruder_groove_collet_top_part2_44x29_stl() {
+    $fn=180;
+    toolhead_titan_extruder_groove_collet_top_part2(44, 29);
+}
+
+
+module toolhead_titan_extruder_groove_collet_top_part3_44x29_stl() {
+    $fn=180;
+    toolhead_titan_extruder_groove_collet_top_part3(44, 29);
 }
 
 module toolhead_titan_extruder_groove_collet_top(
@@ -283,39 +387,141 @@ module toolhead_titan_extruder_groove_collet_top(
     groove_collet_top_heigth = 4;
     heigth = top_plate_distance - groove_collet_heigth;
     
+    
+    ptfe_cylinder_heigth = heigth - groove_collet_top_heigth;
+
+    piezo_disc_thick = 0.45;
+    
+    module piezo_disc() {
+        difference() {
+            union() {
+                translate_z(0.25)
+                cylinder(d = 20, h = 0.2);
+                translate_z(0)        
+                cylinder(d = 16, h = 0.25);
+            }
+            cylinder(d = 4, h = 1, center = true);
+        }
+    }
+    
+    translate_z(18+piezo_disc_thick) {
+        translate_z(2)
+        piezo_disc();
+        color(TOOLHEAD_EXTRUDER_PLASTIC_COLOR)
+        translate_z(3.05+piezo_disc_thick)
+        toolhead_titan_extruder_groove_collet_top_part3(
+            width,
+            top_plate_distance
+        );
+    }
+        
+    
+    translate_z(groove_collet_top_heigth/2)
+    color(TOOLHEAD_EXTRUDER_PLASTIC_COLOR) {
+        toolhead_titan_extruder_groove_collet_top_part1(
+            width,
+            top_plate_distance
+        );
+        
+        translate([0,0,(groove_collet_top_heigth+ptfe_cylinder_heigth)/2-3]) 
+        toolhead_titan_extruder_groove_collet_top_part2(
+            width,
+            top_plate_distance
+        );
+    }
+}
+
+
+module toolhead_titan_extruder_groove_collet_top_part1(
+    width,
+    top_plate_distance
+) {
+    groove_collet_heigth = hot_end_groove(E3DVulcano);
+    groove_collet_top_heigth = 4;
+    heigth = top_plate_distance - groove_collet_heigth;
+    
+
+
+    length = (TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNT_X - 5) * 2 - coolant_hose_out_wall_dia/2-5;
+    
+    ptfe_cylinder_heigth = heigth - groove_collet_top_heigth;
+
+    
     stl_name = str(
-    "toolhead_titan_extruder_groove_collet_top", "_",
+        "toolhead_titan_extruder_groove_collet_top_part1", "_",
+        width, "x",
+        heigth
+    );
+    stl(stl_name);
+    
+    difference() {
+        rounded_rectangle([length, length, groove_collet_top_heigth], r=3, center = true);
+
+        cylinder(d = 16.2, h = heigth+1, center = true);
+
+        toolhead_extruder_groove_collet_mounts()
+            translate_z(-heigth) cylinder(d = 3.01, h = heigth*4);
+        
+    }
+}
+
+module toolhead_titan_extruder_groove_collet_top_part2(
+    width,
+    top_plate_distance
+) {
+    groove_collet_heigth = hot_end_groove(E3DVulcano);
+    groove_collet_top_heigth = 4;
+    heigth = top_plate_distance - groove_collet_heigth;
+    
+    piezo_disc_thick = 0.45;
+
+    length = (TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNT_X - 5) * 2 - coolant_hose_out_wall_dia/2-5;
+    
+    ptfe_cylinder_heigth = heigth - groove_collet_top_heigth;
+
+
+    stl_name = str(
+    "toolhead_titan_extruder_groove_collet_top_part2", "_",
     width, "x",
     heigth
     );
 //    echo(stl_name);
     stl(stl_name);
-    length = (TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNT_X - 5) * 2;
     
-    ptfe_cylinder_heigth = heigth - groove_collet_top_heigth;
-
-        
-    translate_z(groove_collet_top_heigth/2)
-    color(TOOLHEAD_EXTRUDER_PLASTIC_COLOR) {
-        difference() {
-
-            rounded_rectangle([length, width, groove_collet_top_heigth], r=3, center = true);
-
-            cylinder(d = 16.2, h = heigth+1, center = true);
-
-            toolhead_xtruder_groove_collet_mounts()
-                translate_z(-heigth) cylinder(d = 4.01, h = heigth*4);
-            
-            toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
-                translate_z(-heigth) cylinder(d = 4.01, h = 1000);
-            
+    difference() {
+        union() {
+            translate_z(-5) rounded_rectangle([length, length, 3], r=3, center = true);
+            translate_z(2.45)
+            cylinder(d1 = 6, d2 = 6, h = ptfe_cylinder_heigth-4, center = true);
         }
+        translate_z(-6.51)
+        cylinder(d1 = 2, d2 = 4, h = ptfe_cylinder_heigth/2);
+        translate_z(-6.51+ptfe_cylinder_heigth/2-0.01)
+        cylinder(d = 4, h = ptfe_cylinder_heigth);
 
-        translate([0,0,(groove_collet_top_heigth+ptfe_cylinder_heigth)/2]) 
-        difference() {
-            cylinder(d1 = 18, d2 = 8, h = ptfe_cylinder_heigth, center = true);
-            cylinder(d1 = 16, d2 = 4, h = ptfe_cylinder_heigth+.1, center = true);
-        }
+        toolhead_extruder_groove_collet_mounts()
+            translate_z(-heigth) cylinder(d = 3.01, h = heigth*4);
+    }
+}
+
+module toolhead_titan_extruder_groove_collet_top_part3(
+    width,
+    top_plate_distance
+) {
+    groove_collet_heigth = hot_end_groove(E3DVulcano);
+    heigth = top_plate_distance - groove_collet_heigth;
+    
+    stl_name = str(
+    "toolhead_titan_extruder_groove_collet_top_part2", "_",
+    width, "x",
+    heigth
+    );
+//    echo(stl_name);
+    stl(stl_name);
+    
+    difference() {
+        cylinder(d = 20,h = 2.1, center = true);
+        cylinder(d = 16,h = 2.1, center = true);
     }
 }
 
@@ -336,6 +542,7 @@ module toolhead_titan_extruder_mount(
     motor_type,
     padding = 10
 ) {
+    
     stl_name = str(
         "toolhead_titan_extruder_mount", "_",
         width, "x",
@@ -349,44 +556,68 @@ module toolhead_titan_extruder_mount(
     
     color(TOOLHEAD_EXTRUDER_PLASTIC_COLOR)
     translate_z(3-1.5) { 
-        linear_extrude(3) difference() {
-            square([inset_length - padding, width - padding], center = true); 
-            circle(d = PTFE_TUBE_DIA);
-            
-            translate(coolant_hose_position(length, hose_hole_y_shift)) hull() {
-                circle(d = coolant_hose_size+6);
-                translate([coolant_hose_size, 0, 0])
-                circle(d = coolant_hose_size+6);
+        difference() {
+            linear_extrude(3) difference() {
+                square([inset_length - padding, width - padding], center = true); 
+                circle(d = PTFE_TUBE_DIA);
+                
+                translate(coolant_hose_position(length, hose_hole_y_shift)) hull() {
+                    circle(d = coolant_hose_size+6);
+                    translate([-coolant_hose_size, 0, 0])
+                    circle(d = coolant_hose_size+6);
+                }
+                        
+                translate(coolant_hose_position(length, hose_hole_y_shift, 1)) {
+                    for(x = [-4 : 2 : 5])
+                        for(y = [-5.5 : 2 : 6.5])
+                            translate([x*2, y*2, 0])
+                                circle(d = 2.5);
+                }
+                
+                wires_window(width);
+                
+                toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
+                    circle(d = 4.1);
+                
+//                plate_corner_position(width,inset_length, 10)
+//                    circle(d = 15);
             }
-                    
-            translate(vacuum_hose_position(length, hose_hole_y_shift)) hull() {   
-                circle(d = coolant_hose_size+6);
-                translate([-coolant_hose_size, 0, 0])
-                circle(d = coolant_hose_size+6);
-            }
             
+            translate(coolant_hose_position(length, hose_hole_y_shift, 1)) {
+                translate_z(2)
+                for(x = [-4 : 2 : 5]) {
+                    hull() {
+                        translate([x*2, -5.5*2, 0])
+                            cylinder(d = 2.5, h = 2);
+                        translate([x*2, 16.5*2, 0])
+                            cylinder(d = 2.5, h = 2);
+                    }
+                }
+            }
             
             toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
-                circle(d = 4.1);
-            
-            plate_corner_position(width,inset_length, 10)
-                circle(d = 15);
+                cylinder(d1 = 4.1, d2 = 8.1, h = 3.01);
         }
         
         translate_z(2.95)
         translate([13.6,10.87,NEMA_width(motor_type)/2]) {
             rotate([0,90,0])
             linear_extrude(2) difference() {
-                NEMA_outline(motor_type);
+                union() {
+                    NEMA_outline(motor_type);
+                    square_corner_w = NEMA_width(motor_type)/2;
+                    translate([-square_corner_w+5,-square_corner_w-2])
+                    square([NEMA_width(motor_type)-5,square_corner_w+2]);
+                }
                 circle(NEMA_boss_radius(motor_type));
                 NEMA_screw_positions(motor_type) circle(d = 3.1);
             }
             
-            translate([8.5,-NEMA_width(motor_type)/2-1,-NEMA_width(motor_type)/2])
+            translate([11.5,-NEMA_width(motor_type)/2-2.5,-NEMA_width(motor_type)/2])
             hull() {
-                translate([-7.5,0,NEMA_width(motor_type)-1-5])
+                translate([-10.5,0,NEMA_width(motor_type)-1-5])
                 cube([2,2,2], center = true);
-                cube([17,2,0.1], center = true);
+                cube([23,2,0.1], center = true);
             }
         }
 
@@ -396,13 +627,15 @@ module toolhead_titan_extruder_mount(
 
 module titan_extruder_heatbreak_cooler_100_stl() {
     $fn = 180;
-    titan_extruder_heatbreak_cooler(length = 100);
+    titan_extruder_heatbreak_cooler(plate_length = 100);
 }
 
 module titan_extruder_heatbreak_cooler(
-    length
+    plate_length,
+    cut_half = false
 ) {
-    stl(str("titan_extruder_heatbreak_cooler", "_", length));
+    stl(str("titan_extruder_heatbreak_cooler", "_", plate_length));
+    length = plate_length - TOOLHEAD_PLATES_BELT_INSET*2 - 2;
     
     external_face_w = 20;
     
@@ -413,7 +646,7 @@ module titan_extruder_heatbreak_cooler(
     difference() {
         hull() {
             translate_z(zero_level)
-            resize([94, 40, 0.7])
+            resize([length, 40, 0.7])
             cylinder(d = 40, h = 0.5);
 
 
@@ -428,35 +661,37 @@ module titan_extruder_heatbreak_cooler(
         
         hull() {
             translate_z(zero_level)
-            translate(coolant_hose_position(length))
-            cylinder(d = 11, h = 1);
+            translate(coolant_hose_position(plate_length))
+            cylinder(d = coolant_hose_size, h = 1);
             translate_z(1)
             cylinder(d = 25, h = 1);
         }
         
         hull() {
             translate_z(zero_level)
-            translate(vacuum_hose_position(length))
-            cylinder(d = 11, h = 1);
+            translate(coolant_hose_position(plate_length, 0, 1))
+            cylinder(d = coolant_hose_size, h = 1);
             translate_z(1)
             cylinder(d = 25, h = 1);
         }
         
         
-        toolhead_xtruder_groove_collet_mounts()
-                translate_z(-1) cylinder(d = 3.6, h = 1000);
+        toolhead_extruder_heatbreak_cooler_mounts()
+            translate_z(-1) cylinder(d = 3.6, h = 1000);
             
-            toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
-                translate_z(-1) cylinder(d = 4.01, h = 1000);
-        
+        toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
+            translate_z(-1) cylinder(d = 4.01, h = 1000);
+    
         
 //        translate(vacuum_hose_position(length))   
 //        linear_extrude(100) 
 //        hose_base_plate_drill_holes(coolant_hose_size, 25, 3.05); 
         
         //разрез
-        translate([-100,0,0])
-        cube([200,200,200]);
+        if(cut_half) {
+            translate([-100,0,0])
+            cube([200,200,200]);
+        }
     }
 }
 
@@ -466,7 +701,7 @@ module titan_extruder_vitamins_assembly(length, heigth, motor_type) {
         rotate([0,0,90]) {
             translate_z(0.75) {
                 titan_extruder();
-//                titan_stepper_position(2) NEMA(motor_type);
+                titan_stepper_position(2) NEMA(motor_type);
             }
         }
         translate_z(-16.5) 
@@ -476,7 +711,7 @@ module titan_extruder_vitamins_assembly(length, heigth, motor_type) {
     titan_hot_end_position() { 
         e3d_hot_end_cooler_assembly();
         translate_z(-40)
-        titan_extruder_heatbreak_cooler(length);
+        titan_extruder_heatbreak_cooler(length, cut_half = true);
     }
 }
 
@@ -515,13 +750,47 @@ module titan_extruder_assembly(
     );    
 }
 
-//titan_extruder_assembly(60, 100, 80, 8, 29);
-cooler_stl();
+module berd_air_tube_collet_stl() {
+    berd_air_tube_collet();    
+}
 
+module berd_air_tube_collet() {
+    stl("berd_air_tube_collet");
+    
+    difference() {
+        union() {
+            cylinder(d = 8, h = 6);
+            translate([-1.5,0,0])
+            cube([3,10,6]);
+        }
+        cylinder(d = 3.9, h = 6.1);
+        translate([-.5,0,0])
+        cube([1,12,10]);
+        
+        // отверстие винта М3
+        translate([0,7,3])
+        rotate([0,90,0])
+        cylinder(d = 3, h = 10, center = true);
+    }
+}
+
+
+//berd_air_tube_collet_stl();
+
+//titan_extruder_assembly(60, 100, 80, 8, 29);
+//cooler_stl();
+
+//toolhead_titan_extruder_groove_collet_top_part1_44x29_stl();
+//toolhead_titan_extruder_groove_collet_top_part2_44x29_stl();
+//toolhead_titan_extruder_groove_collet_top_part3_44x29_stl();
 //render()
 //titan_extruder_heatbreak_cooler_100_stl();
 
 //toolhead_titan_extruder_groove_collet_top_44x29_stl();
 
 //toolhead_titan_extruder_mount_60x100x80_NEMA17S_5_stl();
-//toolhead_titan_extruder_groove_collet_44_stl();
+//toolhead_titan_extruder_groove_collet_44x29_100_stl();
+
+
+//D16T_toolhead_extruder_top_plate_W60xL100_IL80_dxf();
+//D16T_toolhead_extruder_bottom_plate_W60xL100_IL80_ID8_dxf();

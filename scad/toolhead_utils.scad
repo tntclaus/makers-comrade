@@ -4,9 +4,9 @@ include <NopSCADlib/vitamins/screws.scad>
 
 
 show_magnets = true;
+TOOLHEAD_PLATES_BELT_INSET = 10;
 
-
-function BOTTOM_PLATE(width, length, inset_length, inset_depth, r = 1) = [
+function BOTTOM_PLATE(width, length, inset_length, inset_depth, belt_inset = TOOLHEAD_PLATES_BELT_INSET, r = 1) = [
     [-(length-r*2)/2, (width-r*2)/2, r],
 
     // карман
@@ -15,7 +15,17 @@ function BOTTOM_PLATE(width, length, inset_length, inset_depth, r = 1) = [
     [ (length-2)/2-(length-inset_length)/2, (width-2)/2-(inset_depth-2), -1],    
     [ (length+2)/2-(length-inset_length)/2, (width-2)/2, 1],    
 
+
+    // вершина X+ Y+
     [ (length-r*2)/2, (width-r*2)/2, r],
+    
+    // вырез под ремни
+    [ (length-r*2)/2, (width-r*2)/2 - belt_inset, r],
+    [ (length-r*2)/2 - belt_inset + r, (width-r*2)/2 - belt_inset - r*2 - inset_depth/2, -r],    
+    [ (length-r*2)/2 - belt_inset + r, -(width-r*2)/2 + belt_inset + r*2 + inset_depth/2, -r],        
+    [ (length-r*2)/2,-(width-r*2)/2 + belt_inset, r],
+
+    // вершина X+ Y-    
     [ (length-r*2)/2,-(width-r*2)/2, r],
 
     // карман
@@ -24,7 +34,14 @@ function BOTTOM_PLATE(width, length, inset_length, inset_depth, r = 1) = [
     [-(length-2)/2+(length-inset_length)/2, -(width-2)/2+(inset_depth-2), -1],    
     [-(length+2)/2+(length-inset_length)/2, -(width-2)/2, 1],    
 
+    // вершина X- Y-    
     [-(length-r*2)/2,-(width-r*2)/2, r],    
+
+    // вырез под ремни
+    [-(length-r*2)/2,                 -(width-r*2)/2 + belt_inset, r],
+    [-(length-r*2)/2 + belt_inset - r,-(width-r*2)/2 + belt_inset + r*2 + inset_depth/2, -r],        
+    [-(length-r*2)/2 + belt_inset - r, (width-r*2)/2 - belt_inset - r*2 - inset_depth/2, -r],    
+    [-(length-r*2)/2,                  (width-r*2)/2 - belt_inset, r],
 ];
 
 function TOP_PLATE(width, length, r = 1) = [
@@ -77,6 +94,7 @@ module toolhead_top_plate_sketch(
             mount_magnet_mount_hole(0);
     }    
 }
+//toolhead_bottom_plate_sketch(44, 100, 80, 4);
 
 module mount_magnet() {
     if(show_magnets) {

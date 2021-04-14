@@ -185,10 +185,10 @@ module toolhead_support_top_3mm_drawing() {
         rounded_rectangle([8,80,1], r = 2, center = true);
 
         translate([0, mount1[3], -1])
-        cylinder(d = mount1[0], h = 6);
+        cylinder(d = mount1[0]-0.6, h = 6);
         
         translate([0, mount2[3], -1])
-        cylinder(d = mount2[0], h = 6);
+        cylinder(d = mount2[0]-0.6, h = 6);
     }
 }
 
@@ -201,6 +201,8 @@ module STEEL_toolhead_support_top_3mm_dxf() {
     $fn = 180;
     toolhead_support_top_3mm_drawing();
 }
+
+//STEEL_toolhead_support_top_3mm_dxf();
 
 module toolhead_support_bottom_3mm_drawing() {
     yo = X_PLATE_SUPPORT_B_OFFSET_Y;

@@ -1,4 +1,5 @@
 include <NopSCADlib/utils/core/core.scad>
+include <NopSCADlib/utils/core/rounded_rectangle.scad>
 
 
 module heatBedHeater(width, depth, padding=14) {
@@ -144,9 +145,73 @@ module heatbed_bottom_plate_620x620_dxf() {
     }
 }
 
+
+
 module heatBedBottomPlate(width, depth, padding) {
     dxf(str("heatbed_bottom_plate_", width + padding,"x", depth + padding));
     translate_z(-4) render() linear_extrude(4) heatbed_bottom_plate_620x620_dxf();
 }
 
 //heatBedBottomPlate(500,500,10);
+
+///////////////////////////////////////////
+///// NEW!!!!! 2021.04.13
+///////////////////////////////////////////
+
+TABLE_BASE_BORDER = 3;
+
+module table_base_sketch(
+    work_area_width,
+    mount_length,
+    mount_point_offset,
+    mounts_num = 3
+) {
+    assert(work_area_width >= 300);
+    assert(mounts_num >= 3);
+    assert(mounts_num <= 4);    
+    
+    width = work_area_width + TABLE_BASE_BORDER*2;
+    
+    difference() {
+        rounded_square(width, TABLE_BASE_BORDER, center = true);
+//        for(x = [-1, 1])
+//            for(y = [-1, 1])
+//                translate([x*work_area_width/4, y*work_area_width/4]) {
+////                    circle(d = work_area_width/2-20);
+//                    rounded_square(work_area_width/2-30, TABLE_BASE_BORDER, center = true);
+//                }
+                
+        rounded_square(work_area_width-46, TABLE_BASE_BORDER, center = true);
+    }
+    
+    module v_strenghtener() {    
+        line_width = 15;
+        
+        hull() {
+            translate([-work_area_width/2,0]) square([1, line_width], center = true);
+            translate([ work_area_width/2,work_area_width/3]) square([1, line_width], center = true);
+        }
+        
+        hull() {
+            translate([-work_area_width/2,0]) square([1, line_width], center = true);
+            translate([ work_area_width/2,-work_area_width/3]) square([1, line_width], center = true);
+        }
+    }
+    
+    v_strenghtener();
+    
+    rotate([0,0,90])
+    v_strenghtener();
+
+    rotate([0,0,180])
+    v_strenghtener();
+
+    rotate([0,0,270])
+    v_strenghtener();
+    
+}
+
+
+table_base_sketch(610, 360);
+
+

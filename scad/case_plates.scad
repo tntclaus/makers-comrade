@@ -3,6 +3,8 @@ include <NopSCADlib/utils/rounded_polygon.scad>
 include <hinge_pn5-40.scad>
 include <utils.scad>
 
+use <parametric_butt_hinge_3.7.scad>
+
 sidePlateColor = "green";
 sidePlateOpacity = 1;
 module bottom_plate(
@@ -146,9 +148,15 @@ module front_plate(
 ) {
     dxf(str("front_plate_",width,"x", heigth, "x", thickness));
 
+    portal_window_w = width-80;
+    portal_window_h = heigth-side-100;
+    
+    echo("front plate window w: ", portal_window_w, "; h: ", portal_window_h);
+    
     difference() {
         side_plate(width,  heigth, side, thickness, topElevation, 20);                
-        translate([0, (heigth-60)/2+side,0]) rounded_square([width-80,  heigth-side-100], 20);
+        translate([0, (heigth-60)/2+side,0]) 
+            rounded_square([portal_window_w, portal_window_h], 20);
         
         
         translate([0,heigth-5, 0]) 
@@ -202,7 +210,7 @@ module side_plate_r(
 }
 
 //front_plate(700,700,80,200,3,80);
-    module motorWindow() {
+module motorWindow() {
     motorWindowCoordinates = [
         [-3,0,0],
         [-3,23,0],    
@@ -219,8 +227,97 @@ module side_plate_r(
 module plastic_doors(width, heigth, side, thickness, angle) {
 //    plastic_door(width, heigth, side, thickness,left = true);
     plastic_door_assembly(width, heigth, side, thickness, angle, left = false);
-    mirror([1,0,0]) plastic_door_assembly(width, heigth, side, thickness, angle, left = false);    
+    mirror([1,0,0]) plastic_door_assembly(width, heigth, side, thickness, angle, left = false);
 }
+
+    C_CONSTANT = 0 + 0;
+    
+    C_FEMALE   = C_CONSTANT + 0;
+    C_MALE     = C_CONSTANT + 1;
+
+
+module hinge()
+{   
+    // Initialize model resolution.
+    
+//    $fn = m_resolution;
+    
+    // Generate hinge assembly.
+    
+    rotate ( [ 0.0, 0.0, 0.0 ] )
+    {
+        rotate ( [ 0.0, -0, 0.0 ] ) leaf ( C_FEMALE );
+        leaf ( C_MALE );     
+    }
+}
+
+module platic_door_hinge_spacer_sketch() {
+    projection()
+    difference() {
+        rotate ( [ 0.0, 180.0, 0.0 ] ) leaf ( C_FEMALE );
+        
+        translate([35/2-5,0,1])
+        cube([35,100,20], center = true);        
+    }
+}
+
+module plastic_door_sketch(width, heigth, side, left = true) {
+    overlap = 10;
+    
+    door_width = width-80+overlap;
+    door_heigth = heigth-side-100+overlap;
+    
+    echo(str("plastic_door_", door_width/2, "x", door_heigth));
+    
+    hinge_y_pos = door_heigth/2-80;
+    
+    module hinge_holes() {
+        projection()
+        tool_cutter_fastener_set ( 6, 1, 0 );
+    }
+    
+    difference() {
+        color("orange")
+        union() {
+            rounded_square([door_width,  door_heigth], 20);
+        }
+        if(left) {
+            translate([(width-80+overlap+1)/2, 0, 0]) 
+                square([width-80+overlap+1, heigth-side-100+overlap+1], center = true);
+        } else {
+            translate([-(width-80+overlap+1)/2, 0, 0]) 
+                square([width-80+overlap+1, heigth-side-100+overlap+1], center = true);
+        }
+        
+        translate([-door_width/2, hinge_y_pos,0])
+        hinge_holes();
+
+        translate([-door_width/2,-hinge_y_pos,0])
+        hinge_holes();
+        
+        // магнит
+        translate([-10, door_heigth/2-10-overlap/2, 0])
+        circle(d = 3);
+
+        translate([-10,-door_heigth/2+10+overlap/2, 0])
+        circle(d = 3);
+    }
+
+//    translate([-door_width/2, hinge_y_pos,-6])
+//    tool_cutter_fastener_set ( 6, 1, 0 );
+
+//    translate([-door_width/2, hinge_y_pos,-6])
+//    color("red")
+//    platic_door_hinge_spacer_sketch();
+//    hinge();
+
+//    translate([-door_width/2,-hinge_y_pos,-6])
+//    color("red")
+//    hinge();
+
+}
+
+
 
 module plastic_door(width, heigth, side, thickness, left = true) {
     overlap = 25;
@@ -302,6 +399,13 @@ module plastic_window_l1_800x60_dxf() {
 //plastic_window_l0_800x60_dxf();
 //translate([0, 0, 1.5]) plastic_window_l1_800x60_dxf();
 
+module plastic_window_sketch(heigth, side) {
+        translate([0, (heigth-60)/2+side,0]) 
+        difference() {
+            rounded_square([100+overlap,  heigth-side-80+overlap], 20);
+        }
+}
+
 module plastic_window(heigth, side, thickness) {
     stl(str("plastic_window_",heigth,"x",side, "x", thickness));
     
@@ -328,9 +432,9 @@ module plastic_window(heigth, side, thickness) {
         }
     
     
-    translate([0, heigth-60,-1]) cylinder(d = 5, h = thickness+2);
-    translate([0, side+35,-1]) cylinder(d = 5, h = thickness+2);
-    translate([0, side+60,-1]) cylinder(d = 5, h = thickness+2);
+        translate([0, heigth-60,-1]) cylinder(d = 5, h = thickness+2);
+        translate([0, side+35,-1]) cylinder(d = 5, h = thickness+2);
+        translate([0, side+60,-1]) cylinder(d = 5, h = thickness+2);
     }
 }
 
@@ -343,8 +447,6 @@ module side_plate_l(
 ) {
     dxf(str("side_plate_l_",width,"x", heigth, "x", thickness));
 
-
-
     difference() {
         side_plate(width,  heigth, side, thickness, topElevation);
         window(heigth, side);
@@ -353,4 +455,14 @@ module side_plate_l(
 }
 //plastic_window(700, 80, 4);
 //side_plate_r(700,700,80,200, 4,180);
-//plastic_doors(800, 700, 80, 4, angle = 0) ;
+//translate([0,-860/2])
+front_plate(740, 800, 60, 4, 160);
+//
+//translate_z(-2)
+//color("silver")
+//plastic_door_sketch(740, 800, 60, 4);
+
+//hinge();
+
+//cube([10,10,10]);
+//platic_door_hinge_spacer_sketch();
