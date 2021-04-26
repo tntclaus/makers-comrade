@@ -24,7 +24,7 @@ include <pulley_and_motor_plates.scad>
 
 use <heatbed.scad>
 include <motors.scad>
-include <case_plates.scad>
+use <case_plates.scad>
 include <axes/z-axis.scad>
 include <axes/y-axis.scad>
 
@@ -81,7 +81,7 @@ wallColor = "#6633ff";
     
 module main_assembly() {
     echo(str(baseFrontSize, " ", portalWidth));
-    case(75);
+    case(0);
 }
 
 
@@ -234,10 +234,10 @@ module case(positionZ = 0) {
     
 
     // Y/X AXIS
-    xAxisLength = baseFrontSize-10;
-    yAxisRails(positionZ, baseFrontSize, baseLength, xAxisLength);
-    mirror([1,0,0]) 
-        yAxisRails(positionZ, baseFrontSize, baseLength, xAxisLength, mirrored = true);
+//    xAxisLength = baseFrontSize-10;
+//    yAxisRails(positionZ, baseFrontSize, baseLength, xAxisLength);
+//    mirror([1,0,0]) 
+//        yAxisRails(positionZ, baseFrontSize, baseLength, xAxisLength, mirrored = true);
     
     bottom_plate_740x740x3_dxf(
         false
@@ -249,7 +249,7 @@ module case(positionZ = 0) {
     base();
     
 //    color(wallColor) 
-    walls();
+//    walls();
             
     top(positionZ,positionZ);
 }
@@ -257,30 +257,32 @@ module case(positionZ = 0) {
 
 module printBed() {
     elevation = 85;
-    baseLength = workingSpaceSize/2;
-    extrusionSize = workingSpaceSize-20;
-    // FRAME
-    translate([-baseLength,0,elevation]) rotate([0,90,90])
-        extrusion_w_cube(V2020, extrusionSize);
-
-    translate([baseLength,0,elevation])  rotate([0,90,-90])
-        extrusion_w_cube(V2020, extrusionSize);
-    
-    translate([0,-baseLength,elevation]) rotate([90,90,-90])
-            extrusion_w_cube(V2020, extrusionSize);
-
-    translate([0,0,elevation])          rotate([0,90,0])
-            extrusion_w_angle(V2020, extrusionSize, sides = [1,0,1,0]);
-    
-    translate([0,baseLength,elevation]) rotate([0,90,0])
-            extrusion_w_cube(V2020, extrusionSize);
+//    baseLength = workingSpaceSize/2;
+//    extrusionSize = workingSpaceSize-20;
+//    // FRAME
+//    translate([-baseLength,0,elevation]) rotate([0,90,90])
+//        extrusion_w_cube(V2020, extrusionSize);
+//
+//    translate([baseLength,0,elevation])  rotate([0,90,-90])
+//        extrusion_w_cube(V2020, extrusionSize);
+//    
+//    translate([0,-baseLength,elevation]) rotate([90,90,-90])
+//            extrusion_w_cube(V2020, extrusionSize);
+//
+//    translate([0,0,elevation])          rotate([0,90,0])
+//            extrusion_w_angle(V2020, extrusionSize, sides = [1,0,1,0]);
+//    
+//    translate([0,baseLength,elevation]) rotate([0,90,0])
+//            extrusion_w_cube(V2020, extrusionSize);
     
     // CONNECTORS
     
 
     // HEATING PLATE
-    translate([0,0,elevation+12])
-        heatBed(workingSpaceSize, workingSpaceSize, 20);
+    translate([0,0,elevation])
+//        heatBed(workingSpaceSize, workingSpaceSize, 20);
+    rotate([0,0,180])
+    heatbed_table_assembly(610, 10, 25);
 }
 
 
@@ -293,7 +295,7 @@ module bottom_plate_740x740x3_dxf(dxf = true) {
                 zAxis(0, true);
             }
     else {
-        color(sidePlateColor, sidePlateOpacity)    
+//        color(sidePlateColor, sidePlateOpacity)    
         render(convexity = 2)  
             translate([0,0,-3])
                 linear_extrude(wallThickness) 
@@ -474,34 +476,4 @@ module xyAxisMotor(left = false) {
     
     rotate([0,-90,0]) motorPulley(6, NEMA17M, GT2x16_toothed_idler, 11);
 //    motorPulley(6, NEMA17M, GT2x16_toothed_idler, 4);
-}
-
-module zAxisMotor(motorTranslation = 0, diff = false) {
-    motorScrewY = frontPlateThickness+3;
-    
-    differ = motorTranslation < 0 ? 4 : 1;
-    
-    translate([
-        0, 
-        -baseLength+NEMA_width(motorModel)/2+10, 
-        NEMA_length(motorModel)/2
-    ]) {
-        rotate([0,-90,0])
-            motor(motorScrewY, motorModel, diff);
-        
-//        if(motorTranslation < 0) {    
-//            xAxisMotorHolder(motorModel);    
-//        } else {
-//            rotate([180,0]) translate([0,0,-3])
-//            xAxisMotorHolder(motorModel);    
-//        }
-        
-        translate([0,0,workingSpaceSize/2+40]) leadscrew(
-            8, 
-            workingSpaceSize, 
-            8, 
-            2, 
-            center = true
-        );
-    }
 }

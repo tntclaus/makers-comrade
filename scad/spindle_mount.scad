@@ -12,12 +12,16 @@ use <toolhead_utils.scad>
 show_hose = false;
 
 
-function TOOLHEAD_SPINDLE_RS895_VERTICAL_SCREW_MOUNTS(x = 26, y = 18) = [
+function TOOLHEAD_SPINDLE_RS895_VERTICAL_SCREW_MOUNTS(x = 30, y = 18) = [
     [ x,  y],
     [ x, -y],
     [-x,  y],
     [-x, -y],
 ];
+
+coolant_hose_size = 20;
+coolant_hose_size_out = coolant_hose_size+4;
+coolant_hose_out_wall_dia = coolant_hose_size_out+2;
 
 module motor_collet_60_100_80_6_RS895_stl() {
     $fn=180;
@@ -86,8 +90,8 @@ module motor_mount_bottom_plate_sketch(
     coolant_hose_size,
     vacuum_hose_size,
     type) {
-    coolant_hose_position = [length/2-coolant_hose_size-4.5,0,0];        
-    vacuum_hose_position = [-length/2+vacuum_hose_size+4,0,0];
+    coolant_hose_position = hose_position(length+1, coolant_hose_size, m=1);
+    vacuum_hose_position = hose_position(length+5, vacuum_hose_size);
 
 
     difference() {
@@ -104,6 +108,8 @@ module motor_mount_bottom_plate_sketch(
             circle(d = 3.01);       
     }
 }
+
+
 
 module motor_mount_bottom_plate(
     width, 
@@ -137,8 +143,9 @@ module motor_mount_bottom_plate(
         coolant_hose_size,
         vacuum_hose_size,
         type);
-    coolant_hose_position = [length/2-coolant_hose_size-4.5,0,0];        
-    vacuum_hose_position = [-length/2+vacuum_hose_size+4,0,0];
+    coolant_hose_position = hose_position(length+1, coolant_hose_size, m=1);
+//    coolant_hose_size = vacuum_hose_size;
+    vacuum_hose_position = hose_position(length+5, vacuum_hose_size);
 
 
     
@@ -165,13 +172,13 @@ module motor_mount_top_plate_sketch(
         type,
         thickness = 3
     ) {
-    coolant_hose_position = [length/2-coolant_hose_size-4.5,0,0];        
-    vacuum_hose_position = [-length/2+vacuum_hose_size+4,0,0];
+    coolant_hose_position = hose_position(length+3, coolant_hose_size, m=1);
+    vacuum_hose_position = hose_position(length+10, vacuum_hose_size);
 
 
     difference() {
         toolhead_top_plate_sketch(width, inset_length);
-        circle(d = SPINDLE_motor_shield_diameter(type)+0.5);
+        circle(d = SPINDLE_motor_shield_diameter(type));
         
 
         translate(coolant_hose_position) hull() {
@@ -219,9 +226,13 @@ module motor_mount_top_plate(
         thickness
     );
         
-    plate_corner_position(width, inset_length, 10)
-    translate_z(3)
-    mount_magnet();
+//    plate_corner_position(width, inset_length, 10)
+//    translate_z(3)
+//    mount_magnet();
+//    translate([length/2-20, width/2-10, -2])
+    toolhead_screw_mount_locations(TOOLHEAD_SPINDLE_RS895_VERTICAL_SCREW_MOUNTS())
+    translate_z(-0.45)
+    piezo_disc();
 }
 
 module coolant_hose_chain(size) {
@@ -282,13 +293,13 @@ module spindle_assembly(
     ) {
     
     coolant_hose_size = 8;
-    vacuum_hose_size = 11;
+    vacuum_hose_size = 12;
 
     toolhead_screw_mount_locations(TOOLHEAD_SPINDLE_RS895_VERTICAL_SCREW_MOUNTS(), 33)
         screw(M4_cap_screw, 35);
 
     
-    SPINDLE_ER11_assembly(type);
+//    SPINDLE_ER11_assembly(type);
     motor_mount_bottom_plate(        
         width = width, length = length, inset_length = inset_length, type = type,
         coolant_hose_size = coolant_hose_size,

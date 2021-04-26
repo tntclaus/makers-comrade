@@ -59,6 +59,9 @@ function PLATE_SCREW_CONNECTORS(width, length, padding) = [
     [-(length-padding)/2,-(width-padding)/2, 0],
 ];
 
+
+function hose_position(length, hose_size, y_shift = 0, m = -1) = [m*(length/2-hose_size/2-4.5-TOOLHEAD_PLATES_BELT_INSET),y_shift,0];
+
 module plate_corner_position(width, length, padding) {
     for(position = PLATE_SCREW_CONNECTORS(width, length, padding))
         translate(position)
@@ -156,3 +159,41 @@ module toolhead_screw_mount_locations(locations, z = 0) {
         children();
 }
 
+piezo_disc_thick = 0.45;
+
+module piezo_disc() {
+    vitamin("piezo_disc_d20");
+    
+    difference() {
+        union() {
+            translate_z(0.25)
+            cylinder(d = 20, h = 0.2);
+            translate_z(0)        
+            color("white")
+            cylinder(d = 16, h = 0.25);
+        }
+        cylinder(d = 4, h = 1, center = true);
+    }
+}
+
+module toolhead_piezo_groove_20x16_stl() {
+    $fn=180;
+    toolhead_piezo_groove(d_out = 20, d_in = 16);
+}
+
+module toolhead_piezo_groove(
+    d_out = 20,
+    d_in = 16
+) {
+    
+    stl_name = str(
+    "toolhead_piezo_groove", "_",
+    d_out, "x", d_in
+    );
+    stl(stl_name);
+    
+    difference() {
+        cylinder(d = d_out,h = 2.1, center = true);
+        cylinder(d = d_in,h = 2.11, center = true);
+    }
+}

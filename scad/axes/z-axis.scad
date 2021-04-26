@@ -7,44 +7,31 @@ include <../../lib/leadscrew_couplers.scad>
 include <../../lib/vwheel_gantries.scad>
 
 include <../motors.scad>
+include <NopSCADlib/vitamins/stepper_motors.scad>
+
+use <NopSCADlib/vitamins/rod.scad>
 
 include <NopSCADlib/vitamins/extrusions.scad>
 include <NopSCADlib/vitamins/leadnuts.scad>
 
+include <../../lib/leadscrew_couplers.scad>
+include <../../lib/vwheel_gantries.scad>
+include <../../lib/vslot_rails.scad>
 
 
 Z_MOUNT_HOLES = [  
-                 [7.2,0,19.85,  -35],
-                 [5,  0,  -10,  -35],
-                 [5,  0,   10,  -35],
-                 [5,  0,    0,  -35],
-                 [5,  0,  -20,  -35/2],
-                 [5,  0,   20,  -35/2],                 
-                 [5,  0,  -10,  -35/2],
-                 [5,  0,   10,  -35/2],
-                 [5,  0,    0,  -35/2],
-                 [5,  0,  -20,  0],
-                 [5,  0,  -10,  0],
-                 [5,  0,   10,  0],
-                 [5,  0,    0,  0],
-                 [5,  0,  -20,  35/2],                 
-                 [5,  0,  -10,  35/2],
-                 [5,  0,   10,  35/2],
-                 [5,  0,   20,  35/2],                 
-                 [5,  0,    0,  35/2],  
-                 [5,  0,  -10,  35],
-                 [5,  0,   10,  35],
-                 [5,  0,    0,  35],
-                 [7.2,0,19.85,  35],
+                 [7.2,0,19.85, -25],
+                 [7.2,0,19.85,  25],
 ];
 
 VW_HOLES_20x3L = [
-    [5,  0,-19.85,35],
-    [7.2,0,19.85,0],
-    [5,  0,-19.85,-35]
+    [5,  0,-20,25],
+    [7.2,0,19.85,  -25],
+
+    [5,  0,-20,-25]
 ];
 
-Z_PLATE = [[90,65],    5,      3,   VW_HOLES_20x3L, Z_MOUNT_HOLES];
+Z_PLATE = [[65,65],    5,      3,   VW_HOLES_20x3L, Z_MOUNT_HOLES];
 
 Z_GANTRY = ["", Z_PLATE, [  S_XTREME_VW_SPACER,
                             S_XTREME_VW_ECCENT,
@@ -56,6 +43,21 @@ VSLOT_Z_RAIL = ["", Z_GANTRY, E2020];
 
 module gantry_sq_plate_90x65x3_22_dxf() {
     projection() vslot_plate(Z_PLATE);
+}
+
+module z_gantry_plate_sketch() {
+    translate([-25+3,0,0])
+    square([50,60], center = true);
+}
+
+module z_gantry_plate_support_sketch() {
+    translate([-25+3,0,0])
+    square([50,60], center = true);
+}
+
+module z_gantry_plate() {
+    linear_extrude(3)
+    z_gantry_plate_sketch();
 }
 
 module zAxisRails(
@@ -80,11 +82,10 @@ module zAxisRails(
             )   {
                 depth = 60;
                 difference() {
-                    translate([0,0,depth/2]) rotate([0,0,90]) extrusion(E2040, depth);
+                    translate([0,-35.5,0]) rotate([0,90,90]) z_gantry_plate();
                     translate([0,-10,17]) rotate([0,-90,90]) drill(5, h=40);
                 }
-                translate_z(60) zHolderPlugPlate();
-                translate([0,14,17])
+                translate([0,-29,17])
                     rotate([0,-90,90]) 
                         leadnut(LSN8x8);
             }
@@ -92,7 +93,8 @@ module zAxisRails(
             translate([0, 0, positionAdj+5]) printBed();
     }
     
-    translate([0,0,-23]) zAxisMotor(diff = diff);
+    translate([0,0,-23]) 
+        zAxisMotor(motorModel = NEMA17, diff = diff);
 }
 
 module zAxis(positionZ, diff = false) {
@@ -108,17 +110,42 @@ module zAxis(positionZ, diff = false) {
 }
 
 
-
-module z_holder_plug_plate_dxf() {
-    dxf(str("z_holder_plug_plate"));
-    difference() {
-        rounded_square([40, 20], 2, center=true);
-        translate([-10,0,0]) circle(d = 5);
-        translate([10,0,0]) circle(d = 5);        
+module zAxisMotor(motorTranslation = 0, motorModel, diff = false) {
+    motorScrewY = frontPlateThickness+3;
+    
+    differ = motorTranslation < 0 ? 4 : 1;
+    
+    translate([
+        0, 
+        -baseLength+NEMA_width(motorModel)/2+10, 
+        NEMA_length(motorModel)/2
+    ]) {
+        rotate([0,-90,0])
+            motor(motorScrewY, motorModel, diff);
+        
+//        if(motorTranslation < 0) {    
+//            xAxisMotorHolder(motorModel);    
+//        } else {
+//            rotate([180,0]) translate([0,0,-3])
+//            xAxisMotorHolder(motorModel);    
+//        }
+        
+        translate([0,0,workingSpaceSize/2+40]) leadscrew(
+            8, 
+            workingSpaceSize, 
+            8, 
+            2, 
+            center = true
+        );
     }
 }
 
-module zHolderPlugPlate() {
-    linear_extrude(4) z_holder_plug_plate_dxf();
-}
 
+//workingSpaceSizeMaxZ = 600;
+//workingSpaceSizeMinZ = 0;
+//workingSpaceSize = 600;
+//baseFrontSize = 500;
+//zAxisLength = 500;
+//baseLength = 500;
+//frontPlateThickness = 4;
+//zAxis(5);
