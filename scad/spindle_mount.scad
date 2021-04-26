@@ -144,7 +144,6 @@ module motor_mount_bottom_plate(
         vacuum_hose_size,
         type);
     coolant_hose_position = hose_position(length+1, coolant_hose_size, m=1);
-//    coolant_hose_size = vacuum_hose_size;
     vacuum_hose_position = hose_position(length+5, vacuum_hose_size);
 
 
@@ -324,8 +323,8 @@ spindle_assembly(
     width = 60, 
     length = 100, 
     inset_length = 80, 
-    inset_depth = 6, 
+    inset_depth = 8, 
     heigth = 30);
 
-//D16T_motor_mount_bottom_plate_W60xL100_IL80_ID6_CH8_VH11_RS895_dxf();
+//D16T_motor_mount_bottom_plate_W60xL100_IL80_ID8_CH8_VH11_RS895_dxf();
 //D16T_motor_mount_top_plate_W60xL100_IL80_CH8_VH11_RS895_dxf();
