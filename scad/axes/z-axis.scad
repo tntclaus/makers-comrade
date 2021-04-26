@@ -18,6 +18,7 @@ include <../../lib/leadscrew_couplers.scad>
 include <../../lib/vwheel_gantries.scad>
 include <../../lib/vslot_rails.scad>
 
+Z_AXIS_LEADNUT = LSN8x8;
 
 Z_MOUNT_HOLES = [  
                  [7.2,0,19.85, -25],
@@ -46,8 +47,34 @@ module gantry_sq_plate_90x65x3_22_dxf() {
 }
 
 module z_gantry_plate_sketch() {
+
     translate([-25+3,0,0])
-    square([50,60], center = true);
+    difference() { 
+        hull() {
+            translate([22,0])
+            square([0.1,60], center = true);
+            
+            translate([0,0])
+            square([0.1,58], center = true);
+
+            translate([-10,0])
+            circle(d = 25);
+        }
+        translate([-10,0])
+        circle(d = 5);
+        translate([5,0]) {
+            circle(d = leadnut_od(Z_AXIS_LEADNUT));
+            for(a = [-30:60:330])
+            rotate([0,0,a])
+            translate([9.5,0])
+            circle(d = 3);
+        }
+    }
+    
+    for(y = [-24 : 12 : 24])
+    translate([0,y])
+    color("red")
+    square([6,6], center = true);
 }
 
 module z_gantry_plate_support_sketch() {
@@ -56,7 +83,7 @@ module z_gantry_plate_support_sketch() {
 }
 
 module z_gantry_plate() {
-    linear_extrude(3)
+//    linear_extrude(3)
     z_gantry_plate_sketch();
 }
 
@@ -86,8 +113,8 @@ module zAxisRails(
                     translate([0,-10,17]) rotate([0,-90,90]) drill(5, h=40);
                 }
                 translate([0,-29,17])
-                    rotate([0,-90,90]) 
-                        leadnut(LSN8x8);
+                    rotate([90,-0,0]) 
+                        leadnut(Z_AXIS_LEADNUT);
             }
         if(mirrored)
             translate([0, 0, positionAdj+5]) printBed();
@@ -141,11 +168,11 @@ module zAxisMotor(motorTranslation = 0, motorModel, diff = false) {
 }
 
 
-//workingSpaceSizeMaxZ = 600;
-//workingSpaceSizeMinZ = 0;
-//workingSpaceSize = 600;
-//baseFrontSize = 500;
-//zAxisLength = 500;
-//baseLength = 500;
-//frontPlateThickness = 4;
-//zAxis(5);
+workingSpaceSizeMaxZ = 600;
+workingSpaceSizeMinZ = 0;
+workingSpaceSize = 600;
+baseFrontSize = 500;
+zAxisLength = 500;
+baseLength = 500;
+frontPlateThickness = 4;
+zAxis(5);
