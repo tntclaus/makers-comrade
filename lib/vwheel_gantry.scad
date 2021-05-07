@@ -11,7 +11,7 @@ module vwheel_gantry(type, center = false, mirror = false, mirror_plate = [0,0,0
     double = wheels[0][5];
     
     
-    zTranslation = center ? -22.2/2 : 0;
+    zTranslation = center ? -23/2 : 0;
     mirror(mirror_plate) {
         rotate([90,0,90])
         translate([0,0,zTranslation]) {

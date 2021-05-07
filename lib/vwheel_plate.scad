@@ -19,6 +19,25 @@ module vslot_plate(geometry, center = false, mirror_plate = [0,0,0]) {
     }
 }
 
+module square_plate_sketch(geometry, center = false) {
+    geom = geometry[0];
+    radius = geometry[1];
+
+    
+    wheelHoles = geometry[3];
+    mountHoles = geometry[4];
+
+    
+    rect_geom = [geom[0], geom[1]];
+    difference() {
+        rotate([0,0,-90])
+        rounded_square(rect_geom, r = radius, center = true);
+
+        drillHoles(wheelHoles, 0);
+        drillHoles(mountHoles, 0);
+    }    
+}
+
 module square_plate(geometry, center = false) {
     geom = geometry[0];
     radius = geometry[1];
@@ -50,21 +69,12 @@ module square_plate(geometry, center = false) {
 //    }
     
     rotate([180,0,0])  translate([0,0,plate_thickness])  children();
-    translate([0,0,zTranslate]) difference() {
-        translate([0,0,0]) rotate([0,0,-90]) {
-            rect_geom = [geom[0], geom[1], plate_thickness];
-            rounded_rectangle(rect_geom, r = radius, center = true);
-
-        }
+    translate([0,0,zTranslate])  {
+        translate_z(-plate_thickness/2)
+        linear_extrude(plate_thickness)
+        square_plate_sketch(geometry, center = true);
+    }
         
-
-        renderGantryHoles = true;
-
-        if(renderGantryHoles) {
-            drillHoles(wheelHoles, plate_thickness);
-            drillHoles(mountHoles, plate_thickness);
-        }
-    }    
 }
 
 module triangle_plate(geometry, center = false) {

@@ -5,7 +5,8 @@ include <NopSCADlib/vitamins/screws.scad>
 
 module spacer(h = 6) {
     hstr = h == 6.35 ? "6_35" : str(h);
-    stl(str("gantry_cart_spacer_", hstr));
+    vitamin(str("gantry_cart_spacer_", hstr));
+    color("silver")
     translate([0,0,h])
     rotate([0,180,0])
     difference() {
@@ -47,7 +48,7 @@ module vwheel_assembly(type) {
         spacer(h);
     }
 
-    shift = eccentric ? [0.25,1,h + 10.2/2] : [0,0,h + 10.2/2];
+    shift = eccentric ? [0.25,1,h + 11/2] : [0,0,h + 11/2];
     
     screwLength = double ? 35 : 25;
         

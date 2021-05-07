@@ -1,9 +1,4 @@
-
-
-// bearings
-BB625_2RS =  ["625",  5,  16, 5, "orange", 1, 1];
-BB625_ZZ =  ["625",  5,  16, 5, "silver", 1, 1];
-
+include <bearings.scad>
 
 // wheels        name           model,  bearings,   type
 //MINI_DERLIN = [   "",         "mini", BB625_2RS, "black"]

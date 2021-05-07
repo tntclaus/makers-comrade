@@ -25,7 +25,7 @@ module heatbed_table_base_sketch(
     mount_point_offset,
     mounts_num = 3
 ) {
-    strenghtener_line_width = 15;
+    strenghtener_line_width = 33;
     
     assert(work_area_width >= 300);
     assert(mounts_num >= 3);
@@ -33,15 +33,19 @@ module heatbed_table_base_sketch(
     
     width = work_area_width + TABLE_BASE_BORDER*2 + TABLE_BASE_OFFSET*2;
     
+    min_width = width > 600 ? 600 : width;
+    
     difference() {
-        slw = strenghtener_line_width/2;
+        slw = strenghtener_line_width/3;
         
-        rounded_square(width, TABLE_BASE_BORDER, center = true);
+        rounded_square([min_width, width], TABLE_BASE_BORDER, center = true);
         for(x = [-1, 1])
             for(y = [-1, 1])
                 translate([x*(work_area_width/4-slw), y*(work_area_width/4-slw)]) {
 //                    circle(d = work_area_width/2-20);
-                    rounded_square(work_area_width/2-4*slw, TABLE_BASE_BORDER*4, center = true);
+                    rounded_square(
+                    [work_area_width/2-4*slw, work_area_width/2-4*slw], 
+                    TABLE_BASE_BORDER*4, center = true);
                 }
                 
 //        rounded_square(work_area_width-46, TABLE_BASE_BORDER, center = true);
@@ -51,13 +55,17 @@ module heatbed_table_base_sketch(
         line_width = strenghtener_line_width;
         
         hull() {
-            translate([-work_area_width/2,0]) square([1, line_width], center = true);
-            translate([ work_area_width/2,work_area_width/3]) square([1, line_width], center = true);
+            translate([-min_width/2+2,0]) 
+                square([1, line_width], center = true);
+            translate([ min_width/2-2,min_width/3])
+                square([1, line_width], center = true);
         }
         
         hull() {
-            translate([-work_area_width/2,0]) square([1, line_width], center = true);
-            translate([ work_area_width/2,-work_area_width/3]) square([1, line_width], center = true);
+            translate([-min_width/2+2,0]) 
+                square([1, line_width], center = true);
+            translate([ min_width/2-2,-min_width/3]) 
+                square([1, line_width], center = true);
         }
     }
     
@@ -78,15 +86,17 @@ module heatbed_table_base_sketch(
         difference() {
             
             hull() {
-                square([mount_point_w , 0.0001], center = true);
+                translate([0, -10])
+                square([mount_point_w-5, 0.0001], center = true);
+                
                 translate([0, mount_length-4, 0])
-                square([40, 8], center = true);
+                square([35, 8], center = true);
             }
-            translate([ 10, mount_length-4, 0])
-            circle(d = 4);
+            translate([ 00, mount_length-6.65, 0])
+            circle(d = 5);
 
-            translate([-10, mount_length-4, 0])
-            circle(d = 4);
+//            translate([-10, mount_length-4, 0])
+//            circle(d = 4);
 
         }
     }
@@ -103,6 +113,14 @@ module heatbed_table_base_sketch(
     mount();
     
 }
+module GRANITE_heatbed_table_base_610_10_25_3_dxf() {
+    heatbed_table_base_sketch(
+        work_area_width = 610, 
+        mount_length = 10,
+        mount_point_offset = 25,
+        mounts_num = 3
+    );
+}
 
 module heatbed_table_base(
     work_area_width,
@@ -110,7 +128,15 @@ module heatbed_table_base(
     mount_point_offset,
     mounts_num = 3
 ) {
-    dxf("todo_heatbed_table_base");
+    dxf_name = str(
+    "GRANITE_heatbed_table_base", "_",
+    work_area_width, "_",
+    mount_length, "_",
+    mount_point_offset, "_",
+    mounts_num
+    );
+    echo(dxf_name);
+    dxf(dxf_name);
     color(STAINLESS_COLOR)
     linear_extrude(3)
     heatbed_table_base_sketch(
@@ -365,14 +391,14 @@ module heatbed_table_assembly(
         mount_point_offset = mount_point_offset,
         mounts_num = mounts_num
     );
-    translate_z(3) {
-        heatbed_table_heater_08_2kW(work_area_width);
-        translate_z(10)
-        heatbed_table_ceramic_granite(work_area_width);
-    }
+//    translate_z(3) {
+//        heatbed_table_heater_08_2kW(work_area_width);
+//        translate_z(10)
+//        heatbed_table_ceramic_granite(work_area_width);
+//    }
 }
 
 heatbed_table_assembly(610, 60, 100);
 
-
+//GRANITE_heatbed_table_base_610_10_25_3_dxf();
 

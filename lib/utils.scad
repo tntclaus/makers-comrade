@@ -14,7 +14,7 @@ module rotate_about_pt(x = 0, y = 0, z = 0, pt = [0,0,0]) {
                 children();   
 }
 
-module drillHoles(holes, plate_thickness, extra_size = 0) {    
+module drillHoles(holes, plate_thickness = 0, extra_size = 0) {    
     module drillHole(hole) {
                 translate([hole[2],hole[3],0])
         color("red")
