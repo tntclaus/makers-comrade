@@ -40,9 +40,9 @@ module spool_holder_rod() {
         translate([0,0,97]) hull() {
             translate([0,10,0])
             rotate([0,0,30])
-            cylinder(d = 9.5, h = 4, $fn = 6);
+            cylinder(d = 9.5, h = 4.5, $fn = 6);
             rotate([0,0,30])
-            cylinder(d = 9.5, h = 4, $fn = 6);
+            cylinder(d = 9.5, h = 4.5, $fn = 6);
         }
         
         translate([0,0,97]) hull() {
@@ -164,7 +164,7 @@ module spool_holder_assembly(type = spool_300x88) {
 }
 
 
-//spool_holder_assembly();
+spool_holder_assembly();
 //spool_holder_bearing_block_stl();
-spool_holder_rod_stl();
+//spool_holder_rod_stl();
 //spool_holder_rod_cap_stl();
