@@ -71,17 +71,23 @@ module z_gantry_plate_sketch() {
 //            translate([0,0])
 //            square([0.1,58], center = true);
 
-            translate([-10,0])
+            translate([-15,0])
             circle(d = 25);
         }
-        translate([-10+.8,0])
-        circle(d = 3);
+        translate([-18.5,0]) {
+            circle(d = 3);
+            translate([0,-7])
+            circle(d = 2.2);
+            translate([0, 7])
+            circle(d = 2.2);
+        }
+        
         translate([5+1,0]) {
             circle(d = leadnut_od(Z_AXIS_LEADNUT));
             for(a = [-30:60:330])
             rotate([0,0,a])
             translate([9.5,0])
-            circle(d = 3);
+            circle(d = 2.2);
         }
     }
     
@@ -129,13 +135,13 @@ module zAxisRails(
                 angles = true
             )   {
                 depth = 60;
-//                difference() {
-//                    translate([0,-0,0]) rotate([0,90,90]) z_gantry_plate();
-//                    translate([0,-10,17]) rotate([0,-90,90]) drill(5, h=40);
-//                }
-//                translate([0,6,17-1.15])
-//                    rotate([90,-0,0]) 
-//                        leadnut(Z_AXIS_LEADNUT);
+                difference() {
+                    translate([0,-0,0]) rotate([0,90,90]) z_gantry_plate();
+                    translate([0,-10,17]) rotate([0,-90,90]) drill(5, h=40);
+                }
+                translate([0,6,17-1.15])
+                    rotate([90,-0,0]) 
+                        leadnut(Z_AXIS_LEADNUT);
                 
                 
 
@@ -203,11 +209,11 @@ module zAxisMotor(motorTranslation = 0, motorModel, diff = false) {
 }
 
 
-workingSpaceSizeMaxZ = 600;
-workingSpaceSizeMinZ = 0;
-workingSpaceSize = 600;
-baseFrontSize = 500;
-zAxisLength = 500;
-baseLength = 500;
-frontPlateThickness = 4;
-zAxis(35);
+//workingSpaceSizeMaxZ = 600;
+//workingSpaceSizeMinZ = 0;
+//workingSpaceSize = 600;
+//baseFrontSize = 500;
+//zAxisLength = 500;
+//baseLength = 500;
+//frontPlateThickness = 4;
+//zAxis(35);
