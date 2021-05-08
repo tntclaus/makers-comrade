@@ -1,5 +1,6 @@
 include <NopSCADlib/utils/core/core.scad>
 include <NopSCADlib/utils/core/rounded_rectangle.scad>
+include <NopSCADlib/vitamins/extrusions.scad>
 
 use <heat_bed_heater.scad>
 
@@ -18,6 +19,29 @@ STAINLESS_COLOR = "#999999";
 D16T_COLOR = "#aaaaaa";
 
 function HEATER_WIDTH(table_width) = 540;
+
+
+module heatbed_table_base_extrusions(
+    work_area_width,
+    mount_length,
+    mount_point_offset,
+    mounts_num = 3
+) {
+    color("#aaaaaa11")
+    for(x = [0:90:360]) {
+        rotate([0,0,x])
+        translate([-work_area_width/2, 10,0])
+        rotate([90,0,0])
+        extrusion(E2020, work_area_width);
+
+//        translate([10, x,0])
+//        rotate([0,90,0])
+//        extrusion(E2020, work_area_width);
+    }
+
+//    rotate([90,0,0])
+//    extrusion(E2020, work_area_width);
+}
 
 module heatbed_table_base_sketch(
     work_area_width,
@@ -385,7 +409,8 @@ module heatbed_table_assembly(
     mount_point_offset,
     mounts_num = 3) 
 {
-    heatbed_table_base(
+//    heatbed_table_base(
+    heatbed_table_base_extrusions(
         work_area_width = work_area_width, 
         mount_length = mount_length,
         mount_point_offset = mount_point_offset,
