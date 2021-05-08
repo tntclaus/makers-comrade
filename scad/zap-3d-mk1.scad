@@ -1,7 +1,3 @@
-
-use <NopSCADlib/vitamins/rod.scad>
-use <NopSCADlib/vitamins/ball_bearing.scad>
-
 include <NopSCADlib/vitamins/extrusions.scad>
 include <NopSCADlib/utils/core/core.scad>
 include <NopSCADlib/utils/core/rounded_rectangle.scad>
@@ -11,9 +7,6 @@ include <NopSCADlib/vitamins/screws.scad>
 include <NopSCADlib/vitamins/washers.scad>
 include <NopSCADlib/vitamins/sheets.scad>
 include <NopSCADlib/vitamins/stepper_motors.scad>
-include <NopSCADlib/vitamins/kp_pillow_blocks.scad>
-
-include <NopSCADlib/vitamins/scs_bearing_blocks.scad>
 include <NopSCADlib/vitamins/pulleys.scad>
 
 include <../lib/vslot_rails.scad>
@@ -29,6 +22,10 @@ include <axes/z-axis.scad>
 include <axes/y-axis.scad>
 
 use <electronics_box.scad>
+
+use <NopSCADlib/vitamins/rod.scad>
+use <NopSCADlib/vitamins/ball_bearing.scad>
+
 
 V2020 = E2020;
 V2040 = E2040;
@@ -282,7 +279,7 @@ module printBed() {
     translate([0,0,elevation])
 //        heatBed(workingSpaceSize, workingSpaceSize, 20);
     rotate([0,0,180])
-    heatbed_table_assembly(610, 10, 25);
+    heatbed_table_assembly(600, 10, 25);
 }
 
 

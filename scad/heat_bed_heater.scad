@@ -146,7 +146,7 @@ module heatBedBottomPlate(width, depth, padding) {
     dxf(str("heatbed_bottom_plate_", width + padding,"x", depth + padding));
     translate_z(-4) render() linear_extrude(4) heatbed_bottom_plate_620x620_dxf();
 }
-
+//heatBed(620,620,20);
 //heatBedBottomPlate(500,500,10);
 
-heat_bed_heater(540, 540);
+//heat_bed_heater(540, 540);

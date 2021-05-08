@@ -27,20 +27,14 @@ module heatbed_table_base_extrusions(
     mount_point_offset,
     mounts_num = 3
 ) {
-    color("#aaaaaa11")
+    echo("extrusion", work_area_width);
+//    color("#aaaaaa11")
     for(x = [0:90:360]) {
         rotate([0,0,x])
         translate([-work_area_width/2, 10,0])
         rotate([90,0,0])
         extrusion(E2020, work_area_width);
-
-//        translate([10, x,0])
-//        rotate([0,90,0])
-//        extrusion(E2020, work_area_width);
     }
-
-//    rotate([90,0,0])
-//    extrusion(E2020, work_area_width);
 }
 
 module heatbed_table_base_sketch(

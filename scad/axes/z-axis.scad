@@ -17,6 +17,8 @@ include <NopSCADlib/vitamins/leadnuts.scad>
 include <../../lib/leadscrew_couplers.scad>
 include <../../lib/vslot_rails.scad>
 
+include <../../lib/spherical_nuts.scad>
+
 use <../heatbed.scad>
 
 include <NopSCADlib/vitamins/pillow_blocks.scad>
@@ -53,6 +55,8 @@ Z_GANTRY = ["", Z_PLATE, [  S_XTREME_VW_SPACER,
 
 VSLOT_Z_RAIL = ["", Z_GANTRY, E2020];
 
+Z_GANTRY_GUIDE_ANGLE = 43.025;
+
 //STEEL_gantry_sq_plate_60x60x3_22_dxf();
 //STEEL_z_gantry_plate_60_dxf();
 
@@ -68,13 +72,10 @@ module z_gantry_plate_sketch() {
             translate([22,0])
             square([0.1,60], center = true);
             
-//            translate([0,0])
-//            square([0.1,58], center = true);
-
-            translate([-15,0])
+            translate([-23.5,0])
             circle(d = 25);
         }
-        translate([-18.5,0]) {
+        translate([-23.5,0]) {
             circle(d = 3);
             translate([0,-7])
             circle(d = 2.2);
@@ -106,18 +107,146 @@ module STEEL_z_gantry_plate_60_dxf() {
     z_gantry_plate_sketch();
 }
 
-module z_gantry_plate() {
+module z_gantry_plate(angle = 0, show_beam = false) {
     dxf("z_gantry_plate_60");
-    translate_z(-1.5-10)
-    color("red")
-    linear_extrude(3)
-    z_gantry_plate_sketch();
+    translate_z(-1.5-10) {
+        color("red")
+        linear_extrude(3)
+        z_gantry_plate_sketch();
+        translate([-45.5,0,3]) {
+            assert(
+            angle == 0 || angle == -1 || angle == 1, 
+            str("angle must be either 0, 1 or -1, got ", angle));
+            
+            if(angle == 0) {
+                stl("ABS_PC_z_gantry_block_center");
+            } else if(angle == 1) {
+                stl("ABS_PC_z_gantry_block_left");
+            } else if(angle == -1) {
+                stl("ABS_PC_z_gantry_block_right");        
+            } 
+            
+            z_gantry_block_assembly(angle * Z_GANTRY_GUIDE_ANGLE, show_beam);
+        }
+    }
 }
 
+module ABS_PC_z_gantry_block_center_stl() {
+    $fn = 90;
+    z_gantry_block(0);
+}
+
+module ABS_PC_z_gantry_block_left_stl() {
+    $fn = 90;
+    z_gantry_block(Z_GANTRY_GUIDE_ANGLE);
+}
+
+module ABS_PC_z_gantry_block_right_stl() {
+    $fn = 90;
+    z_gantry_block(-Z_GANTRY_GUIDE_ANGLE);
+}
+
+module z_gantry_block(angle = 0) {
+    block_h = 8;
+    block_w = 20;    
+    block_w_i = 8;
+    translate_z(block_h/2)
+    difference() {
+        hull() {
+            translate([-2,0,0])
+            cylinder(d = block_w,  h = block_h, center = true);
+            translate([26,0,0])
+            cube([.1,block_w+5,block_h], center = true);
+            
+        }
+        
+        rotate([0,0,angle])
+        translate([-1,0,-block_h/2]) 
+         {           
+            translate([0, 3.8,5+1])
+            vtulka(22);
+            translate([0,-3.8,5+1])
+            vtulka(22);
+        }
+        
+        translate([0,0,3])
+        rotate([0,0,angle])
+        cube([16, block_w_i+1, 3], center = true);
+
+        translate([0,0,2])
+        rotate([0,0,angle])
+        color("blue")
+        hull() {
+            translate([-8,0,0])
+            cube([.1,block_w_i,block_h], center = true);
+            
+            translate([8,0,0])            
+            cube([.1,block_w_i,block_h], center = true);
+            
+        }
+        
+        // center point mount
+        translate_z(-4){
+            cylinder(d = 3, h = 0.35*2, center = true);
+            translate_z(0.35)
+            hull() {
+                cylinder(d = 3, h = 0.01, center = true);
+                translate_z(1.65)
+                cylinder(d = 5.8, h = 0.01, center = true);
+            }
+        }
+        
+        translate([29.5,0,0]) {
+            cylinder(d = leadnut_od(Z_AXIS_LEADNUT), h = 100, center = true);
+            for(a = [-30:60:330])
+            rotate([0,0,a])
+            translate([9.5,0])
+            cylinder(d = 3, h = 100, center = true);
+        }
+    }
+    
+}
+
+module vtulka(l = 20) {
+    rotate([0,90,0])
+    color("silver")
+    cylinder(d = 2, h = l, center = true);        
+}
+
+module z_gantry_block_assembly(angle = 0, show_beam = false) {
+    z_gantry_block(angle);
+    // nut
+    rotate([0,0,angle]) {
+        translate([0,0,16.05])
+        rotate([180,0,0])
+        spherical_nut_DIN_1587(NUT_DIN_1587_M5);
+        
+        // 
+        translate([0, 3.8,5+1])
+        vtulka();
+        translate([0,-3.8,5+1])
+        vtulka();
+        //magnets
+        color("gray") {
+            translate([ 4,0,2])
+            cylinder(d = 8, h = 3);
+            translate([-4,0,2])
+            cylinder(d = 8, h = 3);
+        }
+        if(show_beam)
+            rotate([0,-90,0])
+            cylinder(d = 1, h = 600);
+    }
+
+}
+
+
 module zAxisRails(
-            position = 0, 
-            mirrored = false, 
-            diff = false) {
+    position = 0, 
+    mirrored = false, 
+    diff = false,
+    angle = 0
+) {
     
     if(!diff) {
         positionAdj = 
@@ -136,29 +265,23 @@ module zAxisRails(
             )   {
                 depth = 60;
                 difference() {
-                    translate([0,-0,0]) rotate([0,90,90]) z_gantry_plate();
+                    translate([0,-20,0]) rotate([180,90,90]) z_gantry_plate(angle, false);
                     translate([0,-10,17]) rotate([0,-90,90]) drill(5, h=40);
                 }
-                translate([0,6,17-1.15])
+                translate([0,-4.4,17-1.15])
                     rotate([90,-0,0]) 
                         leadnut(Z_AXIS_LEADNUT);
-                
-                
-
             }
 
-            translate([-30.35,0,30])
-            rotate([0,0,-90])
-            kp_pillow_block_assembly(KP08_18);
-            
-            
-            
+//            translate([-30.35,0,30])
+//            rotate([0,0,-90])
+//            kp_pillow_block_assembly(KP08_18);
         }
         
         if(mirrored)
-            translate([0, 0, positionAdj+75]) 
+            translate([0, 0, positionAdj+87.5]) 
                 rotate([0,0,180])
-                heatbed_table_assembly(610, 10, 25);
+                heatbed_table_assembly(600, 10, 25);
     }
     
     translate([0,0,-23]) 
@@ -166,13 +289,15 @@ module zAxisRails(
 }
 
 module zAxis(positionZ, diff = false) {
-        zAxisRails(positionZ, mirrored = true, diff = diff);
+        zAxisRails(positionZ, mirrored = true, diff = diff, angle = 0);
         translate([-workingSpaceSize/2+20,0,0]) {
-            mirror([0,1,0]) zAxisRails(positionZ, diff = diff);
+            mirror([0,1,0]) 
+            zAxisRails(positionZ, diff = diff, angle = -1);
             
         }
         translate([workingSpaceSize/2-20,0,0]) {
-            mirror([0,1,0]) zAxisRails(positionZ, diff = diff);
+            mirror([0,1,0]) 
+            zAxisRails(positionZ, diff = diff, angle = 1);
         }
     
 }
@@ -208,12 +333,17 @@ module zAxisMotor(motorTranslation = 0, motorModel, diff = false) {
     }
 }
 
-
+//
 //workingSpaceSizeMaxZ = 600;
 //workingSpaceSizeMinZ = 0;
 //workingSpaceSize = 600;
-//baseFrontSize = 500;
+//baseFrontSize = 600;
 //zAxisLength = 500;
-//baseLength = 500;
+//baseLength = 360;
 //frontPlateThickness = 4;
-//zAxis(35);
+//zAxis(100);
+
+//z_gantry_plate();
+//ABS_PC_z_gantry_block_center_stl();
+//ABS_PC_z_gantry_block_left_stl();
+//ABS_PC_z_gantry_block_right_stl();
