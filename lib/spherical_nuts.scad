@@ -5,5 +5,3 @@ NUT_DIN_1587_M6 = [6, 9.5, 5  ,11.05, 7.21, 2, 12, 4.75];
 
 
 use <spherical_nut.scad>
-
-spherical_nut_DIN_1587(NUT_DIN_1587_M6);
