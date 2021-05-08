@@ -76,7 +76,7 @@ module z_gantry_plate_sketch() {
             circle(d = 25);
         }
         translate([-23.5,0]) {
-            circle(d = 3);
+            circle(d = 2.2);
             translate([0,-7])
             circle(d = 2.2);
             translate([0, 7])
@@ -278,10 +278,10 @@ module zAxisRails(
 //            kp_pillow_block_assembly(KP08_18);
         }
         
-        if(mirrored)
-            translate([0, 0, positionAdj+87.5]) 
-                rotate([0,0,180])
-                heatbed_table_assembly(600, 10, 25);
+//        if(mirrored)
+//            translate([0, 0, positionAdj+87.5]) 
+//                rotate([0,0,180])
+//                heatbed_table_assembly(600, 10, 25);
     }
     
     translate([0,0,-23]) 
