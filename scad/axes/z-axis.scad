@@ -23,7 +23,7 @@ use <../heatbed.scad>
 
 include <NopSCADlib/vitamins/pillow_blocks.scad>
 
-Z_AXIS_LEADNUT = LSN8x8;
+Z_AXIS_LEADNUT = LSN8x2;
 
 function leadscrew_mount_hole(pos) = [[pos-1.5,10], [pos+1.5,10]];
 
@@ -57,8 +57,7 @@ VSLOT_Z_RAIL = ["", Z_GANTRY, E2020];
 
 Z_GANTRY_GUIDE_ANGLE = 43.025;
 
-//STEEL_gantry_sq_plate_60x60x3_22_dxf();
-//STEEL_z_gantry_plate_60_dxf();
+
 
 module STEEL_gantry_sq_plate_60x60x3_22_dxf() {
     square_plate_sketch(Z_PLATE);
@@ -85,10 +84,10 @@ module z_gantry_plate_sketch() {
         
         translate([5+1,0]) {
             circle(d = leadnut_od(Z_AXIS_LEADNUT));
-            for(a = [-30:60:330])
+            for(a = [-45:90:315])
             rotate([0,0,a])
-            translate([9.5,0])
-            circle(d = 2.2);
+            translate([leadnut_hole_pitch(Z_AXIS_LEADNUT),0])
+            circle(d = 3.1);
         }
     }
     
@@ -155,9 +154,8 @@ module z_gantry_block(angle = 0) {
         hull() {
             translate([-2,0,0])
             cylinder(d = block_w,  h = block_h, center = true);
-            translate([26,0,0])
+            translate([27,0,0])
             cube([.1,block_w+5,block_h], center = true);
-            
         }
         
         rotate([0,0,angle])
@@ -188,19 +186,18 @@ module z_gantry_block(angle = 0) {
         // center point mount
         translate_z(-4){
             cylinder(d = 3, h = 0.35*2, center = true);
-            translate_z(0.35)
             hull() {
                 cylinder(d = 3, h = 0.01, center = true);
-                translate_z(1.65)
-                cylinder(d = 5.8, h = 0.01, center = true);
+                translate_z(1.65+1)
+                cylinder(d = 6, h = 2, center = true);
             }
         }
         
         translate([29.5,0,0]) {
             cylinder(d = leadnut_od(Z_AXIS_LEADNUT), h = 100, center = true);
-            for(a = [-30:60:330])
+            for(a = [-45:90:315])
             rotate([0,0,a])
-            translate([9.5,0])
+            translate([leadnut_hole_pitch(Z_AXIS_LEADNUT),0])
             cylinder(d = 3, h = 100, center = true);
         }
     }
@@ -347,3 +344,5 @@ module zAxisMotor(motorTranslation = 0, motorModel, diff = false) {
 //ABS_PC_z_gantry_block_center_stl();
 //ABS_PC_z_gantry_block_left_stl();
 //ABS_PC_z_gantry_block_right_stl();
+//STEEL_gantry_sq_plate_60x60x3_22_dxf();
+//STEEL_z_gantry_plate_60_dxf();
