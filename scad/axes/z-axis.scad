@@ -23,6 +23,9 @@ use <../heatbed.scad>
 
 include <NopSCADlib/vitamins/pillow_blocks.scad>
 
+include <../../lib/bearings.scad>
+include <NopSCADlib/vitamins/ball_bearings.scad>
+
 Z_AXIS_LEADNUT = LSN8x2;
 
 function leadscrew_mount_hole(pos) = [[pos-1.5,10], [pos+1.5,10]];
@@ -312,15 +315,12 @@ module zAxisMotor(motorTranslation = 0, motorModel, diff = false) {
     ]) {
         rotate([0,-90,0])
             motor(motorScrewY, motorModel, diff);
+
+        translate_z(4)
+        z_motor_thurst_bearing_collet_assembly();
         
-//        if(motorTranslation < 0) {    
-//            xAxisMotorHolder(motorModel);    
-//        } else {
-//            rotate([180,0]) translate([0,0,-3])
-//            xAxisMotorHolder(motorModel);    
-//        }
-        
-        translate([0,0,workingSpaceSize/2+40]) leadscrew(
+        translate([0,0,workingSpaceSize/2+40]) 
+        leadscrew(
             8, 
             workingSpaceSize, 
             8, 
@@ -328,6 +328,34 @@ module zAxisMotor(motorTranslation = 0, motorModel, diff = false) {
             center = true
         );
     }
+}
+
+module ABS_PC_z_motor_thurst_bearing_collet_type_51101_stl() {
+    $fn = 180;
+    z_motor_thurst_bearing_collet(BB51101, NEMA17S);
+}
+
+module z_motor_thurst_bearing_collet(bearing_type, motor_type) {
+    stl(str("ABS_PC_z_motor_thurst_bearing_collet_type_", bearing_type[0]));
+    
+    difference() {
+        linear_extrude(3)
+        NEMA_outline(motor_type);
+        translate_z(-.1)
+        cylinder(d =  6, h=6);
+        translate_z(-1)
+        cylinder(d =  bb_diameter(bearing_type), h=6);
+        
+        translate_z(-1)
+        NEMA_screw_positions(motor_type) 
+        cylinder(d =  3, h=6);
+    }
+}
+
+module z_motor_thurst_bearing_collet_assembly(type = BB51101) {
+    translate_z(4.5)
+    ball_bearing(type);
+    z_motor_thurst_bearing_collet(type, NEMA17S);
 }
 
 //
@@ -340,6 +368,8 @@ module zAxisMotor(motorTranslation = 0, motorModel, diff = false) {
 //frontPlateThickness = 4;
 //zAxis(100);
 
+
+//ABS_PC_z_motor_thurst_bearing_collet_type_51101_stl();
 //z_gantry_plate();
 //ABS_PC_z_gantry_block_center_stl();
 //ABS_PC_z_gantry_block_left_stl();
