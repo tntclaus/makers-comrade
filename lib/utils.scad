@@ -94,35 +94,71 @@ module arc(radius, angles, width = 1) {
 
 
 
-module tube_adapter(exit_depth, exit_width, height, wall, in_dia = 6, throat = false) {
+module tube_adapter(
+    exit_depth, 
+    exit_width, 
+    height, 
+    wall, 
+    in_dia = 6, 
+    throat_heigth = 0, 
+    lay_flat = false
+) {
+    base_o_width = exit_width+wall+0.5;
+    base_o_depth = exit_depth+wall+0.5;
+    top_o_dia = in_dia+wall;
+    
     difference() {
         hull() {
             translate_z(wall)
-            cube([exit_width+wall+0.5, exit_depth+wall+0.5, 1], center=true);
+            cube([base_o_width, base_o_depth, 1], center=true);
             translate_z(height)
-            cylinder(d = in_dia+wall, h = 1, center = true);
+            if(lay_flat) {
+                translate([0, base_o_depth/2-top_o_dia/2,0])
+                cylinder(d = top_o_dia, h = 1, center = true);
+            } else {
+                cylinder(d = top_o_dia, h = 1, center = true);
+            }
         }
         hull() {
             translate_z(wall)
             cube([exit_width, exit_depth, 1], center=true);
             translate_z(height)
-            cylinder(d = in_dia, h = 1, center = true);
+            if(lay_flat) {
+                translate([0, base_o_depth/2-top_o_dia/2,0])
+                cylinder(d = in_dia, h = 1.005, center = true);
+            } else {
+                cylinder(d = in_dia, h = 1.005, center = true);
+            }
         }
         translate_z(wall)
         cube([exit_width, exit_depth, 1.1], center=true);
+
         translate_z(height)
+        if(lay_flat)
+                translate([0, base_o_depth/2-top_o_dia/2,0])
         cylinder(d = in_dia, h = 1, center = true);
     }
-
-    if(throat) {
-        translate_z(height + wall)
+    module throat() {
         difference() {
-            cylinder(d = in_dia+wall, h = in_dia, center = true, $fn=get_fn_for_stl(stl,360));
-            cylinder(d = in_dia, h = in_dia+1, center = true, $fn=get_fn_for_stl(stl,360));
+        cylinder(d = in_dia+wall, h = throat_heigth, center = true);
+        translate_z(-.1)
+        cylinder(d = in_dia, h = throat_heigth+1, center = true);
+        }
+    }
+
+    if(throat_heigth > 0) {
+        
+        translate_z(height + wall)
+        if(lay_flat) {
+            translate([0, base_o_depth/2-top_o_dia/2,0])
+            throat();
+        } else {
+            throat();
         }
     }
 }
-
+//render()
+//tube_adapter(10,10,10,2,6, 10, lay_flat = false);
 
 module tube_adapter_square2square(in, out, height, wall, r = 1, stl = false) {
     difference() {
