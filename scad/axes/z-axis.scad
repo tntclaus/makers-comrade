@@ -327,6 +327,11 @@ module zAxisMotor(motorTranslation = 0, motorModel, diff = false) {
             2, 
             center = true
         );
+        
+        translate_z(workingSpaceSize+6)
+        rotate([0,0,90])
+        color("blue")
+        pillow_block();
     }
 }
 
@@ -358,15 +363,57 @@ module z_motor_thurst_bearing_collet_assembly(type = BB51101) {
     z_motor_thurst_bearing_collet(type, NEMA17S);
 }
 
+module pillow_block_stl() {
+    $fn = 180;
+    pillow_block();
+}
+
+module pillow_block() {
+//    translate([-20.35 - 10,0,0])
+//    extrusion(E2020, 100);
+    
+    
+    translate([-20.35,0,0])
+    linear_extrude(10) {
+        translate([-1.5,0])
+        square([3,5.5], center = true);
+    }
+    
+    stl("pillow_block");
+    
+    translate([-18.35,0,0]) {
+        rounded_cube_yz([4,20,10], r = 1, xy_center = true, z_center = false);
+        translate_z(8) difference() {
+            rounded_cube_yz([4,12,22], r = 1, xy_center = true, z_center = false);
+            translate_z(16)
+            rotate([0,90,0])
+            cylinder(d = 5.2, h = 100, center = true);
+        }
+    }
+    
+    
+    
+    difference() {
+        union() {
+            translate([-10,0,5])
+            cube([14, 8, 10], center = true);
+            cylinder(d = 15, h = 10);
+        }
+        translate_z(-.1)
+        cylinder(d = 9.5, h = 10.2);
+    }
+}
+
+//pillow_block_stl();
 //
-//workingSpaceSizeMaxZ = 600;
-//workingSpaceSizeMinZ = 0;
-//workingSpaceSize = 600;
-//baseFrontSize = 600;
-//zAxisLength = 500;
-//baseLength = 360;
-//frontPlateThickness = 4;
-//zAxis(100);
+workingSpaceSizeMaxZ = 600;
+workingSpaceSizeMinZ = 0;
+workingSpaceSize = 600;
+baseFrontSize = 600;
+zAxisLength = 500;
+baseLength = 360;
+frontPlateThickness = 4;
+zAxis(100);
 
 
 //ABS_PC_z_motor_thurst_bearing_collet_type_51101_stl();
