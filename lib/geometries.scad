@@ -36,10 +36,17 @@ module triangle(size, h = 1, r = 0, center = false) {
     tangents = rounded_polygon_tangents(points);
 
     if(center) {
-        translate([-c/2, -H/2, -h/2]) linear_extrude(h)
+        translate([-c/2, -H/2, -h/2]) 
+        if(h > 0) {
+            linear_extrude(h) rounded_polygon(points,tangents);
+        } else {
             rounded_polygon(points,tangents);
+        }
     } else {
-        linear_extrude(h)
+        if(h > 0) {
+            linear_extrude(h) rounded_polygon(points,tangents);
+        } else {
             rounded_polygon(points,tangents);
+        }
     }
 }
