@@ -15,6 +15,8 @@ include <toolhead_utils.scad>
 
 use <../lib/modularHoseLibrary.scad>
 
+use <NopSCADlib/utils/tube.scad>
+
 //                                              corner  body    boss    boss          shaft
 //                               side, length, radius, radius, radius, depth, shaft, length,      holes
 
@@ -125,6 +127,9 @@ module toolhead_extruder_top_plate_sketch(
             translate([coolant_hose_size, 0, 0])
             circle(d = coolant_hose_out_wall_dia);
         }
+        
+        colling_tube_position(width-8, inset_length-2, 0)
+        circle(d = 4);
     }    
 }
 
@@ -153,6 +158,15 @@ module toolhead_extruder_top_plate(
     );
 }
 
+module colling_tube_position(width, inset_length, inset_depth) {
+    translate([inset_length/2-5, -(width/2-inset_depth-5)])
+    children();
+
+    translate([-(inset_length/2-5), -(width/2-inset_depth-5)])
+    children();
+
+}
+
 module toolhead_extruder_bottom_plate_sketch(
     width, 
     length, 
@@ -178,6 +192,9 @@ module toolhead_extruder_bottom_plate_sketch(
                     
         translate(hose_position(length, coolant_hose_size, 0, 1))    
         circle(d = coolant_hose_size); 
+        
+        colling_tube_position(width, inset_length, inset_depth)
+        circle(d = 4);
     }
 }
 
@@ -250,34 +267,6 @@ module toolhead_titan_extruder_groove_collet_44_dxf() {
         29
     );
 }
-
-//module toolhead_titan_extruder_groove_collet_sketch(
-//    width
-//) {
-////    rounded_square([length, width, groove_collet_heigth], r=3, center = true);
-//    length = (TOOLHEAD_EXTRUDER_GROOVE_MOUNT_X + 5) * 2;
-//    smallest_width = width < length ? width : length;
-//    
-//    groove_dia = hot_end_groove_dia(E3DVulcano) - 0.1;
-//    
-//    
-//    
-//    difference() {
-//        rounded_square([length, smallest_width], r=3, center = true);
-//        circle(d = groove_dia);
-//
-//        toolhead_extruder_groove_collet_mounts()
-//            circle(d = 3.01);
-//        
-//        toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
-//            circle(d = 4.01);
-//        
-//        toolhead_extruder_heatbreak_cooler_mounts() circle(d = 3.01);
-//        
-//        translate([length-1, 0, 0])
-//            square([length*2, smallest_width*2], center = true);
-//    }
-//}
 
 module toolhead_titan_extruder_groove_collet(
     width,
@@ -552,6 +541,10 @@ module toolhead_titan_extruder_mount(
             
             toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
                 cylinder(d1 = 4.1, d2 = 8.1, h = 3.01);
+            
+            translate_z(-.1)
+            colling_tube_position(width-8, inset_length-2, 0)
+                cylinder(d = 4.1, h = 3.2);
         }
         
         translate_z(2.95)
@@ -705,34 +698,49 @@ module titan_extruder_assembly(
     );    
 }
 
-module berd_air_tube_collet_stl() {
-    berd_air_tube_collet();    
+module fan_duct_splitter_stl() {
+    $fn = 90;
+    rotate([90,0,0])
+    fan_duct_splitter();
 }
 
-module berd_air_tube_collet() {
-    stl("berd_air_tube_collet");
+module fan_duct_splitter() {
+    stl("fan_duct_splitter");
     
+    module triple() {
+        rotate([0,45,0])
+        children();
+
+        rotate([0,-45,0])
+        children();
+
+
+    }
+    
+    
+    h = 15;
+    ir = 3/2;
     difference() {
         union() {
-            cylinder(d = 8, h = 6);
-            translate([-1.5,0,0])
-            cube([3,10,6]);
+            triple()
+            translate_z(.5)
+            tube(or = 4.5/2, ir = ir, h = h, center = false);
+            
+            translate_z(-h)
+            tube(or = 7/2, ir = 2, h = h, center = false);
+            sphere(d = 7);
         }
-        cylinder(d = 3.9, h = 6.1);
-        translate([-.5,0,0])
-        cube([1,12,10]);
-        
-        // отверстие винта М3
-        translate([0,7,3])
-        rotate([0,90,0])
-        cylinder(d = 3, h = 10, center = true);
+        triple()
+        cylinder(r = ir, h = h+2);
+
+        translate_z(-h-2)
+        cylinder(r = 2.5, h = h+3);
     }
 }
 
+//fan_duct_splitter_stl();
 
-//berd_air_tube_collet_stl();
-
-titan_extruder_assembly(60, 100, 80, 8, 29);
+//titan_extruder_assembly(60, 100, 80, 8, 29);
 //cooler_stl();
 
 //toolhead_titan_extruder_groove_collet_top_part1_44x29_stl();
