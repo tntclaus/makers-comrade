@@ -2,19 +2,19 @@ include <NopSCADlib/utils/rounded_polygon.scad>
 include <NopSCADlib/utils/core/polyholes.scad>
 
 
-function get_fn_for_stl(stl, fn) = stl ? fn : 45;     
+function get_fn_for_stl(stl, fn) = stl ? fn : 45;
 function get_fn720(stl) = stl ? 720 : 45;
 function get_fn360(stl) = stl ? 720 : 45;
-function get_fn180(stl) = stl ? 720 : 45;    
+function get_fn180(stl) = stl ? 720 : 45;
 
 module rotate_about_pt(x = 0, y = 0, z = 0, pt = [0,0,0]) {
     translate(pt)
         rotate([x, y, z]) // CHANGE HERE
             translate(-pt)
-                children();   
+                children();
 }
 
-module drillHoles(holes, plate_thickness = 0, extra_size = 0) {    
+module drillHoles(holes, plate_thickness = 0, extra_size = 0) {
     module drillHole(hole) {
                 translate([hole[2],hole[3],0])
         color("red")
@@ -34,7 +34,7 @@ module drillHoles(holes, plate_thickness = 0, extra_size = 0) {
             echo("can't drill");
         }
     }
-    
+
     module drillHull(hole) {
         hullType = hole[2][0];
         hullGeom = hole[2][1];
@@ -53,27 +53,27 @@ module drillHoles(holes, plate_thickness = 0, extra_size = 0) {
             }
         }
     }
-    
-    
-    
+
+
+
     for (hole = holes){
         if(Len(hole) == 4) {
             drillHole(hole);
         } else if(Len(hole) == 3) {
             drillHull(hole);
         }
-        
+
     }
 }
 
 module sector(radius, angles) {
     step_devisor = $fn == 0 ? 24 : $fn;
-    
+
     r = radius / cos(180 / step_devisor);
     step = -360 / step_devisor;
 
     points = concat([[0, 0]],
-        [for(a = [angles[0] : step : angles[1] - 360]) 
+        [for(a = [angles[0] : step : angles[1] - 360])
             [r * cos(a), r * sin(a)]
         ],
         [[r * cos(angles[1]), r * sin(angles[1])]]
@@ -90,23 +90,67 @@ module arc(radius, angles, width = 1) {
         sector(radius + width, angles);
         sector(radius, angles);
     }
-} 
+}
 
+module tube_from_shapes(
+    heigth,
+    heigth_0 = 0,
+    heigth_1 = 0
+) {
+    assert($children == 4, "Must have exactly 4 2D child shapes");
+    translate_z(heigth_1) {
+        difference() {
+            hull() {
+                translate_z(heigth)
+                linear_extrude(.1)
+                    children(0);
 
+                linear_extrude(.1)
+                    children(2);
+            }
+            hull() {
+                translate_z(heigth)
+                linear_extrude(.2)
+                    children(1);
+                translate_z(- .1)
+                linear_extrude(.2)
+                    children(3);
+            }
+        }
+        if (heigth_0 > 0) {
+            translate_z(heigth) difference() {
+                linear_extrude(heigth_0)
+                    children(0);
+                translate_z(- .05)
+                linear_extrude(heigth_0 + .1)
+                    children(1);
+            }
+        }
+    }
+    if(heigth_1 > 0) {
+        difference() {
+            linear_extrude(heigth_1)
+                children(2);
+            translate_z(-.05)
+            linear_extrude(heigth_1+.1)
+                children(3);
+        }
+    }
+}
 
 module tube_adapter(
-    exit_depth, 
-    exit_width, 
-    height, 
-    wall, 
-    in_dia = 6, 
-    throat_heigth = 0, 
+    exit_depth,
+    exit_width,
+    height,
+    wall,
+    in_dia = 6,
+    throat_heigth = 0,
     lay_flat = false
 ) {
     base_o_width = exit_width+wall+0.5;
     base_o_depth = exit_depth+wall+0.5;
     top_o_dia = in_dia+wall;
-    
+
     difference() {
         hull() {
             translate_z(wall)
@@ -147,7 +191,7 @@ module tube_adapter(
     }
 
     if(throat_heigth > 0) {
-        
+
         translate_z(height + wall)
         if(lay_flat) {
             translate([0, base_o_depth/2-top_o_dia/2,0])
@@ -162,7 +206,7 @@ module tube_adapter(
 
 module tube_adapter_square2square(in, out, height, wall, r = 1, stl = false) {
     difference() {
-        hull() {            
+        hull() {
             rounded_rectangle([in.x+wall, in.y+wall, 1], r, center=true);
             translate_z(height)
             rounded_rectangle([out.x+wall, out.y+wall, 1], r, center=true);
@@ -184,7 +228,7 @@ module tube_adapter_square2square(in, out, height, wall, r = 1, stl = false) {
         translate_z(height+out.z/2)
         rounded_rectangle(out, r, center=true);
     }
-    
+
     difference() {
         translate_z(-in.z/2)
         rounded_rectangle([in.x+wall, in.y+wall, in.z], r, center=true);
