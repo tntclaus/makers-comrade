@@ -1,6 +1,7 @@
 include <NopSCADlib/utils/core/core.scad>
 include <NopSCADlib/utils/thread.scad>
 use <heatbreak.scad>
+use <../nozzles/e3d_nozzles.scad>
 
 module thermistor_pocket(h) {
     cylinder(d = 3.1, h = h, center = true);
@@ -154,16 +155,8 @@ module hotend(thread = true) {
 }
 
 
-module nozzle() {
-    color("gold")
-    rotate([0,0,-90])
-    rotate([90,0,0])
-    import("/Users/klaus/Downloads/v6_nozzle_2.stl");
-}
 
-mosquito_heatbreak_assembly();
-translate_z(-35.5-25)
-nozzle();
+
 
 //radiator_hotend_screws_placement()
 //cylinder(d = 1.2, h = 100);
@@ -177,11 +170,17 @@ nozzle();
 //}
 
 //$fn = 360;
-translate_z(-16-25)
-rotate([0,0,-28])
-rotate([0,0,90+28])
-hotend(false);
+module makers_comrade_hotend_assembly() {
+    mosquito_heatbreak_assembly();
+    translate_z(-16-25)
+    rotate([0,0,-28])
+    rotate([0,0,90+28])
+    hotend(false);
+    translate_z(-34-25)
+    e3d_nozzle_v6();
+}
 
+//makers_comrade_hotend_assembly();
 //projection()
 //pos = 60;
 //difference() {
