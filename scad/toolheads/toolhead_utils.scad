@@ -10,37 +10,37 @@ function BOTTOM_PLATE(width, length, inset_length, inset_depth, belt_inset = TOO
     [-(length-r*2)/2, (width-r*2)/2, r],
 
     // карман
-    [-(length+2)/2+(length-inset_length)/2, (width-2)/2, 1],    
+    [-(length+2)/2+(length-inset_length)/2, (width-2)/2, 1],
     [-(length-2)/2+(length-inset_length)/2, (width-2)/2-(inset_depth-2), -1],
-    [ (length-2)/2-(length-inset_length)/2, (width-2)/2-(inset_depth-2), -1],    
-    [ (length+2)/2-(length-inset_length)/2, (width-2)/2, 1],    
+    [ (length-2)/2-(length-inset_length)/2, (width-2)/2-(inset_depth-2), -1],
+    [ (length+2)/2-(length-inset_length)/2, (width-2)/2, 1],
 
 
     // вершина X+ Y+
     [ (length-r*2)/2, (width-r*2)/2, r],
-    
+
     // вырез под ремни
     [ (length-r*2)/2, (width-r*2)/2 - belt_inset, r],
-    [ (length-r*2)/2 - belt_inset + r, (width-r*2)/2 - belt_inset - r*2 - inset_depth/2, -r],    
-    [ (length-r*2)/2 - belt_inset + r, -(width-r*2)/2 + belt_inset + r*2 + inset_depth/2, -r],        
+    [ (length-r*2)/2 - belt_inset + r, (width-r*2)/2 - belt_inset - r*2 - inset_depth/2, -r],
+    [ (length-r*2)/2 - belt_inset + r, -(width-r*2)/2 + belt_inset + r*2 + inset_depth/2, -r],
     [ (length-r*2)/2,-(width-r*2)/2 + belt_inset, r],
 
-    // вершина X+ Y-    
+    // вершина X+ Y-
     [ (length-r*2)/2,-(width-r*2)/2, r],
 
     // карман
-    [ (length+2)/2-(length-inset_length)/2, -(width-2)/2, 1],    
+    [ (length+2)/2-(length-inset_length)/2, -(width-2)/2, 1],
     [ (length-2)/2-(length-inset_length)/2, -(width-2)/2+(inset_depth-2), -1],
-    [-(length-2)/2+(length-inset_length)/2, -(width-2)/2+(inset_depth-2), -1],    
-    [-(length+2)/2+(length-inset_length)/2, -(width-2)/2, 1],    
+    [-(length-2)/2+(length-inset_length)/2, -(width-2)/2+(inset_depth-2), -1],
+    [-(length+2)/2+(length-inset_length)/2, -(width-2)/2, 1],
 
-    // вершина X- Y-    
-    [-(length-r*2)/2,-(width-r*2)/2, r],    
+    // вершина X- Y-
+    [-(length-r*2)/2,-(width-r*2)/2, r],
 
     // вырез под ремни
     [-(length-r*2)/2,                 -(width-r*2)/2 + belt_inset, r],
-    [-(length-r*2)/2 + belt_inset - r,-(width-r*2)/2 + belt_inset + r*2 + inset_depth/2, -r],        
-    [-(length-r*2)/2 + belt_inset - r, (width-r*2)/2 - belt_inset - r*2 - inset_depth/2, -r],    
+    [-(length-r*2)/2 + belt_inset - r,-(width-r*2)/2 + belt_inset + r*2 + inset_depth/2, -r],
+    [-(length-r*2)/2 + belt_inset - r, (width-r*2)/2 - belt_inset - r*2 - inset_depth/2, -r],
     [-(length-r*2)/2,                  (width-r*2)/2 - belt_inset, r],
 ];
 
@@ -48,7 +48,7 @@ function TOP_PLATE(width, length, r = 1) = [
     [-(length-r*2)/2, (width-r*2)/2, r],
     [ (length-r*2)/2, (width-r*2)/2, r],
     [ (length-r*2)/2,-(width-r*2)/2, r],
-    [-(length-r*2)/2,-(width-r*2)/2, r], 
+    [-(length-r*2)/2,-(width-r*2)/2, r],
 ];
 
 
@@ -70,19 +70,16 @@ module plate_corner_position(width, length, padding) {
 
 
 module toolhead_bottom_plate_sketch(
-    width, 
-    length, 
-    inset_length, 
+    width,
+    length,
+    inset_length,
     inset_depth) {
 
     difference() {
         rounded_polygon(BOTTOM_PLATE(width, length, inset_length, inset_depth));
-                
+
         plate_corner_position(width, length, 10)
         mount_magnet_mount_hole(0);
-        
-
-
     }
 }
 
@@ -95,7 +92,7 @@ module toolhead_top_plate_sketch(
 
         plate_corner_position(width, inset_length, 10)
             mount_magnet_mount_hole(0);
-    }    
+    }
 }
 //toolhead_bottom_plate_sketch(44, 100, 80, 4);
 
@@ -126,7 +123,7 @@ module magnet_round_hole(d, h, dia_inner1, dia_inner2) {
         d, "x", h, "_",
         dia_inner1,"x",dia_inner2
     ));
-    
+
     difference() {
         cylinder(d = d, h = h);
 
@@ -137,7 +134,7 @@ module magnet_round_hole(d, h, dia_inner1, dia_inner2) {
 }
 
 module magnet_square(
-        width, 
+        width,
         length,
         heigth
 ) {
@@ -147,7 +144,7 @@ module magnet_square(
         length, "x",
         heigth
     ));
-    
+
     translate_z(heigth/2)
     cube([width, length, heigth], center = true);
 }
@@ -163,12 +160,12 @@ piezo_disc_thick = 0.45;
 
 module piezo_disc() {
     vitamin("piezo_disc_d20");
-    
+
     difference() {
         union() {
             translate_z(0.25)
             cylinder(d = 20, h = 0.2);
-            translate_z(0)        
+            translate_z(0)
             color("white")
             cylinder(d = 16, h = 0.25);
         }
@@ -185,13 +182,13 @@ module toolhead_piezo_groove(
     d_out = 20,
     d_in = 16
 ) {
-    
+
     stl_name = str(
     "toolhead_piezo_groove", "_",
     d_out, "x", d_in
     );
     stl(stl_name);
-    
+
     difference() {
         cylinder(d = d_out,h = 2.1, center = true);
         cylinder(d = d_in,h = 2.11, center = true);
