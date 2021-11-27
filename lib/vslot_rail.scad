@@ -30,13 +30,17 @@ module extrusion_w_angle(type, size, sides = [1,0,0,0], spacing = 0, center = tr
     }
 }
 
+function max_position(length, safe_margin, position) = position <= length - safe_margin * 2 ? position : length - safe_margin * 2;
+
 module vslot_rail(
     type,
     l,
-    pos = 10,
+    pos = 0,
     mirror = false,
     angles = false,
-    mirror_plate = [0,0,0]) {
+    mirror_plate = [0,0,0],
+    safe_margin = 0
+) {
 
     gantry = type[1];
     extrusion = type[2];
@@ -45,9 +49,7 @@ module vslot_rail(
 
     plate = gantry[1][0];
 
-    adjZ = Len(plate[0]) > 0 ? 0 : plate[0]/2;
-
-    translate([0,0,adjZ + position])
+    translate([0,0,length - safe_margin - max_position(length, safe_margin, position)])
         vwheel_gantry(gantry, center=true, mirror = mirror, mirror_plate = mirror_plate){
             children(0);
             if($children > 1)

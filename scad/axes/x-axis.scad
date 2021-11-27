@@ -38,37 +38,41 @@ module D16T_x_caret_with_cable_chain_dxf() {
     x_caret_with_cable_chain_sketch();
 }
 
+SENSOR_DEPTH = 10;
+function safeMarginXAxis() = X_PLATE_LENGTH/2 + SENSOR_DEPTH;
+function realXAxisLength(length) = length + X_PLATE_LENGTH + SENSOR_DEPTH*2;
 
-module xAxisRails(position = 0, xAxisLength, railsWidth = 30) {
-    positionAdj =
-    position > workingSpaceSizeMaxX
-        ? workingSpaceSizeMaxX :
-        position < workingSpaceSizeMinX ? workingSpaceSizeMinX :
-        position;
+module xAxisRails(
+position = 0,
+xAxisLength,
+railsWidth = 30) {
     // 1/2 of 2020  + 3mm plate + 1.4mm offset between plate and 2020 extrusion
     materialsThinkness = 10 + X_CARET_PLATE_GAP;
 
     railsAdjustedWidth = railsWidth + materialsThinkness;
 
+    railsRealLength = realXAxisLength(xAxisLength);
+    caretSafeMargin = safeMarginXAxis();
 
     // endstop y
-    translate([xAxisLength/2-2, railsWidth+materialsThinkness,0])
-    rotate([180,90,0])
-    x_caret_endstop_anchor();
+    translate([-railsRealLength/2-2, -railsAdjustedWidth,0])
+    rotate([0,90,0])
+    y_caret_endstop_anchor();
 
     // endstop x
-    translate([xAxisLength/2-2, -railsWidth-materialsThinkness,0])
-    rotate([180,90,0])
+    translate([-railsRealLength/2-2, railsAdjustedWidth,0])
+    rotate([0,90,0])
     x_caret_endstop_anchor();
 
 
 
-    translate([xAxisLength/2,-railsAdjustedWidth,0]) rotate([-90,0,90]) {
+    translate([railsRealLength/2,-railsAdjustedWidth,0]) rotate([-90,0,90]) {
         vslot_rail(
                 X_RAIL,
-                xAxisLength,
-                pos = positionAdj,
-                mirror = false
+                railsRealLength,
+                pos = position,
+                mirror = false,
+                safe_margin = caretSafeMargin
             ) {
                 let();
                 x_caret_2_stl(stl = false);
@@ -100,12 +104,13 @@ module xAxisRails(position = 0, xAxisLength, railsWidth = 30) {
             }
     }
 
-        translate([xAxisLength/2,railsAdjustedWidth,0]) rotate([-90,0,90]) {
+        translate([railsRealLength/2,railsAdjustedWidth,0]) rotate([-90,0,90]) {
         vslot_rail(
                 X_RAIL,
-                xAxisLength,
-                pos = positionAdj,
-                mirror_plate = [1,0,0]
+                railsRealLength,
+                pos = position,
+                mirror_plate = [1,0,0],
+                safe_margin = caretSafeMargin
             ) {
                 let();
                 x_caret_1_assembly() {
@@ -518,22 +523,33 @@ module x_caret_endstop_anchor_stl() {
     x_caret_endstop_anchor();
 }
 
+module y_caret_endstop_anchor_stl() {
+    y_caret_endstop_anchor();
+}
+
 module x_caret_endstop_anchor() {
     stl("x_caret_endstop_anchor");
-    heigth = 7;
-    anchor_width = 30;
+    caret_endstop_anchor(anchor_width = 20);
+}
+
+module y_caret_endstop_anchor() {
+    stl("y_caret_endstop_anchor");
+    caret_endstop_anchor(anchor_width = 30);
+}
+
+module caret_endstop_anchor(anchor_width) {
+    heigth = 5;
+
     color("blue")
-//    render()
+    render()
     difference() {
         union() {
-            rounded_rectangle([20,20,heigth], r = 1.4);
-            translate([-0.3,anchor_width/2,heigth/2])
-            cube([1.6,anchor_width,heigth*2], center = true);
+            rounded_rectangle([20,20,heigth], r = 1);
+            translate([0,anchor_width/2,heigth/2])
+            cube([1.6,anchor_width,heigth], center = true);
         }
-        translate_z(heigth/2+2)
+        translate_z(heigth+2)
         extrusion(E2020, heigth*2);
-        translate_z(heigth+0.5)
-        cube([21,21,heigth+1], center = true);
     }
 }
 
@@ -546,9 +562,7 @@ module x_caret_endstop_anchor() {
 //D16T_x_caret_connector_lock_26x23_6();
 
 
-workingSpaceSizeMaxX  = 1000;
-workingSpaceSizeMinX = 0;
-xAxisRails(80, 400);
+xAxisRails(50, 300);
 
 
 //rotate([0,0,-90])
