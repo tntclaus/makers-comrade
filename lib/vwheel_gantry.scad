@@ -12,9 +12,9 @@ module vwheel_gantry(type, center = false, mirror = false, mirror_plate = [0,0,0
     holes = plate[3];
 
     double = wheels[0][5];
+    plate_thickness = plate[2];
 
-
-    zTranslation = center ? -23/2 : 0;
+    zTranslation = center ? 29/2 : 0;
     mirror(mirror_plate) {
         rotate([90,0,90])
         translate([0,0,zTranslation]) {
@@ -25,8 +25,9 @@ module vwheel_gantry(type, center = false, mirror = false, mirror_plate = [0,0,0
             }
 
             for (i=[0:len(holes)-1]){
-                translate([holes[i][2],holes[i][3],0])
+                translate([holes[i][2],holes[i][3],-plate_thickness])
                 if(holes[i][1]==0) {
+                    mirror([0,0,1])
                     vwheel_assembly(wheels[i]);
                 }
             }

@@ -14,12 +14,13 @@ include <../endstops_xy.scad>
 
 //use <../mk8_hot_end.scad>
 //
-use <../toolhead_extruder_titan.scad>
+use <../toolheads/toolhead_extruder_titan_e3d.scad>
+use <../toolheads/toolhead_extruder_orbiter_mosquito.scad>
 
 include <carets.scad>
 use <../fan_duct/fan_duct.scad>
 
-use <../spindle_mount.scad>
+use <../toolheads/toolhead_spindle.scad>
 
 
 use <../../lib/opto_endstop.scad>
@@ -62,51 +63,51 @@ module xAxisRails(position = 0, xAxisLength, railsWidth = 30) {
 
 
 
-    translate([xAxisLength/2,railsAdjustedWidth,0]) rotate([-90,0,90]) {
+    translate([xAxisLength/2,-railsAdjustedWidth,0]) rotate([-90,0,90]) {
         vslot_rail(
                 X_RAIL,
                 xAxisLength,
                 pos = positionAdj,
                 mirror = false
             ) {
+                let();
                 x_caret_2_stl(stl = false);
 
 
-                translate([-43,0,railsAdjustedWidth-14.4])
+                translate([-43,0,railsWidth])
                 rotate([90,0,-90]) {
-                    rotate([0,0,180])
-                    translate_z(-48.15)
-                    titan_extruder_assembly(
-                        width =	railsWidth*2,
-                        length = 100,
-                        inset_length =	80,
-                        inset_depth =	8,
-                        heigth =	29
-                    );
-
 //                    translate_z(-48.15)
-//                    spindle_assembly(
+//                    rotate([0,0,180])
+//                    toolhead_extruder_titan_e3d_assembly(
+
+//                    toolhead_extruder_orbiter_mosquito_assembly(
 //                        width =	railsWidth*2,
 //                        length = 100,
 //                        inset_length =	80,
 //                        inset_depth =	8,
 //                        heigth =	29
 //                    );
-                }
-//
-//                fanduct_placed();
 
-//                endstop_x_placed();
+                    translate_z(-48.15)
+                    toolhead_spindle_assembly(
+                        width =	railsWidth*2,
+                        length = 100,
+                        inset_length =	80,
+                        inset_depth =	8,
+                        heigth =	29
+                    );
+                }
             }
     }
 
-        translate([xAxisLength/2,-railsAdjustedWidth,0]) rotate([-90,0,90]) {
+        translate([xAxisLength/2,railsAdjustedWidth,0]) rotate([-90,0,90]) {
         vslot_rail(
                 X_RAIL,
                 xAxisLength,
                 pos = positionAdj,
                 mirror_plate = [1,0,0]
             ) {
+                let();
                 x_caret_1_assembly() {
                     translate([-8.85-1,-X_PLATE_CONNECTOR_MOUNT_X,railsWidth])
                     rotate([90,90,0])
@@ -116,10 +117,6 @@ module xAxisRails(position = 0, xAxisLength, railsWidth = 30) {
                     rotate([90,90,0])
                     x_caret_connector(width = railsWidth*2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH, endstop = true);
                 }
-
-//                translate([25,-48,0])
-//                rotate([180,0,0])
-//                endstop_x_placed();
         }
     }
 }
@@ -329,7 +326,8 @@ module x_caret_with_cable_chain_sketch() {
 module x_caret_with_cable_chain() {
     dxf("D16T_x_caret_with_cable_chain");
     translate_z(-X_RAIL[1][1][2])
-    linear_extrude(X_RAIL[1][1][2]) x_caret_with_cable_chain_sketch();
+    linear_extrude(X_RAIL[1][1][2])
+        x_caret_with_cable_chain_sketch();
 }
 //x_caret_with_cable_chain();
 
@@ -339,15 +337,15 @@ module x_caret_1_assembly() {
     // стальные опоры
     toolhead_supports();
 
-    translate([-48.1,0,-3]) {
-        rotate([0,180,180]) {
-            color("blue")
-            precision_piezo_holder_stl();
-            translate([8.2,0,3])
-            screw(M5_pan_screw, 5);
-        }
-    }
-
+//    translate([-48.1,0,-3]) {
+//        rotate([0,180,180]) {
+//            color("blue")
+//            precision_piezo_holder_stl();
+//            translate([8.2,0,3])
+//            screw(M5_pan_screw, 5);
+//        }
+//    }
+//
     children();
 }
 
@@ -550,7 +548,8 @@ module x_caret_endstop_anchor() {
 
 workingSpaceSizeMaxX  = 1000;
 workingSpaceSizeMinX = 0;
-//xAxisRails(80, 400);
+xAxisRails(80, 400);
+
 
 //rotate([0,0,-90])
 //x_caret_2_assembly() {
