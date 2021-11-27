@@ -1,9 +1,10 @@
 include <toolhead_extruder_generic.scad>
-use <../lib/extruder_orbiter/extruder_orbiter.scad>
+use <../../lib/extruder_e3d_titan/e3d_titan_extruder.scad>
 use <toolhead_extruder_heatbreak_e3d_cooler.scad>
+use <../../lib/hotend_e3d/e3d_volcano.scad>
 
-module toolhead_extruder_orbiter_mount_60x100x80_NEMA17S_5_stl() {
-    toolhead_extruder_orbiter_mount(
+module toolhead_titan_extruder_mount_60x100x80_NEMA17S_5_stl() {
+    toolhead_titan_extruder_mount(
         width = 60,
         length = 100,
         inset_length = 80,
@@ -12,7 +13,7 @@ module toolhead_extruder_orbiter_mount_60x100x80_NEMA17S_5_stl() {
     );
 }
 
-module toolhead_extruder_orbiter_mount(
+module toolhead_titan_extruder_mount(
     width,
     length,
     inset_length,
@@ -21,7 +22,7 @@ module toolhead_extruder_orbiter_mount(
 ) {
 
     stl_name = str(
-        "toolhead_extruder_orbiter_mount", "_",
+        "toolhead_titan_extruder_mount", "_",
         width, "x",
         length,"x",
         inset_length,"_",
@@ -78,65 +79,68 @@ module toolhead_extruder_orbiter_mount(
             translate_z(-.1)
             cooling_tube_position(width-8, inset_length-2, 0)
                 cylinder(d = 4.1, h = 3.2);
-
-            rotate([0,0,-90])
-            translate_z(-40)
-            extruder_orbiter_mounts()
-            cylinder(d = 3.8, h = 113.2);
-
-
-            cooling_tube_position(width, inset_length+4, 5, m = true) {
-                hull() {
-//                    translate([0, 10, 0])
-//                        cylinder(d = FAN_DUCT_OUTER_D+2, h = 100, center = true);
-                    translate([10, 0, 0])
-                        cylinder(d = FAN_DUCT_OUTER_D+2, h = 100, center = true);
-                    cylinder(d = FAN_DUCT_OUTER_D+2, h = 100, center = true);
-                }
-            }
-            cooling_tube_position(width, inset_length, 4) {
-
-            }
         }
 
+        translate_z(2.95)
+        translate([13.6,10.87,NEMA_width(motor_type)/2]) {
+            rotate([0,90,0])
+            linear_extrude(2) difference() {
+                union() {
+                    NEMA_outline(motor_type);
+                    square_corner_w = NEMA_width(motor_type)/2;
+                    translate([-square_corner_w+5,-square_corner_w-2])
+                    square([NEMA_width(motor_type)-5,square_corner_w+2]);
+                }
+                circle(NEMA_boss_radius(motor_type));
+                NEMA_screw_positions(motor_type) circle(d = 3.1);
+            }
+
+            translate([11.5,-NEMA_width(motor_type)/2-2.5,-NEMA_width(motor_type)/2])
+            hull() {
+                translate([-10.5,0,NEMA_width(motor_type)-1-5])
+                cube([2,2,2], center = true);
+                cube([23,2,0.1], center = true);
+            }
+        }
 
     }
 
 }
 
-module toolhead_extruder_orbiter_vitamins_assembly(length, heigth, motor_type) {
+module titan_extruder_vitamins_assembly(length, heigth, motor_type) {
+//    translate([10,0,0])
     translate_z(heigth+15+3) {
-        rotate([0,0,-90]) {
-            translate_z(-11.95) {
-                extruder_orbiter();
-                extruder_orbiter_stepper_position(2) LDO_stepper();
-                //                NEMA(motor_type);
+        rotate([0,0,90]) {
+            translate_z(0.75) {
+                titan_extruder();
+                titan_stepper_position(2) NEMA(motor_type);
             }
         }
         translate_z(-16.5)
             children();
     }
-    translate_z(5.9)
-    extruder_orbiter_hot_end_position() {
-        translate_z(-40) {
+    translate_z(9.7)
+    titan_hot_end_position() {
+        e3d_volcano_hotend_assembly();
+        translate_z(-40){
             toolhead_extruder_heatbreak_e3d_cooler(length, cut_half = true);
             toolhead_extruder_heatbreak_e3d_fan_duct_nozzle();
         }
     }
 }
 
-module toolhead_extruder_orbiter_assembly(
+module toolhead_extruder_titan_e3d_assembly(
         width,
         length,
         inset_length,
         inset_depth,
         heigth,
         motor_type = NEMA17S) {
-    toolhead_extruder_orbiter_vitamins_assembly(
+    titan_extruder_vitamins_assembly(
             length = length,
             heigth = heigth,
             motor_type = motor_type)
-        toolhead_extruder_orbiter_mount(
+        toolhead_titan_extruder_mount(
             width = width,
             length = length,
             inset_length = inset_length,
@@ -151,7 +155,7 @@ module toolhead_extruder_orbiter_assembly(
         inset_length = inset_length
     );
 
-    toolhead_extruder_bottom_plate(
+    toolhead_extruder_e3d_bottom_plate(
         width = width,
         length = length,
         inset_length = inset_length,
@@ -160,59 +164,19 @@ module toolhead_extruder_orbiter_assembly(
     );
 }
 
-module fan_duct_splitter_stl() {
-    $fn = 90;
-    rotate([90,0,0])
-    fan_duct_splitter();
-}
 
-module fan_duct_splitter() {
-    stl("fan_duct_splitter");
-
-    module triple() {
-        rotate([0,45,0])
-        children();
-
-        rotate([0,-45,0])
-        children();
-
-
-    }
-
-
-    h = 15;
-    ir = 3/2;
-    difference() {
-        union() {
-            triple()
-            translate_z(.5)
-            tube(or = 4.5/2, ir = ir, h = h, center = false);
-
-            translate_z(-h)
-            tube(or = 7/2, ir = 2, h = h, center = false);
-            sphere(d = 7);
-        }
-        triple()
-        cylinder(r = ir, h = h+2);
-
-        translate_z(-h-2)
-        cylinder(r = 2.5, h = h+3);
-    }
-}
-
-//fan_duct_splitter_stl();
-//toolhead_extruder_orbiter_mount_60x100x80_NEMA17S_5_stl();
-toolhead_extruder_orbiter_assembly(60, 100, 80, 8, 29);
-//toolhead_extruder_bottom_plate(60, 100, 80, 8, 29);
+//toolhead_extruder_titan_e3d_assembly(60, 100, 80, 8, 29);
 //cooler_stl();
 
 //toolhead_titan_extruder_groove_collet_top_part1_44x29_stl();
 //toolhead_titan_extruder_groove_collet_top_part2_44x29_stl();
 //toolhead_titan_extruder_groove_collet_top_part3_44x29_stl();
+//render()
+//toolhead_extruder_heatbreak_cooler_100_stl();
 
 //toolhead_titan_extruder_groove_collet_top_44x29_stl();
 
-//toolhead_extruder_orbiter_mount_60x100x80_NEMA17S_5_stl();
+//toolhead_titan_extruder_mount_60x100x80_NEMA17S_5_stl();
 //toolhead_titan_extruder_groove_collet_44x29_100_stl();
 
 

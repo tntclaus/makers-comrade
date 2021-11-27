@@ -11,6 +11,7 @@ function t_e_t() = extruder_orbiter_translate();
 
 
 module LDO_stepper() {
+    vitamin("LDO-36STH17 stepper motor");
     color("silver")
     rotate([-90,0,0])
     translate([6.55,-29,-18])
@@ -18,7 +19,8 @@ module LDO_stepper() {
 }
 
 module extruder_orbiter(cover = true) {
-    translate(extruder_orbiter_translate()) {        
+    vitamin("Extruder Orbiter v1.5");
+    translate(extruder_orbiter_translate()) {
         color("#414141")
         import("extruder_orbiter_1.5.stl");
     }
@@ -26,7 +28,7 @@ module extruder_orbiter(cover = true) {
 
 module extruder_orbiter_stepper_position(offset = 0) {
     translate([-6.55,extruder_orbiter_depth(),extruder_orbiter_heigth()/2])
-    rotate([90,0,0])    
+    rotate([90,0,0])
     children();
 }
 

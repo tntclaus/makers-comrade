@@ -1,16 +1,12 @@
 include <toolhead_extruder_generic.scad>
 include <NopSCADlib/utils/core/rounded_rectangle.scad>
-use <../lib/hotend_mosquito/heatbreak.scad>
-use <../lib/hotend_mosquito/mosquito_magnum_hotend.scad>
 
-
-
-module toolhead_extruder_heatbreak_mosquito_cooler_100_stl() {
+module toolhead_extruder_heatbreak_e3d_cooler_100_stl() {
     $fn = 180;
-    toolhead_extruder_heatbreak_mosquito_cooler(plate_length = 100);
+    toolhead_extruder_heatbreak_e3d_cooler(plate_length = 100);
 }
 
-module toolhead_extruder_heatbreak_mosquito_top_sketch(length) {
+module toolhead_extruder_heatbreak_e3d_top_sketch(length) {
     resize([length, 40])
         circle(d = 40);
 
@@ -24,7 +20,7 @@ module toolhead_extruder_heatbreak_mosquito_top_sketch(length) {
     }
 }
 
-module toolhead_extruder_heatbreak_mosquito_fan_duct_exits(sx = 0, sy = 0, sz = 0, m = false) {
+module toolhead_extruder_heatbreak_e3d_fan_duct_exits(sx = 0, sy = 0, sz = 0, m = false) {
     x = 40 / 2 + sx;
     y = 0 + sy;
     z = 0 + sz;
@@ -39,7 +35,7 @@ module toolhead_extruder_heatbreak_mosquito_fan_duct_exits(sx = 0, sy = 0, sz = 
             children();
 }
 
-module toolhead_extruder_heatbreak_mosquito_fan_duct_mount_holes() {
+module toolhead_extruder_heatbreak_e3d_fan_duct_mount_holes() {
     max_heigth = 10;
     module fan_duct_mount_hole() {
         cylinder(d = 3.5, h = max_heigth);
@@ -60,16 +56,16 @@ module toolhead_extruder_heatbreak_mosquito_fan_duct_mount_holes() {
         fan_duct_mount_hole();
 }
 
-module toolhead_extruder_heatbreak_mosquito_cooler(
-    plate_length,
-    cut_half = false
+module toolhead_extruder_heatbreak_e3d_cooler(
+plate_length,
+cut_half = false
 ) {
-    stl(str("toolhead_extruder_heatbreak_mosquito_cooler", "_", plate_length));
+    stl(str("toolhead_extruder_heatbreak_e3d_cooler", "_", plate_length));
     length = plate_length - TOOLHEAD_PLATES_BELT_INSET * 2 - 2;
 
     external_face_w = 20;
 
-    zero_level = 21;
+    zero_level = 33.4 - 3;
 
     color(TOOLHEAD_EXTRUDER_PLASTIC_COLOR)
         difference() {
@@ -77,33 +73,36 @@ module toolhead_extruder_heatbreak_mosquito_cooler(
                 hull() {
                     translate_z(zero_level)
                     linear_extrude(0.5)
-                        toolhead_extruder_heatbreak_mosquito_top_sketch(length = length);
+                        toolhead_extruder_heatbreak_e3d_top_sketch(length = length);
 
                     // низ
                     cylinder(d = 27, h = 1);
-                    toolhead_extruder_heatbreak_mosquito_fan_duct_exits()
+                    toolhead_extruder_heatbreak_e3d_fan_duct_exits()
                     cylinder(d = FAN_DUCT_OUTER_D + 1, h = 0.5);
                 }
 
-                toolhead_extruder_heatbreak_mosquito_fan_duct_exits()
+                toolhead_extruder_heatbreak_e3d_fan_duct_exits()
                 rounded_rectangle([FAN_DUCT_OUTER_D, FAN_DUCT_OUTER_D * 3 + 4, 2], r = 1);
             }
 
             translate_z(- .1)
-            toolhead_extruder_heatbreak_mosquito_fan_duct_exits() {
-                toolhead_extruder_heatbreak_mosquito_fan_duct_mount_holes();
+            toolhead_extruder_heatbreak_e3d_fan_duct_exits() {
+                toolhead_extruder_heatbreak_e3d_fan_duct_mount_holes();
             }
 
-            translate_z(zero_level+1)
-            mosquito_radiator_block_volume();
+            translate_z(30 - 6)
+            color("red")
+                cylinder(d = 25, h = 44, center = true);
 
+            translate_z(0)
+            cylinder(d = 16, h = 10, center = true);
 
             hull() {
                 translate_z(zero_level)
                 translate(hose_position(plate_length, coolant_hose_size))
                     cylinder(d = coolant_hose_size, h = 1);
                 translate_z(1)
-                cylinder(d = 23, h = 1);
+                cylinder(d = 25, h = 1);
             }
 
             hull() {
@@ -111,7 +110,7 @@ module toolhead_extruder_heatbreak_mosquito_cooler(
                 translate(hose_position(plate_length, coolant_hose_size, 0, 1))
                     cylinder(d = coolant_hose_size, h = 1);
                 translate_z(1)
-                cylinder(d = 23, h = 1);
+                cylinder(d = 25, h = 1);
             }
 
             hull() {
@@ -165,12 +164,12 @@ module toolhead_extruder_heatbreak_mosquito_cooler(
         }
 }
 
-module toolhead_extruder_mosquito_heatbreak_fan_duct_nozzle_stl() {
+module toolhead_extruder_e3d_heatbreak_fan_duct_nozzle_stl() {
     rotate([0,180,0])
-    toolhead_extruder_heatbreak_mosquito_fan_duct_nozzle();
+    toolhead_extruder_heatbreak_e3d_fan_duct_nozzle();
 }
-module toolhead_extruder_heatbreak_mosquito_fan_duct_nozzle() {
-    stl("toolhead_extruder_mosquito_heatbreak_fan_duct_nozzle");
+module toolhead_extruder_heatbreak_e3d_fan_duct_nozzle() {
+    stl("toolhead_extruder_e3d_heatbreak_fan_duct_nozzle");
 
     module object(d) {
         hull() {
@@ -182,7 +181,7 @@ module toolhead_extruder_heatbreak_mosquito_fan_duct_nozzle() {
         }
     }
 
-    toolhead_extruder_heatbreak_mosquito_fan_duct_exits(m = true) difference() {
+    toolhead_extruder_heatbreak_e3d_fan_duct_exits(m = true) difference() {
         union() {
             object(FAN_DUCT_OUTER_D);
             translate_z(-1.9)
@@ -190,28 +189,69 @@ module toolhead_extruder_heatbreak_mosquito_fan_duct_nozzle() {
         }
         object(FAN_DUCT_INNER_D);
         translate_z(-1.9)
-        toolhead_extruder_heatbreak_mosquito_fan_duct_mount_holes();
+        toolhead_extruder_heatbreak_e3d_fan_duct_mount_holes();
     }
 }
 
-//translate_z(3)
-//toolhead_extruder_bottom_plate(
-//    width = 60,
-//    length = 100,
-//    inset_length = 80,
-//    inset_depth = 8,
-//    heigth = 29
-//);
+module toolhead_extruder_e3d_bottom_plate_sketch(
+width,
+length,
+inset_length,
+inset_depth
+) {
+    difference() {
+        toolhead_extruder_generic_bottom_plate_sketch(width, length, inset_length, inset_depth);
+        circle(d = 16.01);
 
-//rotate([0,0,90])
-//mosquito_magnum_hotend_assembly();
-
-translate_z(-21.5)
-toolhead_extruder_heatbreak_mosquito_cooler(plate_length = 100, cut_half = true);
-//toolhead_extruder_heatbreak_mosquito_cooler_100_stl();
-translate_z(-21.5)
-rotate([0,180,0])
-toolhead_extruder_mosquito_heatbreak_fan_duct_nozzle_stl();
+        translate([0, 8])
+        circle(d = 3.01);
+    }
+}
 
 
-//toolhead_extruder_heatbreak_mosquito_top_sketch(100);
+module toolhead_extruder_e3d_bottom_plate(
+width,
+length,
+inset_length,
+inset_depth,
+heigth,
+thickness = 3
+) {
+    dxf_name = str(
+    "D16T_toolhead_extruder_e3d_bottom_plate", "_",
+    "W", width, "x",
+    "L", length, "_",
+    "IL", inset_length, "_",
+    "ID", inset_depth);
+    dxf(dxf_name);
+
+    toolhead_extruder_generic_bottom_plate(
+    width,
+    length,
+    inset_length,
+    inset_depth,
+    heigth,
+    thickness
+    )
+    toolhead_extruder_e3d_bottom_plate_sketch(
+    width,
+    length,
+    inset_length,
+    inset_depth
+    );
+}
+
+//toolhead_extruder_e3d_bottom_plate(
+//width = 60,
+//length = 100,
+//inset_length = 80,
+//inset_depth = 8,
+//heigth = 29
+//)toolhead_extruder_e3d_bottom_plate_sketch();
+
+//translate_z(- 34)
+//toolhead_extruder_heatbreak_e3d_cooler(plate_length = 100, cut_half = false);
+//toolhead_extruder_heatbreak_e3d_cooler_100_stl();
+//toolhead_extruder_e3d_heatbreak_fan_duct_nozzle_stl();
+
+//toolhead_extruder_heatbreak_e3d_top_sketch(100);

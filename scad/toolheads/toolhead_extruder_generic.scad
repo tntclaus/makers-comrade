@@ -5,11 +5,11 @@ include <NopSCADlib/vitamins/hot_ends.scad>
 include <NopSCADlib/vitamins/fans.scad>
 include <NopSCADlib/vitamins/stepper_motors.scad>
 
-include <../lib/utils.scad>
+include <../../lib/utils.scad>
 
 include <toolhead_utils.scad>
 
-use <../lib/modularHoseLibrary.scad>
+use <../../lib/modularHoseLibrary.scad>
 use <NopSCADlib/utils/tube.scad>
 
 
@@ -89,12 +89,18 @@ module toolhead_extruder_heatbreak_cooler_mounts() {
 //}
 
 module wires_window(width) {
-    translate([0, - width / 2]) hull() {
-        translate([- 6, 0])
-            circle(d = 12);
-        translate([6, 0])
-            circle(d = 12);
+    module window() {
+        translate([0, - width / 2]) hull() {
+            translate([- 6, 0])
+                circle(d = 12);
+            translate([6, 0])
+                circle(d = 12);
+        }
     }
+
+    window();
+    mirror([0,1,0])
+    window();
 }
 
 module toolhead_extruder_top_plate_sketch(
@@ -430,17 +436,16 @@ top_plate_distance
 }
 
 
-module toolhead_extruder_bottom_plate_sketch(
-width,
-length,
-inset_length,
-inset_depth
+module toolhead_extruder_generic_bottom_plate_sketch(
+    width,
+    length,
+    inset_length,
+    inset_depth
 ) {
     difference() {
         toolhead_bottom_plate_sketch(width, length, inset_length, inset_depth);
-        circle(d = 16.01);
-        translate([0, 8])
-            circle(d = 3.01);
+
+        circle(d = 2.01);
 
         toolhead_extruder_groove_collet_mounts() circle(d = 2.3);
 
@@ -472,7 +477,7 @@ module D16T_toolhead_extruder_bottom_plate_W60xL100_IL80_ID8_dxf() {
     );
 }
 
-module toolhead_extruder_bottom_plate(
+module toolhead_extruder_generic_bottom_plate(
     width,
     length,
     inset_length,
@@ -480,22 +485,10 @@ module toolhead_extruder_bottom_plate(
     heigth,
     thickness = 3
 ) {
-    dxf_name = str(
-    "D16T_toolhead_extruder_bottom_plate", "_",
-    "W", width, "x",
-    "L", length, "_",
-    "IL", inset_length, "_",
-    "ID", inset_depth);
-    dxf(dxf_name);
-
     color("silver")
-        translate_z(- thickness)
-        linear_extrude(thickness)
-            toolhead_extruder_bottom_plate_sketch(
-            width,
-            length,
-            inset_length,
-            inset_depth);
+    translate_z(- thickness)
+    linear_extrude(thickness)
+    children();
 
     groove_collet_width = width - inset_depth * 2;
 
@@ -509,5 +502,4 @@ module toolhead_extruder_bottom_plate(
     toolhead_titan_extruder_groove_collet_top(groove_collet_width, heigth);
 
 }
-//toolhead_titan_extruder_groove_collet(44, 29, 100);
 
