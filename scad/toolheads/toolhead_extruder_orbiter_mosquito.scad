@@ -30,6 +30,7 @@ width, length, heigth, inset_length, inset_depth, motor_type) {
     );
 
     extruder_orbiter_hot_end_position() {
+        translate_z(-3)
         mosquito_magnum_hotend_assembly();
         translate_z(-21.5-3) {
             toolhead_extruder_heatbreak_mosquito_cooler(length, cut_half = true);
@@ -71,7 +72,11 @@ module toolhead_extruder_orbiter_mosquito_assembly(
     );
 }
 
-
-
-//toolhead_extruder_orbiter_e3d_assembly(60, 100, 80, 8, 29);
+//toolhead_extruder_orbiter_mosquito_assembly(
+//    width = 60,
+//    length = 100,
+//    inset_length = 80,
+//    inset_depth = 8,
+//    heigth = 29
+//);
 //toolhead_extruder_orbiter_mount_60x100x80_NEMA17S_5_stl();

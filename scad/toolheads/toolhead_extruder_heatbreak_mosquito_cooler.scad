@@ -219,7 +219,18 @@ module toolhead_extruder_mosquito_bottom_plate_sketch(
 ) {
     difference() {
         toolhead_extruder_generic_bottom_plate_sketch(width, length, inset_length, inset_depth);
+        mosquito_radiator_radiator_mount_screws_placement()
+        circle(d=2);
     }
+}
+
+module D16T_toolhead_extruder_mosquito_bottom_plate_W60xL100_IL80_ID8_dxf() {
+    toolhead_extruder_mosquito_bottom_plate_sketch(
+        width = 60,
+        length = 100,
+        inset_length = 80,
+        inset_depth = 8
+    );
 }
 
 module toolhead_extruder_mosquito_bottom_plate(
@@ -237,6 +248,7 @@ module toolhead_extruder_mosquito_bottom_plate(
     "IL", inset_length, "_",
     "ID", inset_depth);
     dxf(dxf_name);
+    echo(dxf_name);
 
     toolhead_extruder_generic_bottom_plate(
         width,
@@ -287,4 +299,4 @@ module toolhead_extruder_mosquito_bottom_plate(
 //    cube([100,100,100]);
 //}
 
-
+//D16T_toolhead_extruder_mosquito_bottom_plate_W60xL100_IL80_ID8_dxf();
