@@ -84,15 +84,15 @@ module heater_block(type, naked = false, resistor_wire_rotate = [0,0,0]) {
 module mk8_fan_duct(type) {
     radiator_path = [
         for (y = [0 : 3 : 39]) each [
-        [0, 0+y, 0], 
-        [10, 0+y, 0], 
-        [10, 1+y, 0], 
-        [2, 1+y, 0], 
+        [0, 0+y, 0],
+        [10, 0+y, 0],
+        [10, 1+y, 0],
+        [2, 1+y, 0],
 
-        [2, 2+y, 0], 
-        [10, 2+y, 0], 
-        [10, 3+y, 0], 
-        [0.01, 3+y, 0], 
+        [2, 2+y, 0],
+        [10, 2+y, 0],
+        [10, 3+y, 0],
+        [0.01, 3+y, 0],
         ]
     ];
 
@@ -103,8 +103,8 @@ module mk8_fan_duct(type) {
             translate([-12, -42 / 2 - 7, 0])
                 cube([16.5, 42, 42]);
 
-            translate([-11.5+16, -42 / 2 - 7, 0]) 
-                linear_extrude(42) 
+            translate([-11.5+16, -42 / 2 - 7, 0])
+                linear_extrude(42)
                     rounded_polygon(radiator_path);
         }
        cylinder(d = 6, h = 200);
@@ -147,7 +147,7 @@ module mk8_hot_end(type, filament, naked = false, resistor_wire_rotate = [-40,30
 module mk8_hot_end_assembly() {
     translate_z(-3) {
         mk8_hot_end(MK8_HE, 1.7, false);
-        translate([-12,-7,-18]) rotate([0,90,0]) 
+        translate([-12,-7,-18]) rotate([0,90,0])
             not_on_bom() NEMA(NEMA17M);
     }
 }

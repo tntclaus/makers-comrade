@@ -20,8 +20,10 @@ include <carets.scad>
 
 module D16T_y_caret_60_dxf() {
     $fn = 180;
-    projection() vslot_plate(GET_Y_PLATE(w = 60));
+    polygon_plate_sketch(GET_Y_PLATE(w = CARET_LENGTH_X));
 }
+
+D16T_y_caret_60_dxf();
 
 module pulley_spacer_19_stl() {
     $fn = 180;
@@ -88,19 +90,18 @@ railSpacing = 60) {
             vslot_rail(
             GET_Y_RAIL(railSpacing),
             railsRealLength,
-            pos = position,
+            pos = xAxisLength-position,
             safe_margin = caretSafeMargin
             ) {
                 let();
 
                 translate([- outerXAxisWidth / 2, 0, 10])
                     rotate([0, 0, 180])
-                        xAxisRails(position, xAxisLength, railSpacing / 2);
+                        xAxisRails(position, xAxisLength, railSpacing / 2)
+                        children();
 
                 translate([0, PULLEY_Y_COORDINATE2, 0]) y_pulley_block(37, 3);
                 translate([- PULLEY2_X_COORDINATE, - PULLEY_Y_COORDINATE, 0]) y_pulley_block(20, 3);
-
-
             }
         }
 
@@ -110,7 +111,7 @@ railSpacing = 60) {
             vslot_rail(
             GET_Y_RAIL(railSpacing),
             railsRealLength,
-            pos = position,
+            pos = xAxisLength-position,
             safe_margin = caretSafeMargin
             ) {
                 let();
@@ -124,7 +125,7 @@ railSpacing = 60) {
 //y_caret_stl();
 //y_caret_60_dwg();
 
-yAxisRails(300, 300, 10, 300);
+//yAxisRails(300, 300, 10, 300);
 
 //gantry_poly_plate_xx3_15_dxf();
 

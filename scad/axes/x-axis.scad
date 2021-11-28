@@ -12,16 +12,8 @@ include <../../lib/vwheel_gantries.scad>
 include <../../lib/vslot_rails.scad>
 include <../endstops_xy.scad>
 
-//use <../mk8_hot_end.scad>
-//
-use <../toolheads/toolhead_extruder_titan_e3d.scad>
-use <../toolheads/toolhead_extruder_orbiter_mosquito.scad>
-
 include <carets.scad>
 use <../fan_duct/fan_duct.scad>
-
-use <../toolheads/toolhead_spindle.scad>
-
 
 use <../../lib/opto_endstop.scad>
 
@@ -93,13 +85,7 @@ railsWidth = 30) {
 //                    );
 
                     translate_z(-48.15)
-                    toolhead_spindle_assembly(
-                        width =	railsWidth*2,
-                        length = 100,
-                        inset_length =	80,
-                        inset_depth =	8,
-                        heigth =	29
-                    );
+                    children();
                 }
             }
     }
@@ -146,34 +132,35 @@ module x_caret_strnghteners(piezo_mount = false) {
 
 }
 
-module piezo_shield_25_stl() {
-    $fn=180;
-    piezo_shield(d = 25);
-}
-module piezo_shield(d = 25) {
-    stl(str(
-        "piezo_shield", "_",
-        d));
-
-    color("blue") difference() {
-        union() {
-            cylinder(d = d, h =0.5, center = true);
-            translate_z(0.75) difference() {
-                union() {
-                    cylinder(d =   d, h=1.5, center = true);
-                    translate([-10,0,-0.25/2])
-                        cube([30,6,1.75], center = true);
-                }
-                translate([-120/2,0,120/2-0.5])
-                cube([120,3,120], center = true);
-            }
-        }
-        translate_z(-1)
-        cylinder(d=X_VW_HOLES[1][0], h=5);
-
-
-    }
-}
+//module piezo_shield_25_stl() {
+//    $fn=180;
+//    piezo_shield(d = 25);
+//}
+//
+//module piezo_shield(d = 25) {
+//    stl(str(
+//        "piezo_shield", "_",
+//        d));
+//
+//    color("blue") difference() {
+//        union() {
+//            cylinder(d = d, h =0.5, center = true);
+//            translate_z(0.75) difference() {
+//                union() {
+//                    cylinder(d =   d, h=1.5, center = true);
+//                    translate([-10,0,-0.25/2])
+//                        cube([30,6,1.75], center = true);
+//                }
+//                translate([-120/2,0,120/2-0.5])
+//                cube([120,3,120], center = true);
+//            }
+//        }
+//        translate_z(-1)
+//        cylinder(d=X_VW_HOLES[1][0], h=5);
+//
+//
+//    }
+//}
 
 
 
@@ -360,9 +347,9 @@ module x_caret_2_stl(stl = true) {
     module addons() {
 //        x_caret_strnghteners();
 //        belt_clamps();
-        rotate([180,0,0])
-        translate([X_VW_HOLES[1][2], X_VW_HOLES[1][1], -1.5])
-        piezo_shield(25);
+//        rotate([180,0,0])
+//        translate([X_VW_HOLES[1][2], X_VW_HOLES[1][1], -1.5])
+//        piezo_shield(25);
     }
 
     if (stl) {
@@ -400,6 +387,11 @@ module x_caret_connector_lock_sketch(width, heigth, line_width = 6) {
 module D16T_x_caret_connector_lock_26x23_6_dxf() {
     $fn = 180;
     x_caret_connector_lock_sketch(width = 26, heigth = 23, line_width = 6);
+}
+
+module D16T_x_caret_connector_lock_26x27_6_dxf() {
+    $fn = 180;
+    x_caret_connector_lock_sketch(width = 26, heigth = 27, line_width = 6);
 }
 
 module x_caret_connector_lock(width, heigth, line_width = 6) {

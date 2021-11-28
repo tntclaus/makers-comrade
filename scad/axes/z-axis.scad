@@ -19,8 +19,6 @@ include <../../lib/vslot_rails.scad>
 
 include <../../lib/spherical_nuts.scad>
 
-use <../heatbed.scad>
-
 include <NopSCADlib/vitamins/pillow_blocks.scad>
 
 include <../../lib/bearings.scad>
@@ -112,7 +110,7 @@ module STEEL_z_gantry_plate_60_dxf() {
 }
 
 module z_gantry_plate(angle = 0, show_beam = false) {
-    dxf("z_gantry_plate_60");
+    dxf("STEEL_z_gantry_plate_60");
     translate_z(- 1.5 - 10) {
         color("red")
             linear_extrude(3)
@@ -242,7 +240,7 @@ module z_gantry_block_assembly(angle = 0, show_beam = false) {
 
 }
 
-Z_TABLE_MOUNTS_HEIGTH = 37;
+Z_TABLE_MOUNTS_HEIGTH = 40;
 Z_COUPLER_HEIGHT = 50;
 function safeMarginZAxis() = Z_COUPLER_HEIGHT;
 function realZAxisLength(length) = length + Z_TABLE_MOUNTS_HEIGTH + safeMarginZAxis() - 30;
@@ -257,7 +255,7 @@ angle = 0
     realZAxisLength = realZAxisLength(length);
 
     if (!diff) {
-        translate([0, 0, realZAxisLength + frontPlateThickness + 20])
+        translate([0, 0, realZAxisLength + $CASE_MATERIAL_THICKNESS + 20])
             rotate([0, 180, -90]) {
                 vslot_rail(
                 VSLOT_Z_RAIL,
@@ -275,8 +273,6 @@ angle = 0
                     translate([0, 15, 18])
                         rotate([90, - 0, 0])
                             leadnut(Z_AXIS_LEADNUT);
-
-
                 }
             }
 
@@ -297,61 +293,19 @@ module zAxis(positionZ, lengthZ, lengthX, lengthY, diff = false) {
     translate([0, -outerYAxisWidth/2, 0])
         zAxisRails(positionZ, length = lengthZ, mirrored = true, diff = diff, angle = 0);
 
-    translate([- lengthX / 2, outerYAxisWidth/2, 0]) {
+    translate([- lengthX / 2 + $Z_AXIS_OFFSET, outerYAxisWidth/2, 0]) {
         mirror([0, 1, 0])
             zAxisRails(positionZ, length = lengthZ, diff = diff, angle = - 1);
 
     }
 
-    translate([lengthX / 2, outerYAxisWidth/2, 0]) {
+    translate([lengthX / 2 - $Z_AXIS_OFFSET, outerYAxisWidth/2, 0]) {
         mirror([0, 1, 0])
             zAxisRails(positionZ, length = lengthZ, diff = diff, angle = 1);
     }
 
-    translate([0, 0, positionZ + frontPlateThickness + 20 + Z_TABLE_MOUNTS_HEIGTH])
-        rotate([0,0,180])
-            heatbed_table_assembly(lengthX, 10, 25);
-
-
-    module xAxisExtrusions() {
-        translate([0, outerYAxisWidth / 2, 0])
-            rotate([0, 90, 0])
-                extrusion(E2020, outerXAxisWidth);
-
-        translate([0, -outerYAxisWidth / 2, 0])
-            rotate([0, 90, 0])
-                extrusion(E2020, outerXAxisWidth);
-    }
-
-    translate_z(10+frontPlateThickness){
-        translate_z(realZAxisLength(lengthZ)+20)
-        rotate([0, 0, 90])
-            yAxisRails(150, lengthY, lengthX);
-
-        xAxisExtrusions();
-
-        translate_z(realZAxisLength(lengthZ)+20)
-        xAxisExtrusions();
-
-        translate([outerXAxisWidth / 2+10, 0, 0])
-            rotate([90, 0, 0])
-                extrusion(E2020, realYAxisLength(lengthY));
-
-        translate([-outerXAxisWidth / 2-10, 0, 0])
-            rotate([90, 0, 0])
-                extrusion(E2020, realYAxisLength(lengthY));
-
-
-        translate_z(lengthZ/2+70) {
-            x = outerXAxisWidth / 2+10;
-            y = outerYAxisWidth / 2;
-            for(ix = [x, -x])
-                for(iy = [y, -y])
-                    translate([ix, iy, 0])
-                        extrusion(E2020, realZAxisLength(lengthZ) + 260);
-        }
-    }
-
+    translate([0, 0, positionZ + safeMarginZAxis() + $CASE_MATERIAL_THICKNESS + 20 + 6])
+        children();
 }
 
 
@@ -360,7 +314,7 @@ module zAxisMotor(
     motorModel,
     leadscrew_length,
     diff = false) {
-    motorScrewY = frontPlateThickness + 3;
+    motorScrewY = $CASE_MATERIAL_THICKNESS + 3;
 
     differ = motorTranslation < 0 ? 4 : 1;
 
@@ -456,8 +410,8 @@ module pillow_block() {
 
 //pillow_block_stl();
 //
-frontPlateThickness = 4;
-zAxis(300, lengthZ = 300, lengthX = 300, lengthY = 300);
+//CASE_MATERIAL_THICKNESS = 4;
+//zAxis(300, lengthZ = 300, lengthX = 300, lengthY = 300);
 
 
 //ABS_PC_z_motor_thurst_bearing_collet_type_51101_stl();

@@ -77,6 +77,15 @@ module motor_collet(width, length, heigth, wall_thickness = 30, type) {
     }
 }
 
+module D16T_motor_mount_bottom_plate_W60xL100_IL80_ID8_CH8_VH12_RS895_dxf() {
+    $fn = 180;
+    motor_mount_bottom_plate_sketch(60, 100, 80, 8, 8, 12, RS895);
+}
+
+module D16T_motor_mount_top_plate_W60xL100_IL80_CH8_VH12_RS895_dxf() {
+    $fn = 180;
+    motor_mount_top_plate_sketch(60, 100, 80, 8, 12, RS895);
+}
 module D16T_motor_mount_bottom_plate_W60xL100_IL80_ID8_CH8_VH11_RS895_dxf() {
     $fn = 180;
     motor_mount_bottom_plate_sketch(60, 100, 80, 8, 8, 11, RS895);

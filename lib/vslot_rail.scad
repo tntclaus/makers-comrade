@@ -30,7 +30,7 @@ module extrusion_w_angle(type, size, sides = [1,0,0,0], spacing = 0, center = tr
     }
 }
 
-function max_position(length, safe_margin, position) = position <= length - safe_margin * 2 ? position : length - safe_margin * 2;
+function max_position(length, safe_margin, position) = position >= 0 && position <= length - safe_margin * 2 ? position : length - safe_margin * 2;
 
 module vslot_rail(
     type,
