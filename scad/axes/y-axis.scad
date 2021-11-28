@@ -74,7 +74,6 @@ function outerXAxisWidth(length) = realXAxisLength(length) + 50;
 module yAxisRails(
 position = 0,
 size,
-baseLength,
 xAxisLength,
 railSpacing = 60) {
     dxf(str("D16T_y_caret_", railSpacing));
