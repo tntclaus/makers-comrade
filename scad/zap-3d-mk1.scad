@@ -458,18 +458,3 @@ module walls() {
         electronics_case_assembly();
     }
 }
-
-
-
-module xyAxisMotor(left = false) {
-    color("silver") if(left) {
-        linear_extrude(3) mirror([0,1,0])
-            motorMountPlate(NEMA17M, wallThickness);
-    } else {
-        linear_extrude(3) mirror([1,0,0]) mirror([0,1,0])
-            motorMountPlate(NEMA17M, wallThickness);
-    }
-
-    rotate([0,-90,0]) motorPulley(6, NEMA17M, GT2x16_toothed_idler, 11);
-//    motorPulley(6, NEMA17M, GT2x16_toothed_idler, 4);
-}

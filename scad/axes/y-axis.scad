@@ -23,8 +23,6 @@ module D16T_y_caret_60_dxf() {
     polygon_plate_sketch(GET_Y_PLATE(w = CARET_LENGTH_X));
 }
 
-D16T_y_caret_60_dxf();
-
 module pulley_spacer_19_stl() {
     $fn = 180;
     pulley_spacer(19);
@@ -78,6 +76,7 @@ position = 0,
 size,
 xAxisLength,
 railSpacing = 60) {
+    dxf(str("D16T_y_caret_", railSpacing));
     dxf(str("D16T_y_caret_", railSpacing));
 
     outerXAxisWidth = outerXAxisWidth(xAxisLength);

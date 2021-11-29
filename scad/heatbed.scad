@@ -29,7 +29,7 @@ module heatbed_table_base_extrusions(
     mount_point_offset,
     mounts_num = 3
 ) {
-    echo("extrusion", work_area_width);
+//    echo("extrusion", work_area_width);
     for(x = [0:90:360]) {
         rotate([0,0,x])
         translate([-work_area_width/2, 10,0])
@@ -191,7 +191,7 @@ module heatbed_table_base(
     work_area_width, "_",
     mounts_num
     );
-    echo(dxf_name);
+//    echo(dxf_name);
     dxf(dxf_name);
     color(STAINLESS_COLOR)
     linear_extrude(3)
