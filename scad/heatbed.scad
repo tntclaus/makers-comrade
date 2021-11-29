@@ -87,25 +87,29 @@ module heatbed_table_base_poperechina_sketch(work_area_width, cut = 1) {
 
 
 module heatbed_table_base_sketch(
-    work_area_width,
+    x_work_area_width,
+    y_work_area_width,
     mount_length,
     mount_point_offset,
     mounts_num = 3
 ) {
     strenghtener_line_width = 33;
+    echo(y_work_area_width);
+    assert(x_work_area_width >= 300);
+    assert(y_work_area_width >= 300);
 
-    assert(work_area_width >= 300);
     assert(mounts_num >= 3);
     assert(mounts_num <= 4);
 
-    width = work_area_width + TABLE_BASE_BORDER*2 + TABLE_BASE_OFFSET*2;
+    x_width = x_work_area_width + TABLE_BASE_BORDER*2 + TABLE_BASE_OFFSET*2;
+    y_width = y_work_area_width + TABLE_BASE_BORDER*2 + TABLE_BASE_OFFSET*2;
 
-    min_width = width > 700 ? 600 : width;
+//    min_width = width > 700 ? 600 : width;
 
     difference() {
         slw = strenghtener_line_width/3;
 
-        rounded_square([min_width, width], TABLE_BASE_BORDER, center = true);
+        rounded_square([x_width, y_width], TABLE_BASE_BORDER, center = true);
 //        for(x = [-1, 1])
 //            for(y = [-1, 1])
 //                translate([x*(work_area_width/4-slw), y*(work_area_width/4-slw)]) {
@@ -115,23 +119,23 @@ module heatbed_table_base_sketch(
 //                    TABLE_BASE_BORDER*4, center = true);
 //                }
 
-        rounded_square([work_area_width, work_area_width], 0.5, center = true);
+        rounded_square([x_work_area_width, y_work_area_width], 0.5, center = true);
 
 
 
 
-        place_poperechina(work_area_width) {
-            translate([0,poperechina_width(work_area_width)/2-4])
+        place_poperechina(x_work_area_width) {
+            translate([0,poperechina_width(x_work_area_width)/2-4])
                 square([3,3], center = true);
-            translate([0,-poperechina_width(work_area_width)/2+4])
+            translate([0,-poperechina_width(x_work_area_width)/2+4])
                 square([3,3], center = true);
         }
 
         rotate([0,0,90])
-        place_poperechina(work_area_width) {
-            translate([0,poperechina_width(work_area_width)/2-4])
+        place_poperechina(y_work_area_width) {
+            translate([0,poperechina_width(y_work_area_width)/2-4])
                 square([3,3], center = true);
-            translate([0,-poperechina_width(work_area_width)/2+4])
+            translate([0,-poperechina_width(y_work_area_width)/2+4])
                 square([3,3], center = true);
         }
     }
@@ -157,22 +161,23 @@ module heatbed_table_base_sketch(
         }
     }
 
-    translate([0, width/2, 0])
+    translate([0, y_width/2, 0])
     mount();
 
-    translate([ width/2-mount_point_offset-TABLE_BASE_BORDER, -width/2, 0])
+    translate([ x_width/2-mount_point_offset-TABLE_BASE_BORDER, -y_width/2, 0])
     rotate([0,0,180])
     mount();
 
-    translate([-(width/2-mount_point_offset-TABLE_BASE_BORDER), -width/2, 0])
+    translate([-(x_width/2-mount_point_offset-TABLE_BASE_BORDER), -y_width/2, 0])
     rotate([0,0,180])
     mount();
 }
 
 
-module STEEL_3mm_heatbed_table_base_300_3_dxf() {
+module STEEL_3mm_heatbed_table_base_300x300_3_dxf() {
     heatbed_table_base_sketch(
-        work_area_width = 300,
+        x_work_area_width = 300,
+        y_work_area_width = 300,
         mount_length = 11.2,
         mount_point_offset = 25,
         mounts_num = 3
@@ -181,14 +186,15 @@ module STEEL_3mm_heatbed_table_base_300_3_dxf() {
 
 
 module heatbed_table_base(
-    work_area_width,
+    x_work_area_width,
+    y_work_area_width,
     mount_length,
     mount_point_offset,
     mounts_num = 3
 ) {
     dxf_name = str(
     "STEEL_3mm_heatbed_table_base", "_",
-    work_area_width, "_",
+    x_work_area_width, "x", y_work_area_width, "_",
     mounts_num
     );
 //    echo(dxf_name);
@@ -196,7 +202,8 @@ module heatbed_table_base(
     color(STAINLESS_COLOR)
     linear_extrude(3)
     heatbed_table_base_sketch(
-        work_area_width = work_area_width,
+        x_work_area_width = x_work_area_width,
+        y_work_area_width = y_work_area_width,
         mount_length = mount_length,
         mount_point_offset = mount_point_offset,
         mounts_num = mounts_num
@@ -206,7 +213,7 @@ module heatbed_table_base(
         rotate([90,0,90])
         translate_z(-1.5)
         linear_extrude(3)
-            heatbed_table_base_poperechina_top(work_area_width = work_area_width);
+            heatbed_table_base_poperechina_top(work_area_width = y_work_area_width);
     }
 
     module poperechina_bottom() {
@@ -214,17 +221,17 @@ module heatbed_table_base(
         rotate([90,0,90])
         translate_z(-1.5)
         linear_extrude(3)
-            heatbed_table_base_poperechina_bottom(work_area_width = work_area_width);
+            heatbed_table_base_poperechina_bottom(work_area_width = x_work_area_width);
     }
 
     translate_z(-10) {
-        place_poperechina(work_area_width = work_area_width)
+        place_poperechina(work_area_width = x_work_area_width)
         poperechina_top();
     }
 
     rotate([0,0,90])
     translate_z(-10) {
-        place_poperechina(work_area_width = work_area_width)
+        place_poperechina(work_area_width = y_work_area_width)
             poperechina_bottom();
     }
 
@@ -447,30 +454,32 @@ module heatbed_table_heater_08_2kW(work_area_width) {
 }
 
 module heatbed_table_ceramic_granite(
-    work_area_width,
+    x_work_area_width,
+    y_work_area_width,
     thickness = 8
 ) {
-    width = work_area_width;
     vitamin(
         str("heatbed_table_ceramic_granite: Ceramic Granite Tile ",
-            width, "x", width, "x",
+            x_work_area_width, "x", y_work_area_width, "x",
             thickness, "mm"
         )
     );
     translate_z(thickness/2)
     color("#333333")
-    cube([width,width, thickness], center = true);
+    cube([x_work_area_width,y_work_area_width, thickness], center = true);
 }
 
 module heatbed_table_assembly(
-    work_area_width,
+    x_work_area_width,
+    y_work_area_width,
     mount_length,
     mount_point_offset,
     mounts_num = 3)
 {
     heatbed_table_base(
 //    heatbed_table_base_extrusions(
-        work_area_width = work_area_width,
+        x_work_area_width = x_work_area_width,
+        y_work_area_width = y_work_area_width,
         mount_length = mount_length,
         mount_point_offset = mount_point_offset,
         mounts_num = mounts_num
@@ -478,7 +487,7 @@ module heatbed_table_assembly(
     translate_z(0) {
 //        heatbed_table_heater_08_2kW(work_area_width);
 //        translate_z(10)
-        heatbed_table_ceramic_granite(work_area_width);
+        heatbed_table_ceramic_granite(x_work_area_width, y_work_area_width);
     }
 }
 

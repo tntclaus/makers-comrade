@@ -71,7 +71,6 @@ module motorMountPlate(model, distance = 3) {
     mw = NEMA_width(model)/2;
 
     cl = mw;
-    echo(cl);
     coords = [
             [3,3,3],
             [-3,41,-3],
