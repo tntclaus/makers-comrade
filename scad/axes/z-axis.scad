@@ -62,7 +62,7 @@ Z_GANTRY_GUIDE_ANGLE = 43.025;
 
 
 
-module STEEL_gantry_sq_plate_60x60x3_22_dxf() {
+module STEEL_3mm_gantry_sq_plate_60x60x3_22_dxf() {
     square_plate_sketch(Z_PLATE);
 }
 
@@ -105,12 +105,12 @@ module z_gantry_plate_support_sketch() {
         square([50, 60], center = true);
 }
 
-module STEEL_z_gantry_plate_60_dxf() {
+module STEEL_3mm_z_gantry_plate_60_dxf() {
     z_gantry_plate_sketch();
 }
 
 module z_gantry_plate(angle = 0, show_beam = false) {
-    dxf("STEEL_z_gantry_plate_60");
+    dxf("STEEL_3mm_z_gantry_plate_60");
     translate_z(- 1.5 - 10) {
         color("red")
             linear_extrude(3)
@@ -314,6 +314,9 @@ module zAxisMotor(
     motorModel,
     leadscrew_length,
     diff = false) {
+
+    dxf("STEEL_3mm_gantry_sq_plate_60x60x3_22");
+
     motorScrewY = $CASE_MATERIAL_THICKNESS + 3;
 
     differ = motorTranslation < 0 ? 4 : 1;

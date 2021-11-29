@@ -12,6 +12,8 @@ include <../../lib/vslot_rails.scad>
 use <x-axis.scad>
 include <brackets.scad>
 
+use <../pulley_spacer.scad>
+
 
 //include <NopSCADlib/vitamins/pulleys.scad>
 //use <NopSCADlib/vitamins/pulley.scad>
@@ -23,30 +25,14 @@ module D16T_y_caret_60_dxf() {
     polygon_plate_sketch(GET_Y_PLATE(w = CARET_LENGTH_X));
 }
 
-module pulley_spacer_19_stl() {
+module ABS_pulley_spacer_19_stl() {
     $fn = 180;
     pulley_spacer(19);
 }
 
-module pulley_spacer_2_stl() {
+module ABS_pulley_spacer_2_stl() {
     $fn = 180;
     pulley_spacer(2);
-}
-
-module pulley_spacer(h) {
-    stl_name = str(
-    "pulley_spacer", "_",
-    h
-    );
-    stl(stl_name);
-    //    echo(stl_name);
-
-    color("teal")
-        translate_z(h / 2)
-        difference() {
-            cylinder(d = 7, h = h, center = true);
-            cylinder(d = 4.1, h = h + .1, center = true);
-        }
 }
 
 module y_pulley_block(length, plate_thickness) {
@@ -115,17 +101,10 @@ railSpacing = 60) {
             ) {
                 let();
 
-                translate([0, PULLEY_Y_COORDINATE2, 0]) y_pulley_block(20.5, 3);
-                translate([- PULLEY2_X_COORDINATE, - PULLEY_Y_COORDINATE, 0]) y_pulley_block(37.5, 3);
+                translate([0, PULLEY_Y_COORDINATE2, 0]) y_pulley_block(20, 3);
+                translate([- PULLEY2_X_COORDINATE, - PULLEY_Y_COORDINATE, 0]) y_pulley_block(37, 3);
             }
         }
 }
 
-//y_caret_stl();
-//y_caret_60_dwg();
-
 //yAxisRails(300, 300, 10, 300);
-
-//gantry_poly_plate_xx3_15_dxf();
-
-//pulley_spacer_19_stl();

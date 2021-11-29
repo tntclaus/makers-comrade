@@ -242,3 +242,10 @@ module tube_adapter_square2square(in, out, height, wall, r = 1, stl = false) {
 //        cylinder(d = in_dia, h = in_dia+1, center = true, $fn=get_fn_for_stl(stl,360));
 //    }
 }
+
+function str_replace(string, search_chr, replace_chr) = chr([
+    for(c = str(string))
+        c == search_chr ? ord(replace_chr) : ord(c)
+]);
+
+

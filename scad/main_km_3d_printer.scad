@@ -105,6 +105,9 @@ module km_frame_corner_plates(x, y) {
             color("silver")
                 linear_extrude(3)
                     pulley_corner_plate();
+
+        translate([-30, +10, 0])
+            corner_pulley_assembly(8.5,25.5, 40, 3);
     }
 
     translate([x + 20, - y + 30, 10]) {
@@ -112,6 +115,8 @@ module km_frame_corner_plates(x, y) {
             color("silver")
                 linear_extrude(3)
                     pulley_corner_plate();
+        translate([-10, -30, 0])
+            corner_pulley_assembly(8.5,25.5, 40, 3);
     }
 
     translate([x + 10, y + 37, 10]) xyAxisMotor(left = true);
