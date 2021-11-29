@@ -64,7 +64,8 @@ railsWidth = 30) {
                 railsRealLength,
                 pos = position,
                 mirror = false,
-                safe_margin = caretSafeMargin
+                safe_margin = caretSafeMargin,
+                safe_margin_top = caretSafeMargin
             ) {
                 let();
                 x_caret_2_stl(stl = false);
@@ -96,7 +97,8 @@ railsWidth = 30) {
                 railsRealLength,
                 pos = position,
                 mirror_plate = [1,0,0],
-                safe_margin = caretSafeMargin
+                safe_margin = caretSafeMargin,
+                safe_margin_top = caretSafeMargin
             ) {
                 let();
                 x_caret_1_assembly() {
@@ -541,7 +543,7 @@ module caret_endstop_anchor(anchor_width) {
             cube([1.6,anchor_width,heigth], center = true);
         }
         translate_z(heigth+2)
-        extrusion(E2020, heigth*2);
+        not_on_bom() extrusion(E2020, heigth*2);
     }
 }
 

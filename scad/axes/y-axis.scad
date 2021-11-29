@@ -76,7 +76,8 @@ railSpacing = 60) {
             GET_Y_RAIL(railSpacing),
             railsRealLength,
             pos = xAxisLength-position,
-            safe_margin = caretSafeMargin
+            safe_margin = caretSafeMargin,
+            safe_margin_top = caretSafeMargin
             ) {
                 let();
 
@@ -97,7 +98,8 @@ railSpacing = 60) {
             GET_Y_RAIL(railSpacing),
             railsRealLength,
             pos = xAxisLength-position,
-            safe_margin = caretSafeMargin
+            safe_margin = caretSafeMargin,
+            safe_margin_top = caretSafeMargin
             ) {
                 let();
 

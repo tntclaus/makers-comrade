@@ -28,7 +28,7 @@ use <y-axis.scad>
 
 Z_AXIS_LEADNUT = LSN8x2;
 
-function leadscrew_mount_hole(pos) = [[pos - 1.5, 10], [pos + 1.5, 10]];
+function leadscrew_mount_hole(pos) = [[pos - 1.5, 0], [pos + 1.5, 0]];
 
 Z_MOUNT_HOLES = [
         [7.2, 0, 20, - 24],
@@ -38,7 +38,7 @@ Z_MOUNT_HOLES = [
         [3.01, 0, ["square", leadscrew_mount_hole(- 12)]],
         [3.01, 0, ["square", leadscrew_mount_hole(0)]],
         [3.01, 0, ["square", leadscrew_mount_hole(12)]],
-        [3.01, 0, ["square", leadscrew_mount_hole(24)]],
+//        [3.01, 0, ["square", leadscrew_mount_hole(24)]],
     //    [3, 0,["square",[[-27+1.5,0], [-21-1.5,0]]]],
     //    [3, 0,["square",[[-27+1.5,0], [-21-1.5,0]]]],
     //    [2, 0,["square",[[-27,0], [-18,0]]]],
@@ -71,8 +71,11 @@ module z_gantry_plate_sketch() {
     translate([- 25 + 3, 0, 0])
         difference() {
             hull() {
-                translate([22, 0])
-                    square([0.1, 60], center = true);
+                translate([22, -7.5])
+                    square([0.1, 45], center = true);
+
+                translate([18, -7])
+                    square([0.1, 44], center = true);
 
                 translate([- 23.5, 0])
                     circle(d = 25);
@@ -94,7 +97,7 @@ module z_gantry_plate_sketch() {
             }
         }
 
-    for (y = [- 24 : 12 : 24])
+    for (y = [- 24 : 12 : 12])
     translate([0, y])
         color("red")
             square([6, 6], center = true);
@@ -111,7 +114,7 @@ module STEEL_3mm_z_gantry_plate_60_dxf() {
 
 module z_gantry_plate(angle = 0, show_beam = false) {
     dxf("STEEL_3mm_z_gantry_plate_60");
-    translate_z(- 1.5 - 10) {
+    translate_z(- 1.5) {
         color("red")
             linear_extrude(3)
                 z_gantry_plate_sketch();
@@ -240,10 +243,12 @@ module z_gantry_block_assembly(angle = 0, show_beam = false) {
 
 }
 
-Z_TABLE_MOUNTS_HEIGTH = 40;
-Z_COUPLER_HEIGHT = 50;
-function safeMarginZAxis() = Z_COUPLER_HEIGHT;
-function realZAxisLength(length) = length + Z_TABLE_MOUNTS_HEIGTH + safeMarginZAxis() - 30;
+Z_TABLE_HEIGTH = 15;
+Z_CARET_HEIGTH = 60;
+Z_COUPLER_HEIGHT = 35;
+function safeMarginZAxisTop() = Z_CARET_HEIGTH/2 + Z_TABLE_HEIGTH;
+function safeMarginZAxisBottom() = Z_COUPLER_HEIGHT;
+function realZAxisLength(length) = length + safeMarginZAxisBottom() + safeMarginZAxisTop();
 
 module zAxisRails(
 position = 0,
@@ -262,7 +267,8 @@ angle = 0
                 realZAxisLength,
                 pos = position,
                 mirror = true,
-                safe_margin = safeMarginZAxis()
+                safe_margin = safeMarginZAxisBottom(),
+                safe_margin_top = safeMarginZAxisTop()
                 )   {
                     let();
                     depth = 60;
@@ -270,7 +276,7 @@ angle = 0
                         translate([0, 0, 1.5]) rotate([180, 90, 90]) z_gantry_plate(angle, false);
 //                        translate([0, - 10, 17]) rotate([0, - 90, 90]) drill(5, h = 40);
                     }
-                    translate([0, 15, 18])
+                    translate([0, 5, 18])
                         rotate([90, - 0, 0])
                             leadnut(Z_AXIS_LEADNUT);
                 }
@@ -296,7 +302,6 @@ module zAxis(positionZ, lengthZ, lengthX, lengthY, diff = false) {
     translate([- lengthX / 2 + $Z_AXIS_OFFSET, outerYAxisWidth/2, 0]) {
         mirror([0, 1, 0])
             zAxisRails(positionZ, length = lengthZ, diff = diff, angle = - 1);
-
     }
 
     translate([lengthX / 2 - $Z_AXIS_OFFSET, outerYAxisWidth/2, 0]) {
@@ -304,7 +309,7 @@ module zAxis(positionZ, lengthZ, lengthX, lengthY, diff = false) {
             zAxisRails(positionZ, length = lengthZ, diff = diff, angle = 1);
     }
 
-    translate([0, 0, positionZ + safeMarginZAxis() + $CASE_MATERIAL_THICKNESS + 20 + 6])
+    translate([0, 0, positionZ + safeMarginZAxisBottom() + $CASE_MATERIAL_THICKNESS + 30 + 6])
         children();
 }
 

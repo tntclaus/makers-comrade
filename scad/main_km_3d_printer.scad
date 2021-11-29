@@ -21,13 +21,13 @@ AXIS_Z_SIZE = 300;
 AXIS_X_SIZE = 300;
 AXIS_Y_SIZE = 300;
 
-CASE_MATERIAL_THICKNESS = 4;
+CASE_MATERIAL_THICKNESS = 3;
 
 if ($preview)
 main_assembly();
 
 module main_assembly() {
-    km_3d_printer(zpos = 160, xypos = 150);
+    km_3d_printer(zpos = 300, xypos = 300);
 }
 
 module km_3d_printer(zpos = 0, xypos = 0) {
@@ -133,7 +133,7 @@ module corexy_belts(width_x, width_y, xpos, ypos) {
     coreXYPosBL = [0, 0, 0];
     coreXYPosTR = [width_x+20, width_y+37, 0];
     separation = [0, coreXY_coincident_separation(coreXY_type).y, pulley_height(plain_idler) + 8.2];
-    pos = [safeMarginXAxis()+xpos, safeMarginYAxis()+ypos+10];
+    pos = [xpos, safeMarginYAxis()+ypos+10];
 
     upper_drive_pulley_offset = [0, 0];
     lower_drive_pulley_offset = [0, 0];
@@ -148,6 +148,7 @@ module corexy_belts(width_x, width_y, xpos, ypos) {
         x_gap = 10,
         upper_drive_pulley_offset = upper_drive_pulley_offset,
         lower_drive_pulley_offset = lower_drive_pulley_offset,
-        show_pulleys = true);
+        show_pulleys = true,
+        left_lower = true);
 
 }
