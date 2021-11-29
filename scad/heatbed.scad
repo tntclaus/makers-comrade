@@ -452,7 +452,7 @@ module heatbed_table_ceramic_granite(
 ) {
     width = work_area_width;
     vitamin(
-        str("heatbed_table_ceramic_granite_",
+        str("heatbed_table_ceramic_granite: Ceramic Granite Tile ",
             width, "x", width, "x",
             thickness, "mm"
         )
