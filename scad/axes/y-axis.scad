@@ -45,7 +45,7 @@ module y_pulley_block(length, plate_thickness) {
     spring_washer(M4_washer);
 
     translate_z(length - 14 + .5)
-    pulley(Y_PULLEY);
+    not_on_bom() pulley(Y_PULLEY);
 
     translate_z(4.4)
     pulley_spacer(length - 4.4 - 13.6);

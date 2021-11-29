@@ -50,8 +50,8 @@ module corner_pulley_assembly(pos1, pos2, length, plate_thickness) {
     translate_z(plate_thickness+3.5) pulley_spacer(5);
     translate_z(plate_thickness+3.5+pos1+5.1) pulley_spacer(8.2);
 
-    translate_z(plate_thickness+pos1) pulley(GT2x20_plain_idler);
-    translate_z(plate_thickness+pos2) pulley(GT2x20_plain_idler);
+//    translate_z(plate_thickness+pos1) pulley(GT2x20_plain_idler);
+//    translate_z(plate_thickness+pos2) pulley(GT2x20_plain_idler);
 }
 
 module corner_pulley_block(pos1, pos2, length = 40, plate_thickness=3) {
@@ -116,11 +116,9 @@ module motorMountPlate(model, distance = 3) {
 }
 
 
-module motorPulley(motorScrewY, model, pulley, pulleyElevation) {
+module motor_assembly(motorScrewY, model) {
     rotate([0,90,0]) {
         NEMA(model);
-        translate([0,0,pulleyElevation])
-            pulley(pulley);
     }
 
     tr = NEMA_hole_pitch(model)/2;
@@ -140,6 +138,6 @@ module xyAxisMotor(left = false, wallThickness = 3) {
             motorMountPlate(NEMA17M, wallThickness);
     }
 
-    rotate([0,-90,0]) motorPulley(6, NEMA17M, GT2x16_toothed_idler, 11);
+    rotate([0,-90,0]) motor_assembly(6, NEMA17M);
     //    motorPulley(6, NEMA17M, GT2x16_toothed_idler, 4);
 }
