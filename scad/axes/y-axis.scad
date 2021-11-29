@@ -59,7 +59,7 @@ function outerXAxisWidth(length) = realXAxisLength(length) + 50;
 
 module yAxisRails(
 position = 0,
-size,
+yAxisLength,
 xAxisLength,
 railSpacing = 60) {
     dxf(str("D16T_y_caret_", railSpacing));
@@ -67,7 +67,7 @@ railSpacing = 60) {
 
     outerXAxisWidth = outerXAxisWidth(xAxisLength);
 
-    railsRealLength = realYAxisLength(size);
+    railsRealLength = realYAxisLength(yAxisLength);
     caretSafeMargin = safeMarginYAxis();
 
     translate([railsRealLength / 2, outerXAxisWidth / 2, 0])
@@ -75,7 +75,7 @@ railSpacing = 60) {
             vslot_rail(
             GET_Y_RAIL(railSpacing),
             railsRealLength,
-            pos = xAxisLength-position,
+            pos = yAxisLength-position,
             safe_margin = caretSafeMargin,
             safe_margin_top = caretSafeMargin
             ) {
@@ -97,7 +97,7 @@ railSpacing = 60) {
             vslot_rail(
             GET_Y_RAIL(railSpacing),
             railsRealLength,
-            pos = xAxisLength-position,
+            pos = yAxisLength-position,
             safe_margin = caretSafeMargin,
             safe_margin_top = caretSafeMargin
             ) {
