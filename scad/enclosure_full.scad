@@ -44,7 +44,7 @@ module enclosure_base_place_vertical_perforation(heigth, overlap = 0) {
 
 module enclosure_place_horizontal_perforation(width, overlap = 0) {
     for (i = PERFORATION_ROW(- width / 2 + 65, width / 2 - 65, (width - 130) / 2)) {
-//    for (i = PERFORATION_ROW(- width / 2 + 30 + overlap, width / 2 - 30 - overlap, (width - 60 - overlap * 2) / 3)) {
+        //    for (i = PERFORATION_ROW(- width / 2 + 30 + overlap, width / 2 - 30 - overlap, (width - 60 - overlap * 2) / 3)) {
         translate([i, 0, 0]) children();
     }
 }
@@ -55,18 +55,18 @@ module enclosure_base_place_horizontal_perforation(width, heigth, overlap = 0) {
 }
 
 module enclosure_side_place_horizontal_top_perforation(width, heigth, overlap = 0) {
-//    for (i = PERFORATION_ROW(- width / 2 + 65, width / 2 - 65, (width - 130) / 2)) {
-        translate([0, heigth / 2 - 10, 0])
-            enclosure_place_horizontal_perforation(width, overlap) children();
-//    }
+    //    for (i = PERFORATION_ROW(- width / 2 + 65, width / 2 - 65, (width - 130) / 2)) {
+    translate([0, heigth / 2 - 10, 0])
+        enclosure_place_horizontal_perforation(width, overlap) children();
+    //    }
 }
 
 module enclosure_front_back_place_horizontal_top_perforation(width, heigth) {
-//    for (i = PERFORATION_ROW(- width / 2 + 30 + MATERIAL_STEEL_THICKNESS, width / 2 - 30 - MATERIAL_STEEL_THICKNESS, (
-//            width - 60 - MATERIAL_STEEL_THICKNESS * 2) / 3)) {
-        translate([0, heigth / 2 - 30, 0])
-            enclosure_place_horizontal_perforation(width, MATERIAL_STEEL_THICKNESS) children();
-//    }
+    //    for (i = PERFORATION_ROW(- width / 2 + 30 + MATERIAL_STEEL_THICKNESS, width / 2 - 30 - MATERIAL_STEEL_THICKNESS, (
+    //            width - 60 - MATERIAL_STEEL_THICKNESS * 2) / 3)) {
+    translate([0, heigth / 2 - 30, 0])
+        enclosure_place_horizontal_perforation(width, MATERIAL_STEEL_THICKNESS) children();
+    //    }
 }
 module enclosure_side_window_place_holes(heigth) {
     translate([0, 35]) {
@@ -234,16 +234,16 @@ module enclosure_side_single_z(width, heigth, window_h) {
 }
 
 module enclosure_shared_parts(width, heigth, overlap = 0) {
-    translate_z(-MATERIAL_STEEL_THICKNESS*2-1.8){
-        translate([width/2-10,0,0])
+    translate_z(- MATERIAL_STEEL_THICKNESS * 2 - 1.8){
+        translate([width / 2 - 10, 0, 0])
             enclosure_vslot_mount_line_vertical(heigth);
-        translate([-(width/2-10),0,0])
+        translate([- (width / 2 - 10), 0, 0])
             enclosure_vslot_mount_line_vertical(heigth);
 
-        translate([0, -(heigth/2-10)+$LEG_HEIGTH,0])
+        translate([0, - (heigth / 2 - 10) + $LEG_HEIGTH, 0])
             enclosure_vslot_mount_line_horizontal(width, overlap);
 
-        translate([0, (heigth/2-30),0])
+        translate([0, (heigth / 2 - 30), 0])
             enclosure_vslot_mount_line_horizontal(width, overlap);
     }
 }
@@ -322,6 +322,50 @@ module enclosure_back(width, heigth, window_w) {
 module enclosure_back_sketch(width, heigth, window_w) {
     enclosure_base_front_back_sketch(width, heigth, window_w, overlap = MATERIAL_STEEL_THICKNESS);
 }
+
+module enclosure_bottom_plate(width, length) {
+    translate_z($LEG_HEIGTH)
+    linear_extrude(MATERIAL_STEEL_THICKNESS)
+    enclosure_bottom_plate_sketch(width, length);
+}
+
+module enclosure_bottom_plate_sketch(width, length) {
+    dxf(str("STEEL_",MATERIAL_STEEL_THICKNESS,"_3mm_enclosure_bottom_plate_", width, "x", length));
+
+    difference() {
+        translate([0, 0, 0]) {
+            difference() {
+                square([width, length], center = true);
+
+                for(xi = [-1,1])
+                for(yi = [-1,1])
+                translate([xi * (width / 2), yi * (length / 2), 0])
+                    square(40, center = true);
+
+//                stepZ = (heigth - 60) / 6;
+//                listZ = [for (i = [30 : stepZ : heigth]) i];
+//                //    echo(listZ);
+//                stepX = (width - 60) / 6;
+//                listX = [for (i = [30 : stepX : width]) i];
+//                //    echo(listX);
+//
+//
+//                for (i = listX) {
+//                    translate([- heigth / 2 + i, - width / 2 + 10, 0]) m5_hole(d = 5);
+//                    translate([- heigth / 2 + i, width / 2 - 10, 0]) m5_hole(d = 5);
+//                }
+//
+//                for (i = listZ) {
+//                    translate([- heigth / 2 + 10, - width / 2 + i, 0]) m5_hole(d = 5);
+//                    translate([heigth / 2 - 10, - width / 2 + i, 0]) m5_hole(d = 5);
+//                }
+            }
+        }
+
+        children();
+    }
+}
+
 
 function door_hinge_pos(door_width, door_heigth) = [
         [door_width / 2, door_heigth / 2 - 80, 0],
@@ -408,15 +452,15 @@ module hinge(angle = 0) {
 
 module enclosure_vslot_mount_line_vertical(length) {
     color("silver")
-    enclosure_vslot_mount_line(length, "vertical")
-    enclosure_base_place_vertical_perforation(length) circle(d = 4.1);
+        enclosure_vslot_mount_line(length, "vertical")
+        enclosure_base_place_vertical_perforation(length) circle(d = 4.1);
 }
 
 module enclosure_vslot_mount_line_horizontal(length, overlap) {
     color("silver")
-    enclosure_vslot_mount_line(length-40, "horizontal_bottom", vertical = false)
-    enclosure_base_place_horizontal_perforation(length + overlap*2, $LEG_HEIGTH * 2 + 20)
-    circle(d = 4.1);
+        enclosure_vslot_mount_line(length - 40, "horizontal_bottom", vertical = false)
+        enclosure_base_place_horizontal_perforation(length + overlap * 2, $LEG_HEIGTH * 2 + 20)
+        circle(d = 4.1);
 }
 
 module enclosure_vslot_mount_line(length, name, vertical = true) {
@@ -424,16 +468,16 @@ module enclosure_vslot_mount_line(length, name, vertical = true) {
     dxf(name);
 
     linear_extrude(MATERIAL_STEEL_THICKNESS)
-    screw_mount_line_sketch(length, vertical)
-    children();
+        screw_mount_line_sketch(length, vertical)
+        children();
 }
 
 module screw_mount_line_sketch(length, vertical = true) {
     difference() {
-        if(vertical)
-            rounded_square([8, length], r = 2, center = true);
+        if (vertical)
+        rounded_square([8, length], r = 2, center = true);
         else
-            rounded_square([length, 8], r = 2, center = true);
+        rounded_square([length, 8], r = 2, center = true);
 
         children();
     }

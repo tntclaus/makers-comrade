@@ -288,7 +288,7 @@ angle = 0
                 pillow_block();
     }
 
-    translate([0, 0, - 23])
+    translate([0, 0, - 17 - $CASE_MATERIAL_THICKNESS])
         zAxisMotor(motorModel = NEMA17, leadscrew_length = length + 50, diff = diff);
 }
 
@@ -332,20 +332,8 @@ module zAxisMotor(
         0, NEMA_width(motorModel) / 2 + 10,
             NEMA_length(motorModel) / 2
         ]) {
-        rotate([0, - 90, 0])
-            motor(motorScrewY, motorModel, diff);
+            z_axis_motor_assembly(motorModel, leadscrew_length);
 
-        translate_z(4)
-        z_motor_thurst_bearing_collet_assembly();
-
-        translate([0, 0, leadscrew_length/2+30])
-            leadscrew(
-            8,
-            leadscrew_length,
-            8,
-            2,
-            center = true
-            );
     }
 }
 

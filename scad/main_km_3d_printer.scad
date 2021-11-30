@@ -16,6 +16,9 @@ use <toolheads/toolhead_spindle.scad>
 
 use <pulley_and_motor_plates.scad>
 
+$bom = undef;
+function is_bom() = $bom != undef ? true : false;
+
 
 AXIS_Z_SIZE = 300;
 AXIS_X_SIZE = 300;
@@ -28,22 +31,22 @@ $CAP_HEIGTH = 160;
 BASE_HEIGTH = realZAxisLength(AXIS_Z_SIZE) + 40 + $LEG_HEIGTH;
 FULL_HEIGTH = realZAxisLength(AXIS_Z_SIZE) + 40 + $LEG_HEIGTH + $CAP_HEIGTH;
 
-CASE_MATERIAL_THICKNESS = 3;
+$CASE_MATERIAL_THICKNESS = 3;
 
 if ($preview)
-    main_assembly();
+main_assembly();
 
-$preview_table = !$preview || true;
-$preview_belts = !$preview || true;
-$preview_tool = !$preview || true;
-$preview_screws = !$preview || true;
+$preview_table = !$preview || is_bom()  || false;
+$preview_belts = !$preview || is_bom()  || false;
+$preview_tool = !$preview || is_bom()  || false;
+$preview_screws = !$preview || is_bom() || false;
 
 module main_assembly() {
     km_3d_printer(zpos = 200, xypos = 0);
 }
 
 module km_3d_printer(zpos = 0, xypos = 0) {
-    $CASE_MATERIAL_THICKNESS = CASE_MATERIAL_THICKNESS;
+
 
     km_frame_assembly(zpos, xypos);
     case();
@@ -53,8 +56,6 @@ outerXAxisWidth = outerXAxisWidth(AXIS_X_SIZE) - 20;
 outerYAxisWidth = realYAxisLength(AXIS_Y_SIZE) + 20;
 
 module km_frame_assembly(zpos = 0, xypos = 0) {
-    $CASE_MATERIAL_THICKNESS = CASE_MATERIAL_THICKNESS;
-
     module xAxisExtrusions() {
         translate([0, outerYAxisWidth / 2, 0])
             rotate([0, 90, 0])
@@ -181,46 +182,50 @@ use <enclosure_full.scad>
 
 module enclosure_assembly() {
     assembly("enclosure") {
-        translate([- outerXAxisWidth(AXIS_X_SIZE) / 2 - 13, 0, 0]) {
-            enclosure_front(
-            width = realYAxisLength(AXIS_Y_SIZE) + 40,
-            heigth = BASE_HEIGTH,
-            window_w = realYAxisLength(AXIS_Y_SIZE),
-            window_h = realZAxisLength(AXIS_Z_SIZE) - 20,
-            window_translate_z = 25
-            );
+//        translate([- outerXAxisWidth(AXIS_X_SIZE) / 2 - 13, 0, 0]) {
+//            enclosure_front(
+//            width = realYAxisLength(AXIS_Y_SIZE) + 40,
+//            heigth = BASE_HEIGTH,
+//            window_w = realYAxisLength(AXIS_Y_SIZE),
+//            window_h = realZAxisLength(AXIS_Z_SIZE) - 20,
+//            window_translate_z = 25
+//            );
+//
+//            plastic_doors_assembly(
+//            width = realYAxisLength(AXIS_Y_SIZE),
+//            heigth = realZAxisLength(AXIS_Z_SIZE) - 20,
+//            side = 0,
+//            thickness = 5,
+//            angle = 60
+//            );
+//        }
+//
+//        translate([outerXAxisWidth(AXIS_X_SIZE) / 2 + 13, 0, 0])
+//            enclosure_back(
+//            width = realYAxisLength(AXIS_Y_SIZE) + 40,
+//            heigth = BASE_HEIGTH,
+//            window_w = realYAxisLength(AXIS_Y_SIZE)
+//            );
+//
+//        translate([0, outerYAxisWidth / 2 + 13, 0])
+//            enclosure_side_dual_z(
+//            width = outerXAxisWidth + 40,
+//            heigth = BASE_HEIGTH,
+//            window_h = realZAxisLength(AXIS_Z_SIZE),
+//            x_length = AXIS_X_SIZE
+//            );
+//
+//        translate([0, - (outerYAxisWidth / 2 + 13), 0])
+//            enclosure_side_single_z(
+//            width = outerXAxisWidth + 40,
+//            heigth = BASE_HEIGTH,
+//            window_h = realZAxisLength(AXIS_Z_SIZE)
+//            );
 
-            plastic_doors_assembly(
-            width = realYAxisLength(AXIS_Y_SIZE),
-            heigth = realZAxisLength(AXIS_Z_SIZE) - 20,
-            side = 0,
-            thickness = 5,
-            angle = 60
-            );
-        }
-
-        translate([outerXAxisWidth(AXIS_X_SIZE) / 2 + 13, 0, 0])
-            enclosure_back(
-            width = realYAxisLength(AXIS_Y_SIZE) + 40,
-            heigth = BASE_HEIGTH,
-            window_w = realYAxisLength(AXIS_Y_SIZE)
-            );
-
-        translate([0, outerYAxisWidth / 2 + 13, 0])
-            enclosure_side_dual_z(
-            width = outerXAxisWidth + 40,
-            heigth = BASE_HEIGTH,
-            window_h = realZAxisLength(AXIS_Z_SIZE),
-            x_length = AXIS_X_SIZE
-            );
-
-        translate([0, -(outerYAxisWidth / 2 + 13), 0])
-            enclosure_side_single_z(
-            width = outerXAxisWidth + 40,
-            heigth = BASE_HEIGTH,
-            window_h = realZAxisLength(AXIS_Z_SIZE)
-            );
-
+        enclosure_bottom_plate(
+            outerXAxisWidth + 40,
+            realYAxisLength(AXIS_Y_SIZE) + 40
+        );
     }
 }
 
