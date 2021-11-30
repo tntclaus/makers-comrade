@@ -17,7 +17,7 @@
 // - Version 3.7
 //   * Added a comment for the "knuckle_count" parameter, to notify users to always set an odd knuckle count in order to ensure that the unified
 //     pin is supported by male knuckles on both ends. An even number of knuckles will leave one end of the unified pin unsupported by a male knuckle.
-//   * Added a constraint to the "knuckle_count" parameter, to force an odd knuckle count. Even knuckle counts are now incemented to next odd number. 
+//   * Added a constraint to the "knuckle_count" parameter, to force an odd knuckle count. Even knuckle counts are now incemented to next odd number.
 //     Example:
 //     - A knuckle count of 4, will be incremented to 5.
 //     - A knuckle count of 10 will, with be incremented to 11
@@ -38,7 +38,7 @@
 //
 // - Version 3.2
 //   * Added support for independently configurable top and bottom pin shaft counterbores.
-//   * Added an assembly option to flip the model about the z-axis. 
+//   * Added an assembly option to flip the model about the z-axis.
 //     Usefull for viewing the top and bottom pin shaft counterbores.
 //   * Configured the hinge throw angle Thingiverse Customizer parameter step size, to 5 degrees.
 //
@@ -74,11 +74,11 @@
 //     piano hinge style fastener arrangements.
 //
 // - Version 2.7
-//   * Rewrote the knuckle cutter module using mode generic math, that enables more parametizable control over knuckle joint 
+//   * Rewrote the knuckle cutter module using mode generic math, that enables more parametizable control over knuckle joint
 //     dimensions and configuration.
 //
 // - Version 2.6
-//   * Added support for countersunk fastener holes. Now users can select either counterbore or countersunk. 
+//   * Added support for countersunk fastener holes. Now users can select either counterbore or countersunk.
 //     dimensions and configuration.
 //   * Started tracking release updates.
 //
@@ -116,7 +116,7 @@ C_HEXAGONAL = C_CONSTANT + 2;
 // Curve Type
 
 C_FUNCTION_LINEAR    = C_CONSTANT + 1;      //  y = ax + b
-C_FUNCTION_CIRCULAR  = C_CONSTANT + 2;      // r2 = x2 + y2 
+C_FUNCTION_CIRCULAR  = C_CONSTANT + 2;      // r2 = x2 + y2
 C_FUNCTION_PARABOLIC = C_CONSTANT + 3;      //  y = a2(x - j)2 + k    ...Vertex form.
 
 // Minimum and maximum constraints.
@@ -128,15 +128,15 @@ C_MIN_COMPONENT_CLEARENCE                  = C_CONSTANT + 0.1;
 C_MAX_COMPONENT_CLEARENCE                  = C_CONSTANT + 1.0;
 C_MIN_KNUCKLE_COUNT                        = C_CONSTANT + 3;
 C_MAX_KNUCKLE_COUNT                        = C_CONSTANT + 15;
-C_MIN_KNUCKLE_GUSSET_WIDTH                 = C_CONSTANT + 1.0; 
-C_MIN_FASTENER_MARGIN                      = C_CONSTANT + 1.0; 
-C_MIN_PIN_DIAMETER                         = C_CONSTANT + 1.0; 
-C_MIN_COUNTER_SINK_DEPTH_STOP              = C_CONSTANT + 1.0; 
-C_MIN_FASTENER_THREAD_DIAMETER             = C_CONSTANT + 0.0; 
-C_MIN_FASTENER_COUNT                       = C_CONSTANT + 3; 
-C_MIN_FASTENER_COLUMN_COUNT                = C_CONSTANT + 1; 
-C_MAX_FASTENER_COLUMN_COUNT                = C_CONSTANT + 2; 
-C_MIN_TESSELLATION                         = C_CONSTANT + 32; 
+C_MIN_KNUCKLE_GUSSET_WIDTH                 = C_CONSTANT + 1.0;
+C_MIN_FASTENER_MARGIN                      = C_CONSTANT + 1.0;
+C_MIN_PIN_DIAMETER                         = C_CONSTANT + 1.0;
+C_MIN_COUNTER_SINK_DEPTH_STOP              = C_CONSTANT + 1.0;
+C_MIN_FASTENER_THREAD_DIAMETER             = C_CONSTANT + 0.0;
+C_MIN_FASTENER_COUNT                       = C_CONSTANT + 3;
+C_MIN_FASTENER_COLUMN_COUNT                = C_CONSTANT + 1;
+C_MAX_FASTENER_COLUMN_COUNT                = C_CONSTANT + 2;
+C_MIN_TESSELLATION                         = C_CONSTANT + 32;
 C_MAX_TESSELLATION                         = C_CONSTANT + 256;
 C_MIN_THROW_ANGLE                          = C_CONSTANT + -90;
 C_MAX_THROW_ANGLE                          = C_CONSTANT + 180;
@@ -152,11 +152,11 @@ C_MIN_PIN_SHAFT_COUNTERBORE_DEPTH          = C_CONSTANT + 0.0;
 // - These parameters are used to integrate with the Thingiverse Customizer, and should only be used by the
 //   class member variables specified in the "Model parameters" section below.
 //
-// - These Thingiverse Parameters should never be accessed from inside any module. We do this to enforce 
+// - These Thingiverse Parameters should never be accessed from inside any module. We do this to enforce
 //   principles of object orientation.
 //
-// - By separating concerns between variables exposed to Thingiverse vs. variables used internally by the 
-//   SCAD model (class), we are better able to manage the ordering and grouping of variables exposed to 
+// - By separating concerns between variables exposed to Thingiverse vs. variables used internally by the
+//   SCAD model (class), we are better able to manage the ordering and grouping of variables exposed to
 //   Thingiverse, vs. the ordering of variables used internally by the model.
 //
 // -------------------------------------+---------------------------------------+---------------------------------------+---------------------------------------
@@ -210,7 +210,7 @@ bottom_pin_shaft_counterbore_shape    = 2;            // [ 0:Circular, 1:Square,
 fstener_head_type                = 0;   // [ 0:Counterbored, 1:Countersunk ]
 counter_sink_depth               = 2.5;
 fastener_thread_diameter         = 3.5;
-// Add 0.5mm to 1.0mm to the fastener head diameter, to allow for head clearance. 
+// Add 0.5mm to 1.0mm to the fastener head diameter, to allow for head clearance.
 fastener_head_diameter           = 7.0;
 fastener_count                   = 6;   // [3:32]
 fastener_column_count            = 1;   // [1,2]
@@ -222,17 +222,17 @@ fastener_margin                  = 3;
 // Model parameters and geometric constraints. (Class member variables).
 //
 // - If we treat an OpenSCAD file as though it is an object oriented class, then we can prefix global variables
-//   with "m_", to denote class membership. 
+//   with "m_", to denote class membership.
 //   - As an alternative to "m_", we could also use "this_" as a standard. However, "m_" is shorter and faster to type.
-//   - Another advantage of this convention, is that we can arrange parameters meant for display in Thingiverse, in 
+//   - Another advantage of this convention, is that we can arrange parameters meant for display in Thingiverse, in
 //     an order that makes sense to the user, while arranging the member versions of the parameters in an order
 //     that better accommodates constraint computation.
 //
 // - Once we have defined global variables as member variables of a class, in this case the class represented
-//   by the SCAD file, then we are free to better manage global vs local scope of class member 
+//   by the SCAD file, then we are free to better manage global vs local scope of class member
 //   variables, vs. local module (method) variables.
 //
-// - Thingiverse only integrates constant literal values. So as long as we reference other parameters or 
+// - Thingiverse only integrates constant literal values. So as long as we reference other parameters or
 //   initialize variables as expressions, then none of these will appear in the Thingiverse customizer.
 //
 // -------------------------------------+---------------------------------------+---------------------------------------+---------------------------------------
@@ -292,7 +292,7 @@ m_resolution      = clip ( resolution, C_MIN_TESSELLATION, C_MAX_TESSELLATION );
 m_component_color = component_color;
 
 // -------------------------------------+---------------------------------------+---------------------------------------+---------------------------------------
-// DEBUG: Console Output. 
+// DEBUG: Console Output.
 // -------------------------------------+---------------------------------------+---------------------------------------+---------------------------------------
 
 C_DEBUG_ENABLED = false;
@@ -312,9 +312,9 @@ if ( C_DEBUG_ENABLED )
     echo ( m_fastener_margin                = m_fastener_margin );
     echo ( m_pin_diameter                   = m_pin_diameter );
     echo ( m_parametric_pin_diameter        = m_parametric_pin_diameter );
-    echo ( absolute_pin_diameter            = m_parametric_pin_diameter - m_component_clearance / 2.0 );    
+    echo ( absolute_pin_diameter            = m_parametric_pin_diameter - m_component_clearance / 2.0 );
     echo ( m_pin_shaft_counterbore_diameter = m_pin_shaft_counterbore_diameter );
-    echo ( m_pin_shaft_counterbore_depth    = m_pin_shaft_counterbore_depth );    
+    echo ( m_pin_shaft_counterbore_depth    = m_pin_shaft_counterbore_depth );
 }
 
 // -------------------------------------+---------------------------------------+---------------------------------------+---------------------------------------
@@ -330,17 +330,17 @@ if ( C_DEBUG_ENABLED )
 main();
 
 module main ()
-{   
+{
     // Initialize model resolution.
-    
+
     $fn = m_resolution;
-    
+
     // Generate hinge assembly.
-    
+
     rotate ( [ 0.0, 0.0, ( m_flip_model ) ? 180.0 : 0.0 ] )
     {
         if ( m_female_leaf_enabled ) rotate ( [ 0.0, -m_throw_angle, 0.0 ] ) leaf ( C_FEMALE );
-        if ( m_male_leaf_enabled )   leaf ( C_MALE );     
+        if ( m_male_leaf_enabled )   leaf ( C_MALE );
     }
 }
 
@@ -353,7 +353,7 @@ module main ()
 // - Creates a hinge leaf component, whose gender may be selected through the gender argument.
 //
 // - Note:
-//   The text option is not made public to the Thingiverse Customizer at this time. 
+//   The text option is not made public to the Thingiverse Customizer at this time.
 //   However, you can add and configure text here in the code.
 //
 // Parameters:
@@ -364,59 +364,59 @@ module main ()
 // -------------------------------------+---------------------------------------+---------------------------------------+---------------------------------------
 
 module leaf ( gender )
-{  
+{
     // Text configuration.
-    
+
     text_enabled          = false;
     text_string_female    = "0.4";
     text_string_male      = "RG";
     text_female_font_size = 8;
     text_male_font_size   = 8;
-    
+
     // Compute the gender angle.
     // - 0 degrees for female, and 180 degrees for male.
-    // - In other words, we leave the female leaf un-rotated, but we rotate the male leaf 180 degrees, to place it at an 
+    // - In other words, we leave the female leaf un-rotated, but we rotate the male leaf 180 degrees, to place it at an
     //   opposing orientation to the female.
-    
+
     gender_angle = ( gender == C_FEMALE ) ? 0 : 180;
-    
+
     // Create leaves.
-    
+
     rotate ( [ 0, 0, gender_angle ] )
     {
         color ( m_component_color )
         difference ()
         {
             // Cut pin hole.
-            
-            workpiece_leaf_knuckle_pin ( gender );   
-            
+
+            workpiece_leaf_knuckle_pin ( gender );
+
             // Cut fstener holes.
-            
+
             if ( m_fasteners_enabled )
             {
-                tool_cutter_fastener_set ( m_fastener_count, m_fastener_column_count, 0 );                
+                tool_cutter_fastener_set ( m_fastener_count, m_fastener_column_count, 0 );
             }
-            
+
             // Cut pin shaft counterbore into female leaf.
-            
+
             if ( m_pin_shaft_counterbore_enabled && gender == C_FEMALE )
             {
                 tool_cutter_pin_shaft_counterbore
                 (
-                    diameter_top    = m_top_pin_shaft_counterbore_diameter, 
-                    depth_top       = m_top_pin_shaft_counterbore_depth, 
+                    diameter_top    = m_top_pin_shaft_counterbore_diameter,
+                    depth_top       = m_top_pin_shaft_counterbore_depth,
                     shape_top       = m_top_pin_shaft_counterbore_shape,
-                    diameter_bottom = m_bottom_pin_shaft_counterbore_diameter, 
-                    depth_bottom    = m_bottom_pin_shaft_counterbore_depth, 
+                    diameter_bottom = m_bottom_pin_shaft_counterbore_diameter,
+                    depth_bottom    = m_bottom_pin_shaft_counterbore_depth,
                     shape_bottom    = m_bottom_pin_shaft_counterbore_shape
                 );
             }
-            
+
             // Cut text.
             // -  We will only cut text into the leaves, if we are using exactly 4 fasteners per leaf.
             // -  All other leaf counts will not leave enough space for the text to fit easily. So we only add text, if we are using 4 fasteners.
-            
+
             if ( text_enabled && m_fastener_count == 4 )
             {
                 if ( gender == C_FEMALE ) tool_cutter_text ( text_string_female, text_female_font_size );
@@ -442,38 +442,38 @@ module leaf ( gender )
 // -------------------------------------+---------------------------------------+---------------------------------------+---------------------------------------
 
 module workpiece_leaf_knuckle_pin ( gender )
-{   
+{
     // Initialize local variables.
-    
+
     d = m_parametric_pin_diameter;
     c = m_component_clearance;
-    e = SCG_OVERLAP; 
+    e = SCG_OVERLAP;
 
     // Combine pin with leaf and knuckle.
-    
+
     if ( gender == C_FEMALE )
     {
         if ( m_pin_enabled )
         {
             // Fuse the pin to the female leaf by default.
-            
+
             union ()
-            {                           
+            {
                 dc = d - c/2.0;
-                
-                workpiece_leaf_knuckle ( C_FEMALE );            
+
+                workpiece_leaf_knuckle ( C_FEMALE );
                 pin ( dc, m_leaf_height - e );
             }
         }
         else
         {
             // Cut a hole for an external pin if selected by the user.
-            
+
             difference ()
-            {                           
-                dc = d + c/2.0; 
-                
-                workpiece_leaf_knuckle ( C_FEMALE );            
+            {
+                dc = d + c/2.0;
+
+                workpiece_leaf_knuckle ( C_FEMALE );
                 pin ( dc, m_leaf_height + e );
             }
         }
@@ -481,12 +481,12 @@ module workpiece_leaf_knuckle_pin ( gender )
     else
     {
         // Cut a hole for the pin to pass throug in the male leaf.
-        
+
         difference ()
-        {   
-            dc = d + c/2.0;            
-            
-            workpiece_leaf_knuckle ( C_MALE );            
+        {
+            dc = d + c/2.0;
+
+            workpiece_leaf_knuckle ( C_MALE );
             pin ( dc, m_leaf_height + e );
         }
     }
@@ -513,15 +513,15 @@ module workpiece_leaf_knuckle_pin ( gender )
 module pin ( diameter, length )
 {
     rotate ( [ 90, 0, 0 ] )
-    {   
+    {
         // Initialize pin dimensions.
-        
+
         tx = 0;
         ty = 0;
         tz = -length/2;
-        
+
         // Create pin.
-        
+
         translate ( [ tx, ty, tz ] )
         {
             cylinder ( d = diameter, h = length );
@@ -547,63 +547,63 @@ module pin ( diameter, length )
 module workpiece_leaf_knuckle ( gender )
 {
     // Initialize local variables.
-    
+
     gender_flipped = ( gender == C_MALE ) ? C_FEMALE : C_MALE;
-    
+
     w = m_leaf_width;
     l = m_leaf_height;
     h = m_leaf_gauge;
     r = m_leaf_fillet_radius;
     d = m_knuckle_outer_radius;
-    
+
     // Create workpiece.
-    
+
     difference ()
     {
         difference ()
         {
             // leaf and knuckle work piece.
-            
+
             translate ( [ 0, -l/2, 0 ] )
-            {        
+            {
                 union ()
-                {                    
+                {
                     // Leaf.
-                          
+
                     workpiece_leaf ( w, l, h, r );
-                                    
+
                     // Knuckle.
-                    
+
                     rotate ( [ -90, 0, 0 ] ) cylinder ( d = d, h = l );
-                    
+
                     // Gusset array.
-                    
-                    if ( m_knuckle_gusset_type != C_NONE ) 
+
+                    if ( m_knuckle_gusset_type != C_NONE )
                     {
-                        translate ( [ 0, l/2, 0 ] )                        
+                        translate ( [ 0, l/2, 0 ] )
                         workpiece_gusset_array
                         (
-                            gender                   = gender, 
-                            curve                    = m_knuckle_gusset_type, 
-                            scg_type                 = C_POSITIVE, 
+                            gender                   = gender,
+                            curve                    = m_knuckle_gusset_type,
+                            scg_type                 = C_POSITIVE,
                             fill_component_clearance = false
                         );
                     }
                 }
             }
-                
+
             // Cut knuckle gaps.
-            
+
             tool_cutter_knuckle_array
             (
-                gender                   = gender, 
-                fill_component_clearance = true, 
+                gender                   = gender,
+                fill_component_clearance = true,
                 size                     = 2.0*m_leaf_gauge + m_component_clearance
             );
         }
-        
+
         // Cut opposing gusset groves.
-     
+
         if ( m_knuckle_gusset_type != C_NONE )
         {
             workpiece_gusset_array
@@ -644,29 +644,29 @@ module workpiece_leaf_knuckle ( gender )
 module workpiece_leaf ( w, l, h, r )
 {
     translate ( [ 0, 0, -h ] )
-    {   
+    {
         union ()
         {
             if ( m_leaf_fillet_enabled )
             {
                 // Leaf.
-            
+
                 cube ( [ w-r, l, h] );
                 translate ( [  0, r, 0 ] ) cube ( [ w, l-2*r, h] );
-            
-                // Fillet corcers.            
-            
+
+                // Fillet corcers.
+
                 translate ( [  w - r, r,   0 ] ) cylinder ( r = r, h = h );
                 translate ( [  w - r, l-r, 0 ] ) cylinder ( r = r, h = h );
             }
             else
             {
                 // Leaf.
-            
+
                 cube ( [ w, l, h] );
             }
         }
-    }  
+    }
 }
 
 // -------------------------------------+---------------------------------------+---------------------------------------+---------------------------------------
@@ -680,7 +680,7 @@ module workpiece_leaf ( w, l, h, r )
 // Parameters:
 //
 // - gender:
-//   Specifies the number of knuckle joints based on hinge leaf gender.   
+//   Specifies the number of knuckle joints based on hinge leaf gender.
 //
 // - scg_type:
 //   Solid Constructive Geometry type.
@@ -694,35 +694,35 @@ module workpiece_leaf ( w, l, h, r )
 // -------------------------------------+---------------------------------------+---------------------------------------+---------------------------------------
 
 module workpiece_gusset_array ( gender, curve, scg_type, fill_component_clearance )
-{   
+{
     // Compute cutting block size.
-    
+
     cutting_block_size = m_leaf_gauge + m_knuckle_gusset_width;
-    leaf_height        = ( scg_type == C_NEGATIVE ) ? m_leaf_height + SCG_OVERLAP : m_leaf_height; 
-    
+    leaf_height        = ( scg_type == C_NEGATIVE ) ? m_leaf_height + SCG_OVERLAP : m_leaf_height;
+
     // Compute cutting block translation.
-    
+
     xt = cutting_block_size/2.0;
     yt = 0.0;
     zt = 0.0;
-    
+
     // Create gusset array.
-    
+
     difference ()
     {
         // Create a solid cylindrical gusset cylinder.
-        
+
         workpiece_gusset
         (
-            width         = m_knuckle_gusset_width, 
-            height        = leaf_height, 
-            knuckle_radus = m_leaf_gauge, 
+            width         = m_knuckle_gusset_width,
+            height        = leaf_height,
+            knuckle_radus = m_leaf_gauge,
             curve         = curve,
             scg_type      = scg_type
         );
-        
+
         // Use the knuckle array cutter tool, to cut knuckle gaps into the gusset to match the dimensions of the knuckles.
-        
+
         translate ( [ xt, yt, zt ] )
         tool_cutter_knuckle_array
         (
@@ -806,49 +806,49 @@ module workpiece_gusset_linear ( width, height, knuckle_radus, scg_type )
 {
     CENTER        = true;
     DEBUG_ENABLED = true;
-    
+
     // Initialize input values.
-    
+
     w = width;          // Gusset width.
     h = height;         // Hinge leaf height.
     r = knuckle_radus;  // Knuckle radius is equal to the leaf gauge.
     s = w + r;          // Cartesian position of the point where the gusset curve merges with the leaf.
     g = m_leaf_gauge;   // Leafe gauge.
     c = SCG_OVERLAP;    // Amount to overlap unions in order to prevent Boolean anomalies.
-    
+
     // Compute gusset tangent curve.
-    
+
     x = r*r/s;
     y = sqrt ( r*r - x*x );
     a = y/( x - s );
     b = -a*s;
-    
+
     // Compute work piece translation and dimensions.
-    
+
     wp_xd = 0;                  // Work piece origin x.
     wp_yd = 0;                  // Work piece origin y.
     wp_zd = -g + c;             // Work piece origin z.
-    
+
     wp_w = s;                   // Work piece width (x axis length).
     wp_g = g + y - c;           // Work piece gauge (y access length. i.e. thickness).
     wp_h = h;                   // Work piece height (y axis length).
-    
+
     // Compute cutting tool translation and dimensions.
-    
+
     ct_xd  = 0;
     ct_yd  = 0;
     ct_zd  = 0;
-            
+
     ct_w0 = x;
     ct_w1 = s;
     ct_g0 = y;
     ct_g1 = 0;
     ct_h  = h + 2*c;
-          
+
     // Compute and configure orientation.
-    
+
     test_yd = 0;
-    
+
     zs = ( scg_type == C_POSITIVE ) ? 1.0 : -1.0;
     scale ( [ 1.0, -1.0, zs ] )
     difference()
@@ -857,7 +857,7 @@ module workpiece_gusset_linear ( width, height, knuckle_radus, scg_type )
         {
             linear_extrude ( height = wp_h, center = CENTER ) rectangle ( w = wp_w, h = wp_g );
         }
-     
+
         translate ( [ ct_xd, ct_yd + test_yd, ct_zd ] ) rotate ( [ 90, 0, 0 ] )
         {
             linear_extrude ( height = ct_h, center = CENTER ) triangle ( [ [ ct_w0, ct_g0 ],[ ct_w1+c, ct_g0+c ],[ ct_w1, ct_g1 ] ] );
@@ -896,60 +896,60 @@ module workpiece_gusset_linear ( width, height, knuckle_radus, scg_type )
 module workpiece_gusset_circular ( width, height, knuckle_radus, scg_type )
 {
     CENTER = true;
-    
+
     // Initialize input values.
-    
+
     w = width;          // Gusset width.
     g = knuckle_radus;  // Knuckle radius is equal to the leaf gauge.
     c = SCG_OVERLAP;    // Amount to overlap unions in order to prevent Boolean anomalies.
-    
+
     // Compute gusset radius. The radius of the circle, that is tangential to the knuckle cylinder.
-    
+
     r = ( 2.0*g*w + w*w ) / ( 2.0*g );
 
     // Compute gusset height. The point of intersection between the knuckle cylinder and the gusset cutter.
-    
+
     h = ( g*r ) / sqrt ( g*g + 2.0*g*w + r*r + w*w );
-    
+
     // Compute intersection point between knuckle and gusset cutting tool, using gusset height.
     // The coordinate of the intersection point are, p(x,h), where h is the vertical value of the coordinate.
-    
+
     x = h*( g + w ) / r;
-        
+
     // Compute gusset cutting tool translation.
-    
+
     ctxd = g + w;
     ctyd = c;
     ctzd = r;
     ctt  = height + 2.0*x;
-    
+
     // Compute gusset work piece translation and dimensions.
-    
+
     wpw  = g + w -x;
-    wph  = h + c;    
+    wph  = h + c;
     wpxd = x;
     wpyd = 0.0;
     wpzd = 0.0 - c;
     wpt  = height;
-    
+
     // Initialize cutting plane and component scaling.
-    
+
     xr = 90.0;
     yr = 0.0;
     zr = 0.0;
-    
+
     xs =  1.0;
     ys = -1.0;
     zs =  ( scg_type == C_POSITIVE ) ? 1.0 : -1.0;
-   
+
     // Generate gusset.
-    
+
     color ( "silver" )
     scale ( [ xs, ys, zs ] )
     difference ()
     {
         translate ( [ wpxd, wpyd, wpzd ] ) rotate ( [ xr, yr, zr ] ) linear_extrude ( height = wpt, center = CENTER ) rectangle ( w = wpw, h = wph );
-        translate ( [ ctxd, ctyd, ctzd ] ) rotate ( [ xr, yr, zr ] ) linear_extrude ( height = ctt, center = CENTER ) circle    ( r = r );            
+        translate ( [ ctxd, ctyd, ctzd ] ) rotate ( [ xr, yr, zr ] ) linear_extrude ( height = ctt, center = CENTER ) circle    ( r = r );
     }
 }
 
@@ -961,7 +961,7 @@ module workpiece_gusset_circular ( width, height, knuckle_radus, scg_type )
 // Description:
 //
 // - Parabolic knuckle gusset, called by workpiece_gusset.
-// 
+//
 // Parameters:
 //
 // - width
@@ -987,72 +987,72 @@ module workpiece_gusset_parabolic ( width, height, knuckle_radus, scg_type )
     CENTER        = true;
     DEBUG_ENABLED = true;
     RESOLUTION    = m_resolution / C_MIN_TESSELLATION;
-    
+
     // Initialize input values.
-    
+
     w = width;          // Gusset width.
     h = height;         // Hinge leaf height.
     r = knuckle_radus;  // Knuckle radius is equal to the leaf gauge.
     s = w + r;          // Cartesian position of the point where the gusset curve merges with the leaf.
     g = m_leaf_gauge;   // Leafe gauge.
-    c = SCG_OVERLAP;    // Amount to overlap unions in order to prevent Boolean anomalies.    
-    
+    c = SCG_OVERLAP;    // Amount to overlap unions in order to prevent Boolean anomalies.
+
     // Compute parabolic point of contact with the knuckle cylinder.
-    
+
     i  = sqrt ( 8.0*r*r + s*s );    // Common root.
     x  = ( i - s )/2.0;             // x intercept.
     y  = sqrt ( r*r - x*x );        // y intercept.
-    
+
     // Compute coefficient 'a' of vertex form parabola.
     // y = a2(x-s)2
-    
+
     an = root4 ( 2.0 ) * root4 ( s*( i - s ) - 2.0*r*r );   // Numerator.
     ad = sqrt ( s*( 5.0*s - 3.0*i ) + 4.0*r*r );            // Denominator.
     a  = an / ad;                                           // Coefficient 'a' of, y = a2(x-s)2
-    
+
     // Compute work piece translation and dimensions.
-    
+
     wp_xd = 0;                  // Work piece origin x.
     wp_yd = 0;                  // Work piece origin y.
     wp_zd = -g + c;             // Work piece origin z.
-    
+
     wp_w = s;                   // Work piece width (x axis length).
     wp_g = g + y - c;           // Work piece gauge (y access length. i.e. thickness).
     wp_h = h;                   // Work piece height (y axis length).
-    
+
     // Compute cutting tool translation and dimensions.
-    
+
     ct_xd = 0;
     ct_yd = 0;
     ct_zd = 0;
-            
+
     ct_w0 = x;
     ct_w1 = s;
     ct_g0 = y;
     ct_g1 = 0;
     ct_h  = h + 2*c;
-          
+
     // Compute positive or negative tool orientation. We flip the tool by using a negative unit scale.
-    
-    test_yd = 0;    
+
+    test_yd = 0;
     zs = ( scg_type == C_POSITIVE ) ? 1.0 : -1.0;
     scale ( [ 1.0, -1.0, zs ] )
-    
+
     // Create gusset work piece.
-    
+
     difference()
     {
         // Work piece.
-        
+
         translate ( [ wp_xd, wp_yd + test_yd, wp_zd ] ) rotate ( [ 90, 0, 0 ] )
         {
             linear_extrude ( height = wp_h, center = CENTER ) rectangle ( w = wp_w, h = wp_g );
         }
-        
+
         // Parabolic cutting tool.
-        
+
         translate ( [ ct_xd, ct_yd + test_yd, ct_zd ] ) rotate ( [ 90, 0, 0 ] )
-        {                
+        {
             linear_extrude ( height = ct_h, center = CENTER ) parabolic_conic_section ( a, s, 0, s, RESOLUTION );
         }
     }
@@ -1075,9 +1075,9 @@ module workpiece_gusset_parabolic ( width, height, knuckle_radus, scg_type )
 // -------------------------------------+---------------------------------------+---------------------------------------+---------------------------------------
 
 module tool_cutter_fastener ( z_offset,  )
-{   
+{
     // Initialize local variables.
-        
+
     id     = m_fastener_thread_diameter;            // Inner diameter.
     od     = m_fastener_head_diameter;              // Outer diameter.
     t      = m_fstener_head_type;                   // 0 = Fillister (Pan head), 1 = flat countersunk.
@@ -1087,28 +1087,28 @@ module tool_cutter_fastener ( z_offset,  )
     h0     = m_leaf_gauge;                          // Height of head.
     h1     = m_counter_sink_depth;                  // Height of thread.
     c      = SCG_OVERLAP;
-    
+
     // Create cutting tool.
-    
+
     union ()
     {
         // Thread
-        
+
         translate ( [ 0, 0, z0 - c ] )
         {
-            cylinder ( d = id, h = h0 + 2.0*c );            
+            cylinder ( d = id, h = h0 + 2.0*c );
         }
-        
+
         // Head.
-        
+
         union ()
         {
             // Fastener head.
-            
+
             translate ( [ 0, 0, z1 ] )
-            {   
+            {
                 // Fillister (Pan head).
-                
+
                 if ( t == 0 )
                 {
                     d_top    = od;
@@ -1116,9 +1116,9 @@ module tool_cutter_fastener ( z_offset,  )
                     h        = h1 + c;
                     cylinder ( d2 = d_top, d1 = d_bottom, h = h );
                 }
-                
+
                 // Flat countersunk.
-                
+
                 if ( t == 1 )
                 {
                     d_top    = od + c;
@@ -1127,13 +1127,50 @@ module tool_cutter_fastener ( z_offset,  )
                     cylinder ( d2 = d_top, d1 = d_bottom, h = h );
                 }
             }
-            
+
             // Cutting tool extention.
-            
+
             translate ( [ 0, 0, c ] )
-            {   
+            {
                 cylinder ( d = od, h = m_leaf_gauge );
             }
+        }
+    }
+}
+
+module tool_cutter_fastener_place ( fastener_count, fastener_column_count )
+{
+    // Relative origin.
+    xo = m_leaf_gauge + m_component_clearance / 2 + m_fastener_head_diameter / 2 + m_fastener_margin;
+    yo = - m_leaf_height / 2 + m_fastener_head_diameter / 2 + m_fastener_margin;
+
+    // Column offsets.
+
+    col0 = 0;
+    col1 = m_leaf_width - m_fastener_head_diameter / 2 - m_fastener_margin - xo;
+
+    // Loop configuration.
+
+    even = (fastener_count % 2) ? false : true;
+    n1 = fastener_count - 1;
+    n2 = round(fastener_count / 2) - 1;
+    k1 = (m_leaf_height - m_fastener_head_diameter - 2 * m_fastener_margin) / n1;
+    k2 = (m_leaf_height - m_fastener_head_diameter - 2 * m_fastener_margin) / n2;
+
+    // Generate fastener cutting tool.
+
+    // One column of fastener holes, if we have selected one fastener hole column.
+
+    if (fastener_column_count == 1)
+    {
+        for (row = [0 : n1])
+        {
+            cx = (col0 + col1) / 2.0;
+            tx = xo + cx;
+            ty = yo + row * k1;
+            tz = 0;
+
+            translate([tx, ty, tz]) children();
         }
     }
 }
@@ -1164,27 +1201,26 @@ module tool_cutter_fastener ( z_offset,  )
 module tool_cutter_fastener_set ( fastener_count, fastener_column_count, z_offset )
 {
     // Relative origin.
-    
     xo = m_leaf_gauge + m_component_clearance/2 + m_fastener_head_diameter/2 + m_fastener_margin;
     yo = -m_leaf_height/2 + m_fastener_head_diameter/2 + m_fastener_margin;
-    
+
     // Column offsets.
-    
+
     col0 = 0;
     col1 = m_leaf_width - m_fastener_head_diameter/2 - m_fastener_margin - xo;
-    
+
     // Loop configuration.
-    
+
     even = ( fastener_count % 2 ) ? false : true;
-    n1   = fastener_count - 1;    
+    n1   = fastener_count - 1;
     n2   = round ( fastener_count / 2 ) - 1;
     k1   = ( m_leaf_height - m_fastener_head_diameter - 2*m_fastener_margin ) / n1;
     k2   = ( m_leaf_height - m_fastener_head_diameter - 2*m_fastener_margin ) / n2;
-            
+
     // Generate fastener cutting tool.
-    
+
     // One column of fastener holes, if we have selected one fastener hole column.
-    
+
     if ( fastener_column_count == 1 )
     {
         for ( row = [ 0 : n1 ] )
@@ -1192,49 +1228,49 @@ module tool_cutter_fastener_set ( fastener_count, fastener_column_count, z_offse
             cx = ( col0 + col1 ) / 2.0;
             tx = xo + cx;
             ty = yo + row * k1;
-            tz = 0;                
-                            
+            tz = 0;
+
             translate ( [ tx, ty, tz ] ) tool_cutter_fastener ( z_offset );
         }
     }
-    
+
     // Two columns of fastener holes, if we have selected two fastener hole column.
-    
+
     if ( fastener_column_count == 2 )
     {
         for ( col = [ 0 : 1 ] )
-        {  
+        {
             // Column 0, offset translation when we have an odd number of fasteners.
-            
+
             if ( col == 0 )
             {
                 m = ( even ) ? 0 : 1;
-                
+
                 for ( row = [ 0 : n2 - m ] )
-                {        
+                {
                     cx = ( col == 0 ) ? col0 : col1;
                     tx = xo + cx;
                     ty = ( even ) ? yo + row * k2 : yo + row * k2 + k2/2;
-                    tz = 0;                
-                                    
+                    tz = 0;
+
                     translate ( [ tx, ty, tz ] ) tool_cutter_fastener ( z_offset );
                 }
             }
-            
+
             // Column 1.
-            
+
             if ( col == 1 )
             {
                 for ( row = [ 0 : n2 ] )
-                {        
+                {
                     cx = ( col == 0 ) ? col0 : col1;
                     tx = xo + cx;
                     ty = yo + row * k2;
-                    tz = 0;                
-                    
+                    tz = 0;
+
                     translate ( [ tx, ty, tz ] ) tool_cutter_fastener ( z_offset );
                 }
-            }                    
+            }
         }
     }
 }
@@ -1255,22 +1291,22 @@ module tool_cutter_fastener_set ( fastener_count, fastener_column_count, z_offse
 // -------------------------------------+---------------------------------------+---------------------------------------+---------------------------------------
 
 module tool_cutter_text ( string, size )
-{   
+{
     // create text cutter.
 
-    font   = "Ariel:style=Bold";    
+    font   = "Ariel:style=Bold";
     height = 0.15*6.0;
     xd     = 20.0;
     yd     = 0.0;
     zd     = height;
-    
+
     translate ( [ xd, yd, -zd ] )
     {
         rotate ( [ 0.0, 0.0, -90.0 ] )
         {
             linear_extrude ( height = height + SCG_OVERLAP )
             {
-                text ( string, font = font, size = size, valign = "center", halign = "center" );                
+                text ( string, font = font, size = size, valign = "center", halign = "center" );
             }
         }
     }
@@ -1301,51 +1337,51 @@ module tool_cutter_text ( string, size )
 // -------------------------------------+---------------------------------------+---------------------------------------+---------------------------------------
 
 module tool_cutter_knuckle_array ( gender, fill_component_clearance, size )
-{   
+{
     // Initialize local variables.
-    
+
     n = m_knuckle_count;
     h = m_leaf_height;
     c = m_component_clearance;
     e = SCG_OVERLAP;
-    
+
     // Compute knuckle width and segment width.
-    
+
     k = ( h + c )/n - c;
     s = ( fill_component_clearance ) ? k + 2.0*c : k;
-    
+
     // Compute segment offset.
-    
+
     o = ( fill_component_clearance ) ? c : 0.0;
-    
+
     // Generate block array.
-    
+
     a = 0;
     b = ( gender == C_MALE ) ? n/2 : n/2-1;
     g = ( gender == C_MALE ) ? 0.0 : k + c;
-    
+
     for ( i = [ a : b ] )
     {
         // Compute translation index.
-        
+
         ki = g + 2.0*i*(k + c ) - h/2.0 - o;
-        
+
         // Initialize translation.
-        
+
         xt = -size/2.0;
         yt = ki;
         zt = -size/2.0;
-        
+
         // Initialize cutting block dimensions.
-    
+
         cube_x = size;
         cube_y = s;
         cube_z = 2.0*size;
-        
+
         // Create cutting block.
-        
+
         color ( "red" )
-        translate ( [ xt, yt, zt ] )        
+        translate ( [ xt, yt, zt ] )
         cube ( [ cube_x, cube_y, cube_z ] );
     }
 }
@@ -1370,7 +1406,7 @@ module tool_cutter_knuckle_array ( gender, fill_component_clearance, size )
 //   Specifies the depth of the cut.
 //
 // - shape:
-//   The shame of the counterbore. 
+//   The shame of the counterbore.
 //   - Circular
 //   - Square
 //   - Hexagonal
@@ -1380,45 +1416,45 @@ module tool_cutter_knuckle_array ( gender, fill_component_clearance, size )
 module tool_cutter_pin_shaft_counterbore ( diameter_top, depth_top, shape_top, diameter_bottom, depth_bottom, shape_bottom )
 {
     // Local constants.
-    
+
     TOP_COUNTER_BORE_ENABLED    = true;
-    BOTTOM_COUNTER_BORE_ENABLED = true;    
-    
+    BOTTOM_COUNTER_BORE_ENABLED = true;
+
     // Initialize local variables.
-    
+
     d0 = diameter_bottom;
     d1 = diameter_top;
     h0 = depth_bottom + SCG_OVERLAP;
     h1 = depth_top    + SCG_OVERLAP;
-    
+
     // Compute diameter of polygon, inscribed by a circle of radius d/2.
 
     s  = 6;                         // Polygon sides.
     a  = 360.0/(2.0*s);             // Half the angle between each point of the polygon.
-    
+
     x0 = d0/2.0;                    // Bottom: Run of the right angle triangle who hypotenuse is equal to half the radius of our new circle.
     y0 = x0*tan ( a );              // Bottom: Rise of the right angle triangle who hypotenuse is equal to half the radius of our new circle.
     r0 = sqrt ( x0*x0 + y0*y0 );    // Bottom: Hypotenuse of the right angle triangle who hypotenuse is equal to half the radius of our new circle.
-    
+
     x1 = d1/2.0;                    // Top: Run of the right angle triangle who hypotenuse is equal to half the radius of our new circle.
     y1 = x1*tan ( a );              // Top: Rise of the right angle triangle who hypotenuse is equal to half the radius of our new circle.
     r1 = sqrt ( x1*x1 + y1*y1 );    // Top: Hypotenuse of the right angle triangle who hypotenuse is equal to half the radius of our new circle.
-        
+
     // Compute cutting tool translation.
 
     xd  = 0.0;
     yd0 =  ( h0 - m_leaf_height )/2.0 - SCG_OVERLAP;
     yd1 = -( h1 - m_leaf_height )/2.0 + SCG_OVERLAP;
     zd  = 0.0;
-    
+
     // Compute polygon rotation angle.
-    
+
     rx = 90.0;
-    ry = ( s%2 == 0 ) ? a+90 : -a/2.0;  
+    ry = ( s%2 == 0 ) ? a+90 : -a/2.0;
     rz = 0.0;
-  
+
     // Create top counterbore cutting tool.
-    
+
     if ( BOTTOM_COUNTER_BORE_ENABLED )
     {
         color ( "red" )
@@ -1431,15 +1467,15 @@ module tool_cutter_pin_shaft_counterbore ( diameter_top, depth_top, shape_top, d
             translate ( [ xd, yd0, zd ] ) cube ( [ diameter_bottom, h0, diameter_bottom ], center = true );
         }
         else if ( shape_bottom == C_HEXAGONAL )
-        {   
-            translate ( [ xd, yd0, zd ] ) rotate ( [ rx, ry+90, rz ] ) cylinder ( h = h0, r = r0, center = true, $fn = s );        
+        {
+            translate ( [ xd, yd0, zd ] ) rotate ( [ rx, ry+90, rz ] ) cylinder ( h = h0, r = r0, center = true, $fn = s );
         }
     }
-    
+
     // Create bottom counterbore cutting tool.
-    
+
     if ( TOP_COUNTER_BORE_ENABLED )
-    {        
+    {
         color ( "red" )
         if ( shape_top == C_CIRCULAR )
         {
@@ -1450,8 +1486,8 @@ module tool_cutter_pin_shaft_counterbore ( diameter_top, depth_top, shape_top, d
             translate ( [ xd, yd1, zd ] ) cube ( [ diameter_top, h1, diameter_top ], center = true );
         }
         else if ( shape_top == C_HEXAGONAL )
-        {   
-            translate ( [ xd, yd1, zd ] ) rotate ( [ rx, ry, rz ] ) cylinder ( h = h1, r = r1, center = true, $fn = s );        
+        {
+            translate ( [ xd, yd1, zd ] ) rotate ( [ rx, ry, rz ] ) cylinder ( h = h1, r = r1, center = true, $fn = s );
         }
     }
 }
@@ -1477,7 +1513,7 @@ module tool_cutter_pin_shaft_counterbore ( diameter_top, depth_top, shape_top, d
 //   Note:
 //   For the sake of simplifying the actual parabolic function used in the recursive
 //   function "parabolic_vector", we use a call to "translate" to set the vertex, rather than the parabolic function its self.
-// 
+//
 // - y:
 //   y Coordinate of parabola turning point.
 //   Note:
@@ -1486,27 +1522,27 @@ module tool_cutter_pin_shaft_counterbore ( diameter_top, depth_top, shape_top, d
 //
 // - domain:
 //   The input domain x, over which to compute the parabolic function.
-//   
+//
 // - resolution:
-//   The input domain step size, is used to control the resolution of the shape. 
+//   The input domain step size, is used to control the resolution of the shape.
 //
 // -------------------------------------+---------------------------------------+---------------------------------------+---------------------------------------
 
 module parabolic_conic_section ( a, x, y, domain, resolution )
 {
     // Generate 2D geometry
-    
+
     t = 0.0;
     n = resolution;
     i = 0;
     d = domain;
     v = [];
-    
+
     points = parabolic_vector ( a, t, n, i, d, v );
-    
+
     // Generate 3D object.
 
-    translate ( [ x, y, 0 ] )    
+    translate ( [ x, y, 0 ] )
     polygon ( points );
 }
 
@@ -1569,7 +1605,7 @@ module rectangle ( w, h, center )
 // Return Value:
 //
 // - Return the 4th root of x.
-// 
+//
 // Parameters:
 //
 // - x
@@ -1588,14 +1624,14 @@ function root4 ( x ) = ( x >= 0 ) ? sqrt ( sqrt ( x ) ) : 0;
 // - Clips an input value, to a minimum and maximum value.
 //
 //   x_min <= x <= x_max
-// 
+//
 // Parameters:
 //
 // - x
 //   Input value.
 //
 // - x_min
-//   Minimal value constraint. Any x less than x_min, is set to x_min. 
+//   Minimal value constraint. Any x less than x_min, is set to x_min.
 //
 // - x_max
 //   Maximum value constraint. Any x greater than x_max, is set to x_max.
@@ -1609,17 +1645,17 @@ function clip ( x, x_min, x_max ) = ( x < x_min ) ? x_min : ( x > x_max ) ? x_ma
 //
 // Description:
 //
-// - Recursive function to generate an array of 2D points on a parabolic curve. 
+// - Recursive function to generate an array of 2D points on a parabolic curve.
 //
-// - The parabolic vertex form is used. 
-//   
+// - The parabolic vertex form is used.
+//
 //     y = a2(x-b)2
 //
-//   Where, 
+//   Where,
 //
 //     a is the horizontal scale of the parabola.
 //     (b,c) is the Cartesian position of the turning point.
-//   
+//
 //
 // Parameters:
 //
@@ -1630,9 +1666,9 @@ function clip ( x, x_min, x_max ) = ( x < x_min ) ? x_min : ( x > x_max ) ? x_ma
 //   Horizontal input domain.
 //
 // - n
-//   Tessellation factor. Number of points to compute for each half of the parabola object, with both halves sharing the turning point. 
+//   Tessellation factor. Number of points to compute for each half of the parabola object, with both halves sharing the turning point.
 //   For example:
-//   - A tessellation factor of 1, will compute 3 points in total. Two for each half, with one out of the two on each half being the 
+//   - A tessellation factor of 1, will compute 3 points in total. Two for each half, with one out of the two on each half being the
 //     Shared turning point.
 //   - A tessellation factor of 2, with compute 5 points in total, 3 for each half with a shared turning point.
 //
@@ -1640,7 +1676,7 @@ function clip ( x, x_min, x_max ) = ( x < x_min ) ? x_min : ( x > x_max ) ? x_ma
 //   Point index. Initialize to zero.
 //
 // - d
-//   Input domain. The x range over which to compute the function. 
+//   Input domain. The x range over which to compute the function.
 //   -d <= x <= d
 //
 // - v
@@ -1688,7 +1724,7 @@ function parabolic_vector ( a, x, n, i, d, v ) =
 
 // -------------------------------------+---------------------------------------+---------------------------------------+---------------------------------------
 // Module:      module_name
-// Module Type: [ 2D Shape, Profile, Tool, Workpiece, Component ] 
+// Module Type: [ 2D Shape, Profile, Tool, Workpiece, Component ]
 // Description:
 //
 // - Module description.

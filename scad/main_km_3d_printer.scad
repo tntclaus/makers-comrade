@@ -21,19 +21,22 @@ AXIS_Z_SIZE = 300;
 AXIS_X_SIZE = 300;
 AXIS_Y_SIZE = 300;
 
-LEG_HEIGTH = 70;
+$Z_AXIS_OFFSET = 25;
+
+$LEG_HEIGTH = 70;
 $CAP_HEIGTH = 160;
-BASE_HEIGTH = realZAxisLength(AXIS_Z_SIZE) + 40 + LEG_HEIGTH;
-FULL_HEIGTH = realZAxisLength(AXIS_Z_SIZE) + 40 + LEG_HEIGTH + $CAP_HEIGTH;
+BASE_HEIGTH = realZAxisLength(AXIS_Z_SIZE) + 40 + $LEG_HEIGTH;
+FULL_HEIGTH = realZAxisLength(AXIS_Z_SIZE) + 40 + $LEG_HEIGTH + $CAP_HEIGTH;
 
 CASE_MATERIAL_THICKNESS = 3;
 
 if ($preview)
-main_assembly();
+    main_assembly();
 
-$preview_table = !$preview || false;
-$preview_belts = !$preview || false;
-$preview_tool = !$preview || false;
+$preview_table = !$preview || true;
+$preview_belts = !$preview || true;
+$preview_tool = !$preview || true;
+$preview_screws = !$preview || true;
 
 module main_assembly() {
     km_3d_printer(zpos = 200, xypos = 0);
@@ -42,23 +45,15 @@ module main_assembly() {
 module km_3d_printer(zpos = 0, xypos = 0) {
     $CASE_MATERIAL_THICKNESS = CASE_MATERIAL_THICKNESS;
 
-    km_frame(zpos, xypos);
+    km_frame_assembly(zpos, xypos);
     case();
 }
 
-module km_frame(zpos = 0, xypos = 0) {
+outerXAxisWidth = outerXAxisWidth(AXIS_X_SIZE) - 20;
+outerYAxisWidth = realYAxisLength(AXIS_Y_SIZE) + 20;
+
+module km_frame_assembly(zpos = 0, xypos = 0) {
     $CASE_MATERIAL_THICKNESS = CASE_MATERIAL_THICKNESS;
-    $Z_AXIS_OFFSET = 25;
-
-    outerXAxisWidth = outerXAxisWidth(AXIS_X_SIZE) - 20;
-    outerYAxisWidth = realYAxisLength(AXIS_Y_SIZE) + 20;
-
-    translate_z(- $CASE_MATERIAL_THICKNESS)
-    zAxis(positionZ = zpos, lengthZ = AXIS_Z_SIZE, lengthX = AXIS_X_SIZE, lengthY = AXIS_Y_SIZE){
-        if ($preview_table)
-            rotate([0, 0, 180])
-                heatbed_table_assembly(AXIS_X_SIZE, AXIS_Y_SIZE, 11.2, $Z_AXIS_OFFSET);
-    }
 
     module xAxisExtrusions() {
         translate([0, outerYAxisWidth / 2, 0])
@@ -70,46 +65,58 @@ module km_frame(zpos = 0, xypos = 0) {
                 extrusion(E2020, outerXAxisWidth);
     }
 
-    translate_z(10){
-        translate_z(realZAxisLength(AXIS_Z_SIZE) + 20)
-        rotate([0, 0, 90])
-            yAxisRails(xypos, AXIS_Y_SIZE, AXIS_X_SIZE) {
-                //                toolhead_spindle_assembly(
-                if ($preview_tool)
-                toolhead_extruder_orbiter_mosquito_assembly(
-                width = 60,
-                length = 100,
-                inset_length = 80,
-                inset_depth = 8,
-                heigth = 29
-                );
-            }
+    assembly("km_frame") {
 
-        xAxisExtrusions();
-
-        translate_z(realZAxisLength(AXIS_Z_SIZE) + 20){
-            xAxisExtrusions();
-            km_frame_corner_plates(outerXAxisWidth / 2, outerYAxisWidth / 2);
-
-            if ($preview_belts)
-            corexy_belts(outerXAxisWidth, outerYAxisWidth, xypos, AXIS_Y_SIZE - xypos);
+        translate_z(- $CASE_MATERIAL_THICKNESS)
+        zAxis(positionZ = zpos, lengthZ = AXIS_Z_SIZE, lengthX = AXIS_X_SIZE, lengthY = AXIS_Y_SIZE){
+            if ($preview_table)
+                rotate([0, 0, 180])
+                    heatbed_table_assembly(AXIS_X_SIZE, AXIS_Y_SIZE, 11.2, $Z_AXIS_OFFSET);
         }
-        translate([outerXAxisWidth / 2 + 10, 0, 0])
-            rotate([90, 0, 0])
-                extrusion(E2020, realYAxisLength(AXIS_Y_SIZE));
 
-        translate([- outerXAxisWidth / 2 - 10, 0, 0])
-            rotate([90, 0, 0])
-                extrusion(E2020, realYAxisLength(AXIS_Y_SIZE));
+        translate_z(10){
+            translate_z(realZAxisLength(AXIS_Z_SIZE) + 20)
+            rotate([0, 0, 90])
+                yAxisRails(xypos, AXIS_Y_SIZE, AXIS_X_SIZE) {
+                    //                toolhead_spindle_assembly(
+                    if ($preview_tool)
+                    toolhead_extruder_orbiter_mosquito_assembly(
+                    width = 60,
+                    length = 100,
+                    inset_length = 80,
+                    inset_depth = 8,
+                    heigth = 29
+                    );
+                }
+
+            xAxisExtrusions();
+
+            translate_z(realZAxisLength(AXIS_Z_SIZE) + 20){
+                xAxisExtrusions();
 
 
-        translate_z(realZAxisLength(AXIS_Z_SIZE) / 2 + 10 - LEG_HEIGTH / 2) {
-            x = outerXAxisWidth / 2 + 10;
-            y = outerYAxisWidth / 2;
-            for (ix = [x, - x])
-            for (iy = [y, - y])
-            translate([ix, iy, 0])
-                extrusion(E2020, BASE_HEIGTH);
+                if ($preview_belts) {
+                    corexy_belts(outerXAxisWidth, outerYAxisWidth, xypos, AXIS_Y_SIZE - xypos);
+                    km_frame_corner_plates(outerXAxisWidth / 2, outerYAxisWidth / 2);
+                }
+            }
+            translate([outerXAxisWidth / 2 + 10, 0, 0])
+                rotate([90, 0, 0])
+                    extrusion(E2020, realYAxisLength(AXIS_Y_SIZE));
+
+            translate([- outerXAxisWidth / 2 - 10, 0, 0])
+                rotate([90, 0, 0])
+                    extrusion(E2020, realYAxisLength(AXIS_Y_SIZE));
+
+
+            translate_z(realZAxisLength(AXIS_Z_SIZE) / 2 + 10 - $LEG_HEIGTH / 2) {
+                x = outerXAxisWidth / 2 + 10;
+                y = outerYAxisWidth / 2;
+                for (ix = [x, - x])
+                for (iy = [y, - y])
+                translate([ix, iy, 0])
+                    extrusion(E2020, BASE_HEIGTH);
+            }
         }
     }
 }
@@ -172,19 +179,25 @@ module corexy_belts(width_x, width_y, xpos, ypos) {
 
 use <enclosure_full.scad>
 
-module case() {
-//    color("red", 0.5)
-//    color("#ffffff")
-    color("red")
-    translate_z(- LEG_HEIGTH){
-        translate([- outerXAxisWidth(AXIS_X_SIZE) / 2 - 13, 0, 0])
-                enclosure_front(
-                width = realYAxisLength(AXIS_Y_SIZE) + 40,
-                heigth = BASE_HEIGTH,
-                window_w = realYAxisLength(AXIS_Y_SIZE),
-                window_h = realZAxisLength(AXIS_Z_SIZE) - 20,
-                window_translate_z = 25
-                );
+module enclosure_assembly() {
+    assembly("enclosure") {
+        translate([- outerXAxisWidth(AXIS_X_SIZE) / 2 - 13, 0, 0]) {
+            enclosure_front(
+            width = realYAxisLength(AXIS_Y_SIZE) + 40,
+            heigth = BASE_HEIGTH,
+            window_w = realYAxisLength(AXIS_Y_SIZE),
+            window_h = realZAxisLength(AXIS_Z_SIZE) - 20,
+            window_translate_z = 25
+            );
+
+            plastic_doors_assembly(
+            width = realYAxisLength(AXIS_Y_SIZE),
+            heigth = realZAxisLength(AXIS_Z_SIZE) - 20,
+            side = 0,
+            thickness = 5,
+            angle = 60
+            );
+        }
 
         translate([outerXAxisWidth(AXIS_X_SIZE) / 2 + 13, 0, 0])
             enclosure_back(
@@ -192,5 +205,27 @@ module case() {
             heigth = BASE_HEIGTH,
             window_w = realYAxisLength(AXIS_Y_SIZE)
             );
+
+        translate([0, outerYAxisWidth / 2 + 13, 0])
+            enclosure_side_dual_z(
+            width = outerXAxisWidth + 40,
+            heigth = BASE_HEIGTH,
+            window_h = realZAxisLength(AXIS_Z_SIZE),
+            x_length = AXIS_X_SIZE
+            );
+
+        translate([0, -(outerYAxisWidth / 2 + 13), 0])
+            enclosure_side_single_z(
+            width = outerXAxisWidth + 40,
+            heigth = BASE_HEIGTH,
+            window_h = realZAxisLength(AXIS_Z_SIZE)
+            );
+
+    }
+}
+
+module case() {
+    translate_z(- $LEG_HEIGTH){
+        enclosure_assembly();
     }
 }

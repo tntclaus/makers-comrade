@@ -292,6 +292,8 @@ angle = 0
         zAxisMotor(motorModel = NEMA17, leadscrew_length = length + 50, diff = diff);
 }
 
+function zAxisDualPosition(lengthX) = lengthX / 2 - $Z_AXIS_OFFSET;
+
 module zAxis(positionZ, lengthZ, lengthX, lengthY, diff = false) {
     outerXAxisWidth = outerXAxisWidth(lengthX)-20;
     outerYAxisWidth = realYAxisLength(lengthY)+20;
