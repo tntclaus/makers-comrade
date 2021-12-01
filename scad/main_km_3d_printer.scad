@@ -16,6 +16,8 @@ use <toolheads/toolhead_spindle.scad>
 
 use <pulley_and_motor_plates.scad>
 
+include <enclosures/full/enclosure_common.scad>
+
 $bom = undef;
 function is_bom() = $bom != undef ? true : false;
 
@@ -24,12 +26,11 @@ AXIS_Z_SIZE = 300;
 AXIS_X_SIZE = 300;
 AXIS_Y_SIZE = 300;
 
-$Z_AXIS_OFFSET = 25;
+Z_AXIS_OFFSET = z_axis_offset();
 
 $LEG_HEIGTH = 70;
-$CAP_HEIGTH = 160;
 BASE_HEIGTH = realZAxisLength(AXIS_Z_SIZE) + 40 + $LEG_HEIGTH;
-FULL_HEIGTH = realZAxisLength(AXIS_Z_SIZE) + 40 + $LEG_HEIGTH + $CAP_HEIGTH;
+FULL_HEIGTH = realZAxisLength(AXIS_Z_SIZE) + 40 + $LEG_HEIGTH + enclosure_cap_heigth();
 
 $CASE_MATERIAL_THICKNESS = 3;
 
@@ -41,13 +42,22 @@ $preview_belts = !$preview || is_bom()  || false;
 $preview_tool = !$preview || is_bom()  || false;
 $preview_screws = !$preview || is_bom() || false;
 
+module STEEL_3mm_dxf() {
+    circle(d = 5);
+}
+
+module PC_5mm_dxf() {
+    circle(d = 5);
+}
+
 module main_assembly() {
+//    dxf("STEEL_3mm");
+//    dxf("PC_5mm");
+
     km_3d_printer(zpos = 200, xypos = 0);
 }
 
 module km_3d_printer(zpos = 0, xypos = 0) {
-
-
     km_frame_assembly(zpos, xypos);
     case();
 }
@@ -72,7 +82,7 @@ module km_frame_assembly(zpos = 0, xypos = 0) {
         zAxis(positionZ = zpos, lengthZ = AXIS_Z_SIZE, lengthX = AXIS_X_SIZE, lengthY = AXIS_Y_SIZE){
             if ($preview_table)
                 rotate([0, 0, 180])
-                    heatbed_table_assembly(AXIS_X_SIZE, AXIS_Y_SIZE, 11.2, $Z_AXIS_OFFSET);
+                    heatbed_table_assembly(AXIS_X_SIZE, AXIS_Y_SIZE, 11.2, Z_AXIS_OFFSET);
         }
 
         translate_z(10){
@@ -178,59 +188,15 @@ module corexy_belts(width_x, width_y, xpos, ypos) {
 
 }
 
-use <enclosure_full.scad>
-
-module enclosure_assembly() {
-    assembly("enclosure") {
-//        translate([- outerXAxisWidth(AXIS_X_SIZE) / 2 - 13, 0, 0]) {
-//            enclosure_front(
-//            width = realYAxisLength(AXIS_Y_SIZE) + 40,
-//            heigth = BASE_HEIGTH,
-//            window_w = realYAxisLength(AXIS_Y_SIZE),
-//            window_h = realZAxisLength(AXIS_Z_SIZE) - 20,
-//            window_translate_z = 25
-//            );
-//
-//            plastic_doors_assembly(
-//            width = realYAxisLength(AXIS_Y_SIZE),
-//            heigth = realZAxisLength(AXIS_Z_SIZE) - 20,
-//            side = 0,
-//            thickness = 5,
-//            angle = 60
-//            );
-//        }
-//
-//        translate([outerXAxisWidth(AXIS_X_SIZE) / 2 + 13, 0, 0])
-//            enclosure_back(
-//            width = realYAxisLength(AXIS_Y_SIZE) + 40,
-//            heigth = BASE_HEIGTH,
-//            window_w = realYAxisLength(AXIS_Y_SIZE)
-//            );
-//
-//        translate([0, outerYAxisWidth / 2 + 13, 0])
-//            enclosure_side_dual_z(
-//            width = outerXAxisWidth + 40,
-//            heigth = BASE_HEIGTH,
-//            window_h = realZAxisLength(AXIS_Z_SIZE),
-//            x_length = AXIS_X_SIZE
-//            );
-//
-//        translate([0, - (outerYAxisWidth / 2 + 13), 0])
-//            enclosure_side_single_z(
-//            width = outerXAxisWidth + 40,
-//            heigth = BASE_HEIGTH,
-//            window_h = realZAxisLength(AXIS_Z_SIZE)
-//            );
-
-        enclosure_bottom_plate(
-            outerXAxisWidth + 40,
-            realYAxisLength(AXIS_Y_SIZE) + 40
-        );
-    }
-}
+use <enclosures/full/enclosure_assembly.scad>
 
 module case() {
     translate_z(- $LEG_HEIGTH){
-        enclosure_assembly();
+        enclosure_assembly(
+        AXIS_X_SIZE,
+        AXIS_Y_SIZE,
+        AXIS_Z_SIZE,
+        BASE_HEIGTH
+        );
     }
 }

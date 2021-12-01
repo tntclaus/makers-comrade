@@ -26,7 +26,11 @@ include <NopSCADlib/vitamins/ball_bearings.scad>
 
 use <y-axis.scad>
 
+Z_AXIS_OFFSET = 25;
 Z_AXIS_LEADNUT = LSN8x2;
+Z_AXIS_MOTOR = NEMA17;
+
+function z_axis_offset() = Z_AXIS_OFFSET;
 
 function leadscrew_mount_hole(pos) = [[pos - 1.5, 0], [pos + 1.5, 0]];
 
@@ -287,53 +291,96 @@ angle = 0
             color("blue")
                 pillow_block();
     }
+    dxf("STEEL_3mm_gantry_sq_plate_60x60x3_22");
 
-    translate([0, 0, - 17 - $CASE_MATERIAL_THICKNESS])
-        zAxisMotor(motorModel = NEMA17, leadscrew_length = length + 50, diff = diff);
+    translate_z(- 17 - $CASE_MATERIAL_THICKNESS)
+    z_axis_motor_place()
+    z_axis_motor_assembly(Z_AXIS_MOTOR, leadscrew_length = length + 50);
 }
 
-function zAxisDualPosition(lengthX) = lengthX / 2 - $Z_AXIS_OFFSET;
+function zAxisDualPosition(lengthX) = lengthX / 2 - Z_AXIS_OFFSET;
+
+module z_axis_place(outerYAxisWidth, lengthX) {
+    assert($children == 3, "Acceps exactly 3 child modules");
+
+    translate([0, -outerYAxisWidth/2, 0])
+        children(0);
+
+    translate([- lengthX / 2 + Z_AXIS_OFFSET, outerYAxisWidth/2, 0])
+            mirror([0, 1, 0]) children(1);
+
+    translate([lengthX / 2 - Z_AXIS_OFFSET, outerYAxisWidth/2, 0])
+            mirror([0, 1, 0]) children(2);
+}
 
 module zAxis(positionZ, lengthZ, lengthX, lengthY, diff = false) {
     outerXAxisWidth = outerXAxisWidth(lengthX)-20;
     outerYAxisWidth = realYAxisLength(lengthY)+20;
 
-    translate([0, -outerYAxisWidth/2, 0])
+    z_axis_place(outerYAxisWidth, lengthX) {
         zAxisRails(positionZ, length = lengthZ, mirrored = true, diff = diff, angle = 0);
-
-    translate([- lengthX / 2 + $Z_AXIS_OFFSET, outerYAxisWidth/2, 0]) {
-        mirror([0, 1, 0])
-            zAxisRails(positionZ, length = lengthZ, diff = diff, angle = - 1);
-    }
-
-    translate([lengthX / 2 - $Z_AXIS_OFFSET, outerYAxisWidth/2, 0]) {
-        mirror([0, 1, 0])
-            zAxisRails(positionZ, length = lengthZ, diff = diff, angle = 1);
+        zAxisRails(positionZ, length = lengthZ, diff = diff, angle = - 1);
+        zAxisRails(positionZ, length = lengthZ, diff = diff, angle = 1);
     }
 
     translate([0, 0, positionZ + safeMarginZAxisBottom() + $CASE_MATERIAL_THICKNESS + 30 + 6])
         children();
 }
 
-
-module zAxisMotor(
-    motorTranslation = 0,
-    motorModel,
-    leadscrew_length,
-    diff = false) {
-
-    dxf("STEEL_3mm_gantry_sq_plate_60x60x3_22");
-
-    motorScrewY = $CASE_MATERIAL_THICKNESS + 3;
-
-    differ = motorTranslation < 0 ? 4 : 1;
-
+module z_axis_motor_place() {
     translate([
-        0, NEMA_width(motorModel) / 2 + 10,
-            NEMA_length(motorModel) / 2
-        ]) {
-            z_axis_motor_assembly(motorModel, leadscrew_length);
+        0, NEMA_width(Z_AXIS_MOTOR) / 2 + 10,
+            NEMA_length(Z_AXIS_MOTOR) / 2
+        ])
+    children();
+}
 
+module z_axis_motor_outline() {
+    NEMA_screw_positions(Z_AXIS_MOTOR) circle(d = 3.1);
+    circle(r = NEMA_boss_radius(Z_AXIS_MOTOR));
+}
+
+include <../../lib/leadscrew_couplers.scad>
+
+
+module steel_ball(d) {
+    vitamin(str("steel_ball(): Steel Ball d=", d));
+    color("silver")
+        sphere(d = d);
+}
+
+//! 1. Screw each NEMA17 motor and thurst bearing collet to its respective position.
+//! 1. Install thurst bearing.
+//! 1. Place flexible coupler on top of thurst bearing and screw it to the motor shaft.
+//! 1. Place steel ball inside flexible coupler, this is known as steel ball leadscrew hack.
+//! 1. Place leadscrew into flexible coupler so it would touch the steel ball.
+// Leadscrew should be able to freely bend coupler.
+//! 1. Screw leadscrew in flexible coupler.
+module z_axis_motor_assembly(model, leadscrew_length) {
+    assembly("z_axis_motor") {
+        translate_z($CASE_MATERIAL_THICKNESS)
+        z_motor_thurst_bearing_collet_assembly();
+
+        NEMA(model);
+
+        translate([0, 0, 25]) {
+            leadscrew_coupler(FLEXIBLE_COUPLER_8_5);
+            translate_z(2)
+            steel_ball(6);
+        }
+
+        if($preview_screws)
+        translate_z($CASE_MATERIAL_THICKNESS + 3)
+        NEMA_screws(model, M3_pan_screw);
+
+        translate([0, 0, leadscrew_length / 2 + 30])
+            leadscrew(
+            8,
+            leadscrew_length,
+            8,
+            2,
+            center = true
+            );
     }
 }
 
