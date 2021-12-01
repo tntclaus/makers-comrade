@@ -453,7 +453,6 @@ module x_caret_connector_sketch(width, heigth, ear_heigth=8, ear_depth=3) {
             translate([-width/2+10,14.25,0])
             rounded_square([10,17], r = 4.9, center = true);
         }
-        projection()
         drillHoles([
             [BELT_H_D, 0, ["square", [[-bo,bh1-2], [-bo,bh1+2]]]],
             [BELT_H_D, 0, ["square", [[ bo,bh1-2], [ bo,bh1+2]]]],
@@ -478,7 +477,7 @@ module x_caret_connector_sketch(width, heigth, ear_heigth=8, ear_depth=3) {
             [12, 0, width/3,         0],
             [ 7, 0,-width/3, -heigth/4],
             [ 7, 0,-width/3,  heigth/4],
-        ], 3);
+        ], 0);
     }
 
 }
@@ -556,7 +555,7 @@ module caret_endstop_anchor(anchor_width) {
 //D16T_x_caret_connector_lock_26x23_6();
 
 
-xAxisRails(50, 300);
+//xAxisRails(50, 300);
 
 
 //rotate([0,0,-90])
