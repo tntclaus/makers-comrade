@@ -304,33 +304,34 @@ module toolhead_spindle_assembly(
         heigth,
         type = RS895
     ) {
+    assembly("toolhead_spindle"){
+        coolant_hose_size = 8;
+        vacuum_hose_size = 12;
 
-    coolant_hose_size = 8;
-    vacuum_hose_size = 12;
-
-    toolhead_screw_mount_locations(TOOLHEAD_SPINDLE_RS895_VERTICAL_SCREW_MOUNTS(), 33)
+        toolhead_screw_mount_locations(TOOLHEAD_SPINDLE_RS895_VERTICAL_SCREW_MOUNTS(), 33)
         screw(M4_cap_screw, 35);
 
 
-    SPINDLE_ER11_assembly(type);
-    motor_mount_bottom_plate(
+        SPINDLE_ER11_assembly(type);
+        motor_mount_bottom_plate(
         width = width, length = length, inset_length = inset_length, type = type,
         coolant_hose_size = coolant_hose_size,
         vacuum_hose_size = vacuum_hose_size,
         inset_depth = inset_depth
-    );
+        );
 
 
-    motor_collet(width-inset_depth*2, length, heigth, type = type);
-    mirror([1,0,0])
-    motor_collet(width-inset_depth*2, length, heigth, type = type);
+        motor_collet(width - inset_depth * 2, length, heigth, type = type);
+        mirror([1, 0, 0])
+            motor_collet(width - inset_depth * 2, length, heigth, type = type);
 
-    translate_z(heigth)
-    motor_mount_top_plate(
+        translate_z(heigth)
+        motor_mount_top_plate(
         width = width, length = length, inset_length = inset_length, type = type,
         coolant_hose_size = coolant_hose_size,
         vacuum_hose_size = vacuum_hose_size
-   );
+        );
+    }
 }
 
 //spindle_assembly(

@@ -3,8 +3,9 @@ include <NopSCADlib/utils/rounded_polygon.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
 MATERIAL_STEEL_THICKNESS = 3;
-CAP_HEIGTH = 160;
+CAP_HEIGTH = 135 + 40;
 
+function enclosure_material_thickness() = MATERIAL_STEEL_THICKNESS;
 function enclosure_cap_heigth() = CAP_HEIGTH;
 
 function ENCLOSURE_FULL_SHAPE(w, h, lh, rc = 0, r = 5) = [

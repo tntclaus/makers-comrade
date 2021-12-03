@@ -1,6 +1,6 @@
 include <enclosure_common.scad>
 
-use <../../parametric_butt_hinge_3.7.scad>
+use <parametric_hinge_door_front.scad>
 
 use <enclosure_doors.scad>
 use <enclosure_vslot_mounts.scad>

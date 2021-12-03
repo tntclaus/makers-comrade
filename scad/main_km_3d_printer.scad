@@ -43,7 +43,7 @@ $preview_tool = !$preview || is_bom()  || false;
 $preview_screws = !$preview || is_bom() || false;
 
 module STEEL_3mm_dxf() {
-    circle(d = 5);
+    square(5);
 }
 
 module PC_5mm_dxf() {
@@ -51,13 +51,14 @@ module PC_5mm_dxf() {
 }
 
 module main_assembly() {
-//    dxf("STEEL_3mm");
+    dxf("STEEL_3mm");
 //    dxf("PC_5mm");
 
     km_3d_printer(zpos = 200, xypos = 0);
 }
 
 module km_3d_printer(zpos = 0, xypos = 0) {
+    echo(str("FULL_HEIGTH: ", FULL_HEIGTH));
     km_frame_assembly(zpos, xypos);
     case();
 }
@@ -88,9 +89,9 @@ module km_frame_assembly(zpos = 0, xypos = 0) {
         translate_z(10){
             translate_z(realZAxisLength(AXIS_Z_SIZE) + 20)
             rotate([0, 0, 90])
-                yAxisRails(xypos, AXIS_Y_SIZE, AXIS_X_SIZE) {
-                    //                toolhead_spindle_assembly(
+                y_axis_assembly(xypos, AXIS_Y_SIZE, AXIS_X_SIZE) {
                     if ($preview_tool)
+//                    toolhead_spindle_assembly(
                     toolhead_extruder_orbiter_mosquito_assembly(
                     width = 60,
                     length = 100,

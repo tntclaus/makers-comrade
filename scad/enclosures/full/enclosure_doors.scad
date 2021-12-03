@@ -1,6 +1,6 @@
 include <enclosure_common.scad>
 
-use <../../parametric_butt_hinge_3.7.scad>
+use <parametric_hinge_door_front.scad>
 
 C_CONSTANT = 0 + 0;
 
@@ -133,3 +133,5 @@ module plastic_doors_assembly(width, heigth, side, thickness, angle = 0) {
         mirror([1, 0, 0]) plastic_door_assembly(width, heigth, thickness, angle);
     }
 }
+
+

@@ -34,82 +34,70 @@ SENSOR_DEPTH = 10;
 function safeMarginXAxis() = X_PLATE_LENGTH/2 + SENSOR_DEPTH;
 function realXAxisLength(length) = length + X_PLATE_LENGTH + SENSOR_DEPTH*2;
 
-module xAxisRails(
-position = 0,
-xAxisLength,
-railsWidth = 30) {
-    // 1/2 of 2020  + 3mm plate + 1.4mm offset between plate and 2020 extrusion
-    materialsThinkness = 10 + X_CARET_PLATE_GAP;
+module x_axis_assembly(position = 0, xAxisLength, railsWidth = 30) {
+    assembly("x_axis"){
+        // 1/2 of 2020  + 3mm plate + 1.4mm offset between plate and 2020 extrusion
+        materialsThinkness = 10 + X_CARET_PLATE_GAP;
 
-    railsAdjustedWidth = railsWidth + materialsThinkness;
+        railsAdjustedWidth = railsWidth + materialsThinkness;
 
-    railsRealLength = realXAxisLength(xAxisLength);
-    caretSafeMargin = safeMarginXAxis();
+        railsRealLength = realXAxisLength(xAxisLength);
+        caretSafeMargin = safeMarginXAxis();
 
-    // endstop y
-    translate([-railsRealLength/2-2, -railsAdjustedWidth,0])
-    rotate([0,90,0])
-    y_caret_endstop_anchor();
+        // endstop y
+        translate([- railsRealLength / 2 - 2, - railsAdjustedWidth, 0])
+            rotate([0, 90, 0])
+                y_caret_endstop_anchor();
 
-    // endstop x
-    translate([-railsRealLength/2-2, railsAdjustedWidth,0])
-    rotate([0,90,0])
-    x_caret_endstop_anchor();
+        // endstop x
+        translate([- railsRealLength / 2 - 2, railsAdjustedWidth, 0])
+            rotate([0, 90, 0])
+                x_caret_endstop_anchor();
 
 
 
-    translate([railsRealLength/2,-railsAdjustedWidth,0]) rotate([-90,0,90]) {
-        vslot_rail(
-                X_RAIL,
-                railsRealLength,
-                pos = position,
-                mirror = false,
-                safe_margin = caretSafeMargin,
-                safe_margin_top = caretSafeMargin
+        translate([railsRealLength / 2, - railsAdjustedWidth, 0]) rotate([- 90, 0, 90]) {
+            vslot_rail(
+            X_RAIL,
+            railsRealLength,
+            pos = position,
+            mirror = false,
+            safe_margin = caretSafeMargin,
+            safe_margin_top = caretSafeMargin
             ) {
                 let();
                 x_caret_2_stl(stl = false);
 
 
-                translate([-43,0,railsWidth])
-                rotate([90,0,-90]) {
-//                    translate_z(-48.15)
-//                    rotate([0,0,180])
-//                    toolhead_extruder_titan_e3d_assembly(
-
-//                    toolhead_extruder_orbiter_mosquito_assembly(
-//                        width =	railsWidth*2,
-//                        length = 100,
-//                        inset_length =	80,
-//                        inset_depth =	8,
-//                        heigth =	29
-//                    );
-
-                    translate_z(-48.15)
-                    children();
-                }
+                translate([- 43, 0, railsWidth])
+                    rotate([90, 0, - 90]) {
+                        translate_z(- 48.15)
+                        children();
+                    }
             }
-    }
+        }
 
-        translate([railsRealLength/2,railsAdjustedWidth,0]) rotate([-90,0,90]) {
-        vslot_rail(
-                X_RAIL,
-                railsRealLength,
-                pos = position,
-                mirror_plate = [1,0,0],
-                safe_margin = caretSafeMargin,
-                safe_margin_top = caretSafeMargin
+        translate([railsRealLength / 2, railsAdjustedWidth, 0]) rotate([- 90, 0, 90]) {
+            vslot_rail(
+            X_RAIL,
+            railsRealLength,
+            pos = position,
+            mirror_plate = [1, 0, 0],
+            safe_margin = caretSafeMargin,
+            safe_margin_top = caretSafeMargin
             ) {
                 let();
                 x_caret_1_assembly() {
-                    translate([-8.85-1,-X_PLATE_CONNECTOR_MOUNT_X,railsWidth])
-                    rotate([90,90,0])
-                    x_caret_connector(width = railsWidth*2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH);
+                    translate([- 8.85 - 1, - X_PLATE_CONNECTOR_MOUNT_X, railsWidth])
+                        rotate([90, 90, 0])
+                            x_caret_connector(width = railsWidth * 2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH);
 
-                    translate([-8.85-1,X_PLATE_CONNECTOR_MOUNT_X,railsWidth])
-                    rotate([90,90,0])
-                    x_caret_connector(width = railsWidth*2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH, endstop = true);
+                    translate([- 8.85 - 1, X_PLATE_CONNECTOR_MOUNT_X, railsWidth])
+                        rotate([90, 90, 0])
+                            x_caret_connector(width = railsWidth * 2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH, endstop =
+                            true);
                 }
+            }
         }
     }
 }

@@ -57,56 +57,58 @@ function safeMarginYAxis() = Y_CARET_WIDTH / 2 + SENSOR_DEPTH;
 function realYAxisLength(length) = length + Y_CARET_WIDTH + SENSOR_DEPTH * 2;
 function outerXAxisWidth(length) = realXAxisLength(length) + 50;
 
-module yAxisRails(
-position = 0,
-yAxisLength,
-xAxisLength,
-railSpacing = 60) {
-    dxf(str("D16T_y_caret_", railSpacing));
-    dxf(str("D16T_y_caret_", railSpacing));
+module y_axis_assembly(
+    position = 0,
+    yAxisLength,
+    xAxisLength,
+    railSpacing = 60) {
+    assembly("y_axis"){
+        dxf(str("D16T_y_caret_", railSpacing));
+        dxf(str("D16T_y_caret_", railSpacing));
 
-    outerXAxisWidth = outerXAxisWidth(xAxisLength);
+        outerXAxisWidth = outerXAxisWidth(xAxisLength);
 
-    railsRealLength = realYAxisLength(yAxisLength);
-    caretSafeMargin = safeMarginYAxis();
+        railsRealLength = realYAxisLength(yAxisLength);
+        caretSafeMargin = safeMarginYAxis();
 
-    translate([railsRealLength / 2, outerXAxisWidth / 2, 0])
-        rotate([0, - 90, 0]) {
-            vslot_rail(
-            GET_Y_RAIL(railSpacing),
-            railsRealLength,
-            pos = yAxisLength-position,
-            safe_margin = caretSafeMargin,
-            safe_margin_top = caretSafeMargin
-            ) {
-                let();
+        translate([railsRealLength / 2, outerXAxisWidth / 2, 0])
+            rotate([0, - 90, 0]) {
+                vslot_rail(
+                GET_Y_RAIL(railSpacing),
+                railsRealLength,
+                pos = yAxisLength - position,
+                safe_margin = caretSafeMargin,
+                safe_margin_top = caretSafeMargin
+                ) {
+                    let();
 
-                translate([- outerXAxisWidth / 2, 0, 10])
-                    rotate([0, 0, 180])
-                        xAxisRails(position, xAxisLength, railSpacing / 2)
-                        children();
+                    translate([- outerXAxisWidth / 2, 0, 10])
+                        rotate([0, 0, 180])
+                            x_axis_assembly(position, xAxisLength, railSpacing / 2)
+                            children();
 
-                translate([0, PULLEY_Y_COORDINATE2, 0]) y_pulley_block(37, 3);
-                translate([- PULLEY2_X_COORDINATE, - PULLEY_Y_COORDINATE, 0]) y_pulley_block(20, 3);
+                    translate([0, PULLEY_Y_COORDINATE2, 0]) y_pulley_block(37, 3);
+                    translate([- PULLEY2_X_COORDINATE, - PULLEY_Y_COORDINATE, 0]) y_pulley_block(20, 3);
+                }
             }
-        }
 
-    translate([railsRealLength / 2, -outerXAxisWidth / 2, 0])
-        mirror([0,1,0])
-        rotate([0, - 90, 0]) {
-            vslot_rail(
-            GET_Y_RAIL(railSpacing),
-            railsRealLength,
-            pos = yAxisLength-position,
-            safe_margin = caretSafeMargin,
-            safe_margin_top = caretSafeMargin
-            ) {
-                let();
+        translate([railsRealLength / 2, - outerXAxisWidth / 2, 0])
+            mirror([0, 1, 0])
+                rotate([0, - 90, 0]) {
+                    vslot_rail(
+                    GET_Y_RAIL(railSpacing),
+                    railsRealLength,
+                    pos = yAxisLength - position,
+                    safe_margin = caretSafeMargin,
+                    safe_margin_top = caretSafeMargin
+                    ) {
+                        let();
 
-                translate([0, PULLEY_Y_COORDINATE2, 0]) y_pulley_block(20, 3);
-                translate([- PULLEY2_X_COORDINATE, - PULLEY_Y_COORDINATE, 0]) y_pulley_block(37, 3);
-            }
-        }
+                        translate([0, PULLEY_Y_COORDINATE2, 0]) y_pulley_block(20, 3);
+                        translate([- PULLEY2_X_COORDINATE, - PULLEY_Y_COORDINATE, 0]) y_pulley_block(37, 3);
+                    }
+                }
+    }
 }
 
 //yAxisRails(300, 300, 10, 300);

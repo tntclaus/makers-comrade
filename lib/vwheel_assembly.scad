@@ -1,25 +1,28 @@
 include <vwheels.scad>
+include <utils.scad>
 include <NopSCADlib/utils/core/core.scad>
 include <NopSCADlib/vitamins/nuts.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
 module spacer(h = 6) {
-    hstr = h == 6.35 ? "6_35" : str(h);
-    vitamin(str("gantry_cart_spacer_", hstr));
+    hstr = str_replace(str(h), ".", "_");
+    vitamin(str(
+        "spacer(", str(h), "): OpenBuilds Spacer (h=", h, "mm)"
+    ));
     color("silver")
     translate([0,0,h])
     rotate([0,180,0])
     difference() {
-            cylinder(h, d = 10);
-            translate([0,0,-0.1])
-            cylinder(h+0.2, d = 5);
-    }    
+        cylinder(h, d = 10);
+        translate([0,0,-0.1])
+        cylinder(h+0.2, d = 5);
+    }
 }
 
 
 module eccentric_spacer(h = 6) {
     vitamin(str(
-        "Openbuilds Eccentric Spacer (h=", h, "mm)"
+        "eccentric_spacer(", h ,"): OpenBuilds Eccentric Spacer (h=", h, "mm)"
     ));
     translate([0,0,h])
     rotate([0,180,0])
@@ -34,30 +37,39 @@ module eccentric_spacer(h = 6) {
     }
 }
 
+module vwheel_excentric_spacer_assembly(type) {
+    assembly("vwheel_excentric_spacer") {
+        h = type[1];
+        eccentric_spacer(h);
+        vwheel_all_but_spacer(type);
+    }
+}
 
-module vwheel_assembly(type) {
-    h = type[1]; 
+module vwheel_spacer_assembly(type) {
+    assembly("vwheel_spacer") {
+        h = type[1];
+        spacer(h);
+        vwheel_all_but_spacer(type);
+    }
+}
+
+module vwheel_all_but_spacer(type) {
+    h = type[1];
     eccentric = type[2];
     wheelType = type[3];
     screwType = type[4];
     double = type[5];
 
-    if(eccentric) {
-        eccentric_spacer(h);
-    } else {
-        spacer(h);
-    }
-
     shift = eccentric ? [0.25,1,h + 11/2] : [0,0,h + 11/2];
-    
+
     screwLength = double ? 35 : 25;
-        
-   
+
+
     translate(shift){
         vwheel(wheelType);
         rotate([0,180,0])
-        translate([0,0,14.5])
-            screw(screwType, screwLength);
+            translate([0,0,14.5])
+                screw(screwType, screwLength);
 
         translate([0,0,h-1+screwLength-25])
             spring_washer(screw_washer(screwType));
@@ -65,12 +77,22 @@ module vwheel_assembly(type) {
             nut(screw_nut(screwType));
 
     }
-    
+
     if(double) {
         if(eccentric) {
             translate([0,0,21.8]) rotate([0,180,0]) eccentric_spacer(h);
         } else {
             translate([0,0,21.8]) rotate([0,180,0]) spacer(h);
         }
+    }
+}
+
+module vwheel_assembly(type) {
+    eccentric = type[2];
+
+    if(eccentric) {
+        vwheel_excentric_spacer_assembly(type);
+    } else {
+        vwheel_spacer_assembly(type);
     }
 }

@@ -476,18 +476,20 @@ module heatbed_table_assembly(
     mount_point_offset,
     mounts_num = 3)
 {
-    heatbed_table_base(
-//    heatbed_table_base_extrusions(
+    assembly("heatbed_table"){
+        heatbed_table_base(
+        //    heatbed_table_base_extrusions(
         x_work_area_width = x_work_area_width,
         y_work_area_width = y_work_area_width,
         mount_length = mount_length,
         mount_point_offset = mount_point_offset,
         mounts_num = mounts_num
-    );
-    translate_z(0) {
-//        heatbed_table_heater_08_2kW(work_area_width);
-//        translate_z(10)
-        heatbed_table_ceramic_granite(x_work_area_width, y_work_area_width);
+        );
+        translate_z(0) {
+            //        heatbed_table_heater_08_2kW(work_area_width);
+            //        translate_z(10)
+            heatbed_table_ceramic_granite(x_work_area_width, y_work_area_width);
+        }
     }
 }
 
