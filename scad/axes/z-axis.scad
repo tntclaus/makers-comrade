@@ -26,6 +26,8 @@ include <NopSCADlib/vitamins/ball_bearings.scad>
 
 use <y-axis.scad>
 
+use <../../lib/anti_z_wobble/leadscrew_anti_z_wobble.scad>
+
 Z_AXIS_OFFSET = 25;
 Z_AXIS_LEADNUT = LSN8x2;
 Z_AXIS_MOTOR = NEMA17;
@@ -281,15 +283,22 @@ angle = 0
 //                        translate([0, - 10, 17]) rotate([0, - 90, 90]) drill(5, h = 40);
                     }
                     translate([0, 5, 18])
-                        rotate([90, - 0, 0])
+                        rotate([90, - 0, 0]) {
+                            translate_z(-6.5)
+                            rotate([0,0,45])
+                            color("white")
+                            leadscrew_anti_z_wobble_assembly();
+
+                            translate_z(-20)
                             leadnut(Z_AXIS_LEADNUT);
+                        }
                 }
             }
 
-        translate([0,30,length + 70])
-        rotate([0, 0, 90])
-            color("blue")
-                pillow_block();
+//        translate([0,30,length + 70])
+//        rotate([0, 0, 90])
+//            color("blue")
+//                pillow_block();
     }
     dxf("STEEL_3mm_gantry_sq_plate_60x60x3_22");
 
@@ -409,6 +418,8 @@ module z_motor_thurst_bearing_collet(bearing_type, motor_type) {
 module z_motor_thurst_bearing_collet_assembly(type = BB51101) {
     translate_z(4.5)
     ball_bearing(type);
+
+    color("green")
     z_motor_thurst_bearing_collet(type, NEMA17S);
 }
 
@@ -455,8 +466,8 @@ module pillow_block() {
 
 //pillow_block_stl();
 //
-//CASE_MATERIAL_THICKNESS = 4;
-//zAxis(300, lengthZ = 300, lengthX = 300, lengthY = 300);
+$CASE_MATERIAL_THICKNESS = 4;
+zAxis(300, lengthZ = 300, lengthX = 300, lengthY = 300);
 
 
 //ABS_PC_z_motor_thurst_bearing_collet_type_51101_stl();
