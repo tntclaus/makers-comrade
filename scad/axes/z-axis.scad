@@ -466,8 +466,8 @@ module pillow_block() {
 
 //pillow_block_stl();
 //
-$CASE_MATERIAL_THICKNESS = 4;
-zAxis(300, lengthZ = 300, lengthX = 300, lengthY = 300);
+//$CASE_MATERIAL_THICKNESS = 4;
+//zAxis(300, lengthZ = 300, lengthX = 300, lengthY = 300);
 
 
 //ABS_PC_z_motor_thurst_bearing_collet_type_51101_stl();
