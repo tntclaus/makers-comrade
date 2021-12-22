@@ -38,7 +38,7 @@ if ($preview)
 main_assembly();
 
 $preview_table = !$preview || is_bom()  || false;
-$preview_belts = !$preview || is_bom()  || false;
+$preview_belts = !$preview || is_bom()  || true;
 $preview_tool = !$preview || is_bom()  || false;
 $preview_screws = !$preview || is_bom() || false;
 
@@ -133,6 +133,8 @@ module km_frame_assembly(zpos = 0, xypos = 0) {
     }
 }
 
+use <enclosures/full/enclosure_sides.scad>
+
 module km_frame_corner_plates(x, y) {
     translate([- (x - 20), - y - 10, 10]) {
         rotate([0, 0, 90])
@@ -153,7 +155,7 @@ module km_frame_corner_plates(x, y) {
             corner_pulley_assembly(8.5, 25.5, 40, 3);
     }
 
-    translate([x + 10, y + 37, 10]) xyAxisMotor(left = true);
+    translate([x + 10, y + 37, 10+MOTOR_LEFT_ELEVATION_PLATES_COUNT()*3]) xyAxisMotor(left = true);
     translate([- (x + 10), y + 37, 10]) xyAxisMotor(left = false);
 }
 
@@ -171,10 +173,12 @@ module corexy_belts(width_x, width_y, xpos, ypos) {
     separation = [0, coreXY_coincident_separation(coreXY_type).y, pulley_height(plain_idler) + 8.2];
     pos = [xpos, safeMarginYAxis() + ypos + 10];
 
+    bth = belt_thickness(coreXY_belt(coreXY_type));
+
     upper_drive_pulley_offset = [0, 0];
     lower_drive_pulley_offset = [0, 0];
 
-    translate([- width_x / 2 - 10, - width_y / 2, 30 + 8.2 / 2])
+    translate([- width_x / 2 - 10 - bth, - width_y / 2, 30 + 8.2 / 2])
         coreXY_belts(
         coreXY_type,
         carriagePosition = pos,

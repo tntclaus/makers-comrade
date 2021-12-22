@@ -54,12 +54,29 @@ module enclosure_side_window_place_dual_windows(x_length) {
         children();
 }
 
+function MOTOR_WINDOW_COORDINATES() = [
+        [0,0,0],
+        [0,23,0],
+        [17,20,3],
+        [20,3,0],
+        [37,3,0],
+        [37,0,0],
+    ];
+
+function MOTOR_LEFT_ELEVATION_PLATES_COUNT() = 5;
 
 module enclosure_base_side_dual_z_sketch(width, heigth, window_h, x_length, lh, overlap) {
     difference() {
         enclosure_base_side_sketch(width, heigth, window_h, lh, overlap);
         enclosure_side_window_place_dual_windows(x_length)
         enclosure_side_window_shape(window_h);
+
+        translate([-width/2,heigth/2 + MOTOR_LEFT_ELEVATION_PLATES_COUNT() * 3])
+        rounded_polygon(MOTOR_WINDOW_COORDINATES());
+
+        translate([width/2,heigth/2, 0])
+        mirror([1,0,0])
+        rounded_polygon(MOTOR_WINDOW_COORDINATES());
     }
 }
 
