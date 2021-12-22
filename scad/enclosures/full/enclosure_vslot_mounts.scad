@@ -70,3 +70,4 @@ module STEEL_3mm_enclosure_slot_mount_line_l490_vertical_dxf() {
     screw_mount_line_sketch(490, vertical = true)
     enclosure_base_place_vertical_perforation(490) circle(d = 4.1);
 }
+
