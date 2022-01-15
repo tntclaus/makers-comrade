@@ -1,25 +1,42 @@
 include <NopSCADlib/utils/core/core.scad>
 
-module heat_bed_heater(width, depth, spacing = 30) {
-    x=width;
-    y=depth;
+function heater_material_function_name(type) = type[0];
+function heater_material_name(type) = type[1];
+
+// g * cm^3
+function heater_material_density(type) = type[2];
+
+// micro ohm * mm^2 / meter
+function heater_material_resistance(type, temperature = 100) = type[3][search(temperature, type[3])[0]][1];
+
+
+COPPER =                   ["copper",           "Copper",           8.96, [[20, 0.017], [100, 0.018], [200, 0.020]]];
+ALUMINIUM =                ["aluminium",        "Aluminium",        2.7 , [[20, 0.028], [100, 0.029], [200, 0.030]]];
+
+// http://thermalinfo.ru/svojstva-materialov/metally-i-splavy/udelnoe-elektricheskoe-soprotivlenie-stali-pri-razlichnyh-temperaturah
+STEEL_03X18H10 =           ["steel_08Х18Н10",   "Steel 08Х18Н10",   7.85, [[20, 0.800], [100, 0.846], [200, 0.910]]];
+STEEL_AISI304 =            ["steel_aisi304",    "Steel AISI304",    7.85, [[20, 0.800], [100, 0.846], [200, 0.910]]];
+
+// http://thermalinfo.ru/svojstva-materialov/metally-i-splavy/udelnoe-soprotivlenie-nihroma-plotnost-teploprovodnost-teploemkost
+NICHROME_X20H80 =          ["nichrome_X20H80",  "Nichrome X20H80",  8.4 , [[20, 1.130], [100, 1.135], [200, 1.152]]];
+
+
+module heat_bed_heater(type, dimensions, spacing = 1.7, power = 500, volt=220) {
+    x=dimensions.x;
+    y=dimensions.y;
 
     st=spacing;				// step for wires
 
-    wireMinSpacing = 1; 
-
-    volt=220;
-    power=volt * 9;
+    wireMinSpacing = .1;
 
     iamp=power/volt;
     rohm=volt/iamp;
 
 
 
-//    p=0.017/1000;	//Copper resistance om*mm^2/mm
-    p=1.12/1000; // NiChrome resistance om*mm^2/mm
-    
-    h=0.572727;			//Copper foil height
+    p=heater_material_resistance(type)/1000; // Stainless ohm*mm^2/mm
+//    h=0.572727;			//Copper foil height
+    h=dimensions.z;
 
     l=(x/st)*(y/st)*st;
 
@@ -34,6 +51,17 @@ module heat_bed_heater(width, depth, spacing = 30) {
     $fn=16;
 
     //st=w + wireMinSpacing;
+    echo("P ", p, "micro ohm / mm");
+    echo("Power ", power, "VA");
+    echo("Voltage ", volt, "V");
+    echo("Current ", iamp, "A");
+    echo("Resistance ", rohm, "ohm");
+    echo("Wire S ", s, "mm2");
+    echo("Wire length ", l, "mm");
+    echo("Wire width ", w, "mm");
+    echo("Wire height ", h, "mm");
+    echo("Wire spacing ", st - w, "mm");
+
 
     assert(st > w, "Adjust step");
     assert(st - w > wireMinSpacing, "");
@@ -48,21 +76,16 @@ module heat_bed_heater(width, depth, spacing = 30) {
 
 //  todo: dxf, fix path
 //
-    echo("Power ", power, "VA");
-    echo("Voltage ", volt, "V");
-    echo("Current ", iamp, "A");
-    echo("Resistance ", rohm, "ohm");
-    echo("Wire S ", s, "mm2");
-    echo("Wire length ", l, "mm");
-    echo("Wire width ", w, "mm");
-    echo("Wire height ", h, "mm");
-    echo("Wire spacing ", st - w, "mm");
-    echo("Temp in ", seconds, "s = ", temp, "ºC");
+    echo(str("Temp in ", seconds, "s = ", temp, "ºC"));
 
     module line(le) {
         hull() {
-            translate([-le/2,0,0]) circle(w/2);
-            translate([le/2,0,0]) circle(w/2);
+//            translate([-le/2,0,0])  circle(w/2, $fn = 6);
+//            translate([le/2,0,0]) circle(w/2, $fn = 6);
+            translate([-le/2,0,0]) rotate([0,0,45]) square(w*cos(45), center = true);
+            translate([ le/2,0,0]) rotate([0,0,45]) square(w*cos(45), center = true);
+//            translate([le/2,0,0]) circle(w/2, $fn = 20);
+
         } // hl
     }
 
@@ -78,12 +101,12 @@ module heat_bed_heater(width, depth, spacing = 30) {
         translate([-x/2+st,0])
             for (i=[0:st*2:(x-st*3)])
                 translate([i+st,-y/2+st/2]) line(st);
-    } 
+    }
 
 
-    color("orange")  linear_extrude(h)
+//    color("orange")  linear_extrude(h)
     hb();
-    
+
 }
 
 module heatBedGlass(width, depth, thickness = 5) {
@@ -120,23 +143,23 @@ module heatbed_bottom_plate_620x620_dxf() {
 //    echo(listZ);
     stepX = (width-20) / 8;
     listX = [ for (i = [10 : stepX : width]) i ];
-        
-    function firstOrLast(cX, cY) = 
-            cX == 10 ? true : 
+
+    function firstOrLast(cX, cY) =
+            cX == 10 ? true :
             cX == width - 10 ? true :
             cY == 10 ? true :
             cY == heigth - 10 ? true :
             false;
-    
+
     difference() {
         rounded_square([620, 620], r = 3, center=true);
         for(y = listY)
             for(x = listX)
-                translate([x-width/2, y-heigth/2, 0]) 
+                translate([x-width/2, y-heigth/2, 0])
                     if(firstOrLast(x, y))
-                        circle(d = 5);        
-                    else 
-                        circle(d = 3);        
+                        circle(d = 5);
+                    else
+                        circle(d = 3);
     }
 }
 
@@ -149,4 +172,8 @@ module heatBedBottomPlate(width, depth, padding) {
 //heatBed(620,620,20);
 //heatBedBottomPlate(500,500,10);
 
-//heat_bed_heater(540, 540);
+
+
+//heat_bed_heater(295, 295, spacing = 1.7, power = 500);
+//heat_bed_heater(STEEL_03X18H10, [595, 595, 0.5], spacing = 10, power = 2000);
+heat_bed_heater(ALUMINIUM, [295, 295, 0.03], spacing = 1.75, power = 500);
