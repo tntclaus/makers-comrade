@@ -7,13 +7,15 @@ use <enclosure_vslot_mounts.scad>
 
 module enclosure_front(width, heigth, window_w, window_h, window_translate_z) {
     lh = $LEG_HEIGTH - MATERIAL_STEEL_THICKNESS;
+
+    width_full = width + MATERIAL_STEEL_THICKNESS * 2;
+
     dxf(
     str(
     "STEEL_", MATERIAL_STEEL_THICKNESS,
-    "mm_enclosure_front_", width, "x", heigth, "mm_", "w", window_w, "x", window_h, "_lh", lh)
+    "mm_enclosure_front_", width_full, "x", heigth, "mm_", "w", window_w, "x", window_h, "_lh", lh, "_wtz", window_translate_z)
     );
 
-    width_full = width + MATERIAL_STEEL_THICKNESS * 2;
 
     translate_z(heigth / 2)
     rotate([90, 0, - 90]) {
@@ -58,6 +60,6 @@ module enclosure_front_sketch(width, heigth, window_w, window_h, window_translat
     }
 }
 
-module STEEL_3mm_enclosure_front_470x490mm_w430x360_lh67_dxf() {
-    enclosure_front_sketch(width = 470, heigth = 490, window_w = 430, window_h = 360, lh = 67);
+module STEEL_3mm_enclosure_front_476x490mm_w430x360_lh67_wtz25_dxf() {
+    enclosure_front_sketch(width = 476, heigth = 490, window_w = 430, window_h = 360, window_translate_z = 25, lh = 67);
 }

@@ -6,12 +6,13 @@ use <parametric_hinge_door_top.scad>
 
 module enclosure_back(width, heigth, window_w) {
     lh = $LEG_HEIGTH - MATERIAL_STEEL_THICKNESS;
+    width_full = width + MATERIAL_STEEL_THICKNESS * 2;
+
     dxf(
     str(
     "STEEL_", MATERIAL_STEEL_THICKNESS,
-    "mm_enclosure_back_", width, "x", heigth, "mm_", "w", window_w, "_lh", lh
+    "mm_enclosure_back_", width_full, "x", heigth, "mm_", "w", window_w, "_lh", lh
     ));
-    width_full = width + MATERIAL_STEEL_THICKNESS * 2;
 
     translate_z(heigth / 2)
     rotate([90, 0, 90]) {
@@ -48,8 +49,8 @@ module enclosure_back_sketch(width, heigth, window_w, lh) {
     }
 }
 
-module STEEL_3mm_enclosure_back_470x490mm_w430_lh67_dxf() {
-        enclosure_back_sketch(width = 470, heigth = 490, window_w = 430, lh = 67);
+module STEEL_3mm_enclosure_back_476x490mm_w430_lh67_dxf() {
+        enclosure_back_sketch(width = 476, heigth = 490, window_w = 430, lh = 67);
 }
 
 //STEEL_3mm_enclosure_back_470x490mm_w430_lh67_dxf();

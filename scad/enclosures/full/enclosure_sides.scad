@@ -6,12 +6,15 @@ use <enclosure_vslot_mounts.scad>
 
 include <NopSCADlib/utils/core/rounded_rectangle.scad>
 
+use <../../electronics_box.scad>
+use <../../spool_holder.scad>
+
 module enclosure_side_window_place_holes(heigth) {
     translate([0, 35]) {
         translate([0, (heigth - 60) / 2, 0]) children();
-//        translate([0, (heigth - 20) / 2, 0]) children();
+        //        translate([0, (heigth - 20) / 2, 0]) children();
         translate([0, 0, 0]) children();
-//        translate([0, - (heigth - 60) / 2, 0]) children();
+        //        translate([0, - (heigth - 60) / 2, 0]) children();
         translate([0, - (heigth - 20) / 2, 0]) children();
     }
 }
@@ -21,10 +24,10 @@ module enclosure_side_window_shape(heigth, with_holes = true) {
     tongueOffset = (heigth) / 2;
 
     //        rounded_polygon(enclosure_side_window_shape(80, heigth, 20, 30));
-    translate([-20, 35]) difference() {
+    translate([- 20, 35]) difference() {
         rounded_square([20, heigth], 5);
     }
-    translate([ 20, 35]) difference() {
+    translate([20, 35]) difference() {
         rounded_square([20, heigth], 5);
     }
 
@@ -55,15 +58,35 @@ module enclosure_side_window_place_dual_windows(x_length) {
 }
 
 function MOTOR_WINDOW_COORDINATES() = [
-        [0,0,0],
-        [0,23,0],
-        [17,20,3],
-        [20,3,0],
-        [37,3,0],
-        [37,0,0],
+        [0, 0, 0],
+        [0, 23, 0],
+        [17, 20, 3],
+        [20, 3, 0],
+        [37, 3, 0],
+        [37, 0, 0],
     ];
 
 function MOTOR_LEFT_ELEVATION_PLATES_COUNT() = 5;
+
+/**
+* move outta here
+*/
+module gas_lift_mounts() {
+    for(a  = [0, 120, 240])
+    rotate([0,0,a])
+    translate([0, 10.5])
+    children();
+}
+
+
+module enclosure_side_place_gas_lift_door(width, depth) {
+    translate([-(width/2-10), depth/2 - 90])
+        children();
+}
+module enclosure_side_place_gas_lift_wall(width, heigth) {
+    translate([-width/2+255-MATERIAL_STEEL_THICKNESS, heigth/2 + CAP_HEIGTH-20])
+        children();
+}
 
 module enclosure_base_side_dual_z_sketch(width, heigth, window_h, x_length, lh, overlap) {
     difference() {
@@ -71,12 +94,27 @@ module enclosure_base_side_dual_z_sketch(width, heigth, window_h, x_length, lh, 
         enclosure_side_window_place_dual_windows(x_length)
         enclosure_side_window_shape(window_h);
 
-        translate([-width/2,heigth/2 + MOTOR_LEFT_ELEVATION_PLATES_COUNT() * 3])
-        rounded_polygon(MOTOR_WINDOW_COORDINATES());
+        translate([- width / 2, heigth / 2 + MOTOR_LEFT_ELEVATION_PLATES_COUNT() * 3])
+            rounded_polygon(MOTOR_WINDOW_COORDINATES());
 
-        translate([width/2,heigth/2, 0])
-        mirror([1,0,0])
-        rounded_polygon(MOTOR_WINDOW_COORDINATES());
+        translate([width / 2, heigth / 2, 0])
+            mirror([1, 0, 0])
+                rounded_polygon(MOTOR_WINDOW_COORDINATES());
+
+        translate([0, heigth/2, 0])
+        electronics_box_mounts();
+
+        enclosure_side_place_spool_holder(x_length)
+        spool_holder_mounts()
+        circle(r = M5_tap_radius);
+
+        enclosure_side_place_psu_case()
+        electronics_box_psu_case_mounts()
+        circle(d = 4);
+
+        enclosure_side_place_gas_lift_wall(width-10, heigth)
+        gas_lift_mounts()
+        circle(d = M4_tap_radius);
     }
 }
 
@@ -86,12 +124,29 @@ module enclosure_side_z_axis_mount_line(length) {
     name = str("STEEL_3mm_enclosure_slot_z_mount_line_l", length);
     dxf(name);
 
-    translate([0,35,-MATERIAL_STEEL_THICKNESS*2.5])
-    color("silver")
-    linear_extrude(MATERIAL_STEEL_THICKNESS)
-    screw_mount_line_sketch(length, true)
-    translate([0,-35,0])
-    enclosure_side_window_place_holes(length) circle(d = 4.1);
+    translate([0, 35, - MATERIAL_STEEL_THICKNESS * 2.5])
+        color("silver")
+            linear_extrude(MATERIAL_STEEL_THICKNESS)
+                screw_mount_line_sketch(length, true)
+                translate([0, - 35, 0])
+                    enclosure_side_window_place_holes(length) circle(d = 4.1);
+}
+
+
+
+module enclosure_side_place_spool_holder(x_length) {
+//    echo("dual", zAxisDualPosition(x_length));
+
+    pos = zAxisDualPosition(x_length) > 195 ? 195 : zAxisDualPosition(x_length)+70;
+
+    translate([pos, 0, 0])
+    children();
+}
+
+module enclosure_side_place_psu_case() {
+    translate([-25,-50, 0])
+        rotate([0,0,-90])
+    children();
 }
 
 module enclosure_side_dual_z(width, heigth, window_h, x_length) {
@@ -105,6 +160,21 @@ module enclosure_side_dual_z(width, heigth, window_h, x_length) {
 
     translate_z(heigth / 2)
     rotate([90, 0, 180]) {
+
+        if($preview_left_side_parts) {
+            translate([0, heigth / 2, 0])
+                electronics_box_assembly();
+
+            enclosure_side_place_spool_holder(x_length)
+            spool_holder_assembly();
+            //            spool_holder_assembly(type = false);
+
+
+            enclosure_side_place_psu_case()
+            electronics_box_psu_case_assembly();
+        }
+
+
         translate_z(- MATERIAL_STEEL_THICKNESS)
         color("green", 0.5)
             linear_extrude(MATERIAL_STEEL_THICKNESS)
@@ -180,6 +250,13 @@ module STEEL_3mm_enclosure_side_single_z_500x490mm_w380_lh67_dxf() {
 module STEEL_3mm_enclosure_slot_z_mount_line_l380_dxf() {
     length = 380;
     screw_mount_line_sketch(length, true)
-    translate([0,-35,0])
-    enclosure_side_window_place_holes(length) circle(d = 4.1);
+    translate([0, - 35, 0])
+        enclosure_side_window_place_holes(length) circle(d = 4.1);
 }
+
+
+////////
+// ELECTRONIX BOX
+////////
+
+

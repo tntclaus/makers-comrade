@@ -176,4 +176,32 @@ module heatBedBottomPlate(width, depth, padding) {
 
 //heat_bed_heater(295, 295, spacing = 1.7, power = 500);
 //heat_bed_heater(STEEL_03X18H10, [595, 595, 0.5], spacing = 10, power = 2000);
-heat_bed_heater(ALUMINIUM, [295, 295, 0.03], spacing = 1.75, power = 500);
+
+
+module heat_bed_heater_etching_template(thickness = 2) {
+
+    linear_extrude(thickness)
+        union() {
+            difference() {
+                rounded_square([298, 298], 5, center = true);
+                square([286.3, 291], center = true);
+            }
+            heat_bed_heater(ALUMINIUM, [290, 290, 0.009], spacing = 2.65, power = 600);
+        }
+
+    module column() {
+        translate_z(thickness + 1.5)
+        cube([295, 3, 3], center = true);
+    }
+
+    module columns() {
+        for (y = [- 285.6 / 2 : 47.59/2 : 287.4 / 2])
+        translate([0, y, 0])
+            column();
+    }
+
+    color("red")
+        columns();
+}
+
+//heat_bed_heater_etching_template(1.2);

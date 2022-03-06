@@ -37,10 +37,11 @@ $CASE_MATERIAL_THICKNESS = 3;
 if ($preview)
 main_assembly();
 
-$preview_table = !$preview || is_bom()  || false;
-$preview_belts = !$preview || is_bom()  || true;
-$preview_tool = !$preview || is_bom()  || false;
+$preview_table = !$preview || is_bom() || false;
+$preview_belts = !$preview || is_bom() || false;
+$preview_tool = !$preview || is_bom() || false;
 $preview_screws = !$preview || is_bom() || false;
+$preview_left_side_parts = !$preview || is_bom() || false;
 
 module STEEL_3mm_dxf() {
     square(5);
@@ -52,7 +53,7 @@ module PC_5mm_dxf() {
 
 module main_assembly() {
     dxf("STEEL_3mm");
-//    dxf("PC_5mm");
+    //    dxf("PC_5mm");
 
     km_3d_printer(zpos = 200, xypos = 0);
 }
@@ -90,15 +91,16 @@ module km_frame_assembly(zpos = 0, xypos = 0) {
             translate_z(realZAxisLength(AXIS_Z_SIZE) + 20)
             rotate([0, 0, 90])
                 y_axis_assembly(xypos, AXIS_Y_SIZE, AXIS_X_SIZE) {
-                    if ($preview_tool)
-//                    toolhead_spindle_assembly(
-                    toolhead_extruder_orbiter_mosquito_assembly(
-                    width = 60,
-                    length = 100,
-                    inset_length = 80,
-                    inset_depth = 8,
-                    heigth = 29
-                    );
+                    if ($preview_tool) {
+                        //                    toolhead_spindle_assembly(
+                        toolhead_extruder_orbiter_mosquito_assembly(
+                        width = 60,
+                        length = 100,
+                        inset_length = 80,
+                        inset_depth = 8,
+                        heigth = 29
+                        );
+                    }
                 }
 
             xAxisExtrusions();
@@ -155,8 +157,11 @@ module km_frame_corner_plates(x, y) {
             corner_pulley_assembly(8.5, 25.5, 40, 3);
     }
 
-    translate([x + 10, y + 37, 10+MOTOR_LEFT_ELEVATION_PLATES_COUNT()*3]) xyAxisMotor(left = true);
+    translate([x + 10, y + 37, 10 + MOTOR_LEFT_ELEVATION_PLATES_COUNT() * 3]) xyAxisMotor(left = true);
     translate([- (x + 10), y + 37, 10]) xyAxisMotor(left = false);
+
+    for (i = [0 : MOTOR_LEFT_ELEVATION_PLATES_COUNT() - 1])
+    translate([x - 20, y + 10, 10 + i * 3]) rotate([0, 0, - 90]) linear_extrude(3) pulley_corner_plate();
 }
 
 include <NopSCADlib/utils/core_xy.scad>
@@ -196,7 +201,7 @@ module corexy_belts(width_x, width_y, xpos, ypos) {
 use <enclosures/full/enclosure_assembly.scad>
 
 module case() {
-    translate_z(- $LEG_HEIGTH){
+    translate_z(- $LEG_HEIGTH) {
         enclosure_assembly(
         AXIS_X_SIZE,
         AXIS_Y_SIZE,
@@ -205,3 +210,5 @@ module case() {
         );
     }
 }
+
+

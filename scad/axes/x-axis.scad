@@ -159,7 +159,7 @@ module toolhead_support_top_3mm_drawing() {
         mount1 = X_VW_HOLES[0];
         mount2 = X_VW_HOLES[2];
 
-        rounded_square([8,80], r = 2, center = true);
+        rounded_square([8,80], r = 2, center = true, $fn = 90);
 
         translate([0, mount1[3]])
         circle(d = mount1[0]-0.6);
@@ -209,7 +209,7 @@ module toolhead_support_bottom_3mm_drawing() {
     ];
 
     difference() {
-        rounded_polygon(polygon_path);
+        rounded_polygon(polygon_path, $fn = 90);
         translate([X_PLATE_SUPPORT_B_SCREWS_Y_RELATIVE_POS, X_PLATE_SUPPORT_B_SCREW_OFFSET,0])
         circle(d = X_PLATE_SUPPORT_B_SCREW_DIA-0.7);
         translate([X_PLATE_SUPPORT_B_SCREWS_Y_RELATIVE_POS,-X_PLATE_SUPPORT_B_SCREW_OFFSET,0])

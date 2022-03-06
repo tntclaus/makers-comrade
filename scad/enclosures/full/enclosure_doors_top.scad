@@ -64,6 +64,10 @@ module enclosure_door_top_frame_place_screws(length) {
             children();
 }
 
+module STEEL_3mm_enclosure_door_top_frame_hinge_part_450_dxf() {
+    enclosure_door_top_frame_hinge_part_sketch(450);
+}
+
 module enclosure_door_top_frame_hinge_part(length) {
     dxf(str("STEEL_", MATERIAL_STEEL_THICKNESS, "mm_enclosure_door_top_frame_hinge_part_",length));
     color("silver")
@@ -88,6 +92,15 @@ module enclosure_door_top_frame_hinge_part_sketch(length) {
         enclosure_door_top_place_hinges(0, length+20)
         tool_cutter_fastener_place(4, 1) circle(d = 2.3);
     }
+}
+
+
+module STEEL_3mm_enclosure_door_top_frame_l500_dxf() {
+    enclosure_door_top_frame_sketch(500);
+}
+
+module STEEL_3mm_enclosure_door_top_frame_l450_dxf() {
+    enclosure_door_top_frame_sketch(450);
 }
 
 module enclosure_door_top_frame(length) {

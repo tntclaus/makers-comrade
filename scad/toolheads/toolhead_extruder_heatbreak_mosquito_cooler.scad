@@ -173,10 +173,15 @@ module toolhead_extruder_mosquito_heatbreak_fan_duct_nozzle_stl() {
 module toolhead_extruder_heatbreak_mosquito_fan_duct_nozzle() {
     stl("toolhead_extruder_mosquito_heatbreak_fan_duct_nozzle");
 
+    // magnum
+//    heigth = 20;
+    // magnum+
+    heigth = 20 + 19;
+
     module object(d, cutout = false) {
         hull() {
             cylinder(d = d, h = .1);
-            translate([0, 0, - 20])
+            translate([0, 0, - heigth])
                 rotate([0, 76, 0])
                     resize([d / 2, d * 4])
                         if (cutout)
@@ -186,17 +191,17 @@ module toolhead_extruder_heatbreak_mosquito_fan_duct_nozzle() {
                             cylinder(d = d, h = 3);
         }
         if (cutout)
-            translate([0, 0, - 20])
+            translate([0, 0, - heigth])
                 rotate([0, 76, 0])
                     resize([d / 2, d * 4])
                         rotate([0, 180, 0])
                             translate_z(- 1)
                             cylinder(d = d, h = 10);
 
-        //      направление воздушного потока
-        //        translate([0, 0, - 20])
-        //        rotate([0, 76-180, 0])
-        //        cylinder(d=1, h = 100);
+//              направление воздушного потока
+//                translate([0, 0, - heigth])
+//                rotate([0, 76-180, 0])
+//                cylinder(d=1, h = 100);
     }
 
     toolhead_extruder_heatbreak_mosquito_fan_duct_exits(m = true) difference() {
@@ -293,8 +298,8 @@ module toolhead_extruder_mosquito_bottom_plate(
 
 //translate_z(- 21.5)
 //rotate([0, 180, 0])
-//    //translate([0,50,0])
-//    toolhead_extruder_mosquito_heatbreak_fan_duct_nozzle_stl();
+    //translate([0,50,0])
+    toolhead_extruder_mosquito_heatbreak_fan_duct_nozzle_stl();
 //difference() {
 //    cube([100,100,100]);
 //}

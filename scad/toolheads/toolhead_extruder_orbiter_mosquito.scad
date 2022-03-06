@@ -6,6 +6,7 @@ use <toolhead_extruder_orbiter_generic.scad>
 
 use <../../lib/hotend_mosquito/heatbreak.scad>
 use <../../lib/hotend_mosquito/mosquito_magnum_hotend.scad>
+use <../../lib/hotend_mosquito/mosquito_magnum_plus_hotend.scad>
 
 
 module toolhead_extruder_orbiter_vitamins_assembly(
@@ -31,7 +32,7 @@ width, length, heigth, inset_length, inset_depth, motor_type) {
 
     extruder_orbiter_hot_end_position() {
         translate_z(- 3)
-        mosquito_magnum_hotend_assembly();
+        mosquito_magnum_plus_hotend_assembly();
         translate_z(- 21.5 - 3) {
             toolhead_extruder_heatbreak_mosquito_cooler(length, cut_half = true);
             toolhead_extruder_heatbreak_mosquito_fan_duct_nozzle();
@@ -81,3 +82,5 @@ module toolhead_extruder_orbiter_mosquito_assembly(
 //    heigth = 29
 //);
 //toolhead_extruder_orbiter_mount_60x100x80_NEMA17S_5_stl();
+rotate([0,180,0])
+toolhead_extruder_heatbreak_mosquito_fan_duct_nozzle();

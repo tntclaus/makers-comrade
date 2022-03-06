@@ -2,7 +2,10 @@ include <NopSCADlib/utils/core/core.scad>
 
 function mosquito_radiator_heigth() = 25;
 function mosquito_radiator_width() = 25;
-function mosquito_radiator_depth() = 14;
+//original slice engenieering
+function mosquito_radiator_depth() = 14.8;
+// chinese clone
+//function mosquito_radiator_depth() = 14;
 
 
 module mosquito_radiator_hotend_stands_placement() {

@@ -12,10 +12,10 @@ use <../../axes/y-axis.scad>
 use <../../axes/z-axis.scad>
 
 module enclosure_assembly(
-    AXIS_X_SIZE,
-    AXIS_Y_SIZE,
-    AXIS_Z_SIZE,
-    BASE_HEIGTH) {
+AXIS_X_SIZE,
+AXIS_Y_SIZE,
+AXIS_Z_SIZE,
+BASE_HEIGTH) {
 
     outerXAxisWidth = outerXAxisWidth(AXIS_X_SIZE) - 20;
     outerYAxisWidth = realYAxisLength(AXIS_Y_SIZE) + 20;
@@ -46,13 +46,14 @@ module enclosure_assembly(
             window_w = realYAxisLength(AXIS_Y_SIZE)
             );
 
-        translate([0, outerYAxisWidth / 2 + 13, 0])
+        translate([0, outerYAxisWidth / 2 + 13, 0]) {
             enclosure_side_dual_z(
             width = outerXAxisWidth + 40,
             heigth = BASE_HEIGTH,
             window_h = realZAxisLength(AXIS_Z_SIZE),
             x_length = AXIS_X_SIZE
             );
+        }
 
         translate([0, - (outerYAxisWidth / 2 + 13), 0])
             enclosure_side_single_z(
@@ -64,7 +65,7 @@ module enclosure_assembly(
         enclosure_bottom_plate(
             outerXAxisWidth + 40,
             realYAxisLength(AXIS_Y_SIZE) + 40,
-            realYAxisLength(AXIS_Y_SIZE)+20,
+            realYAxisLength(AXIS_Y_SIZE) + 20,
         AXIS_X_SIZE
         );
 
@@ -78,5 +79,4 @@ module enclosure_assembly(
 }
 
 
-
-
+//STEEL_3mm_enclosure_front_470x490mm_w430x360_lh67_dxf();

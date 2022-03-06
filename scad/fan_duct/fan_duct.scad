@@ -10,18 +10,39 @@ include <../../lib/utils.scad>
 
 
 
-module fanduct_stl() {
-    fanduct();
+//module fanduct_stl() {
+//    fanduct();
+//}
+
+module fanduct_circles(d, circles, offcenter) {
+    if(circles == 2)
+        fanduct_two_circles(d, offcenter);
+    else
+        circle(d = d);
+}
+module fanduct_two_circles(d, offcenter = 5.2) {
+    translate([- offcenter, 0])
+        circle(d = d);
+    translate([offcenter, 0])
+        circle(d = d);
 }
 
-module fanduct(blowerType = RB5015)
-{
-    stl("fanduct");
+module fanduct(
+    type = RB5015,
+    make_hull = false,
+    circles = 2,
+    hole_odia = 10,
+    hole_idia = 6,
+    height = 11.051,
+    throat_height = 10,
+    throat_top_thickness = 3,
+    throat_side_thickness = 3,
+    offcenter = 5.2
+) {
+    function thick() = make_hull ? -.2 : .2;
 
-    exit_depth = blower_depth(blowerType) + .2;
-    exit_width = blower_exit(blowerType) + .2;
-
-    height = 20;
+    exit_depth = blower_depth(type) + thick();
+    exit_width = blower_exit(type) + thick();
 
     //    translate_z(2.4)
     //    tube_adapter(exit_depth, exit_width, height, wall, 6, 10);
@@ -30,23 +51,19 @@ module fanduct(blowerType = RB5015)
     //    color("green")
     //    rectangular_tube([exit_width+2.5, exit_depth+2.5, 4], thickness = 1.2, fillet = 0.1);
 
-    module two_circles(d) {
-        translate([- 6.5, 0])
-            circle(d = d);
-        translate([6.5, 0])
-            circle(d = d);
-    }
 
-    tube_from_shapes(height, heigth_0 = 1, heigth_1 = 4) {
-        hull() two_circles(8);
-        union() two_circles(6);
-        square([exit_width + 1, exit_depth + 1], center = true);
+    tube_from_shapes(height, heigth_0 = 1, heigth_1 = 6) {
+        hull() fanduct_circles(hole_odia, circles, offcenter);
+        union() fanduct_circles(hole_idia, circles, offcenter);
+        square([exit_width + throat_side_thickness, exit_depth + throat_top_thickness], center = true);
         square([exit_width, exit_depth], center = true);
     }
-    translate_z(height+5) difference() {
-        linear_extrude(7) two_circles(8);
+
+    if(!make_hull)
+    translate_z(height+6) difference() {
+        linear_extrude(throat_height, convexity = 3) fanduct_circles(hole_odia + 3, circles, offcenter);
         translate_z(-.01)
-        linear_extrude(7.1) two_circles(6);
+        linear_extrude(throat_height + .1) fanduct_circles(hole_odia, circles, offcenter);
     }
 }
 
@@ -67,6 +84,6 @@ module fanduct_assembly(blowerType = RB5015) {
     //    blower_centered(blowerType);
 }
 
-fanduct_assembly();
+//fanduct_assembly();
 
 //blower_centered(RB5015);
