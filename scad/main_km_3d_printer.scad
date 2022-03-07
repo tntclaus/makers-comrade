@@ -128,8 +128,11 @@ module km_frame_assembly(zpos = 0, xypos = 0) {
                 y = outerYAxisWidth / 2;
                 for (ix = [x, - x])
                 for (iy = [y, - y])
-                translate([ix, iy, 0])
+                translate([ix, iy, 0]) {
                     extrusion(E2020, BASE_HEIGTH);
+                    translate_z((BASE_HEIGTH + CAP_HEIGTH)/2 + CAP_HEIGTH/4 - MATERIAL_DOOR_TOP_THICKNESS - MATERIAL_STEEL_THICKNESS)
+                    extrusion(E2020, CAP_HEIGTH/2);
+                }
             }
         }
     }

@@ -41,19 +41,19 @@ module enclosure_door_top_sketch(width, length) {
         square([width, length],center = true);
 
         enclosure_door_top_place_hinges(width+MATERIAL_STEEL_THICKNESS*2, length)
-        tool_cutter_fastener_place(4, 1) circle(d = 3);
+        tool_cutter_fastener_place(4, 1) circle(r = M3_clearance_radius);
 
         enclosure_door_top_frame_place_screws(width) {
             translate([0, length/2 - 5, 0])
-                circle(d = 3);
+                circle(r = M3_clearance_radius);
             translate([0, -(length/2 - 5), 0])
-                circle(d = 3);
+                circle(r = M3_clearance_radius);
         }
 
         translate([(width/2 - 5), 0, 0])
         rotate([0,0,90])
         enclosure_door_top_frame_place_screws(length-20) {
-                circle(d = 3);
+                circle(r = M3_clearance_radius);
         }
     }
 }
@@ -90,7 +90,7 @@ module enclosure_door_top_frame_hinge_part_sketch(length) {
         translate([0,8,0])
         rotate([0,0,-90])
         enclosure_door_top_place_hinges(0, length+20)
-        tool_cutter_fastener_place(4, 1) circle(d = 2.3);
+        tool_cutter_fastener_place(4, 1) circle(r = M3_tap_radius);
     }
 }
 
@@ -118,7 +118,7 @@ module enclosure_door_top_frame(length) {
 module enclosure_door_top_frame_sketch(length) {
     difference() {
         square([length, 10], center = true);
-        enclosure_door_top_frame_place_screws(length) circle(d = 2.3);
+        enclosure_door_top_frame_place_screws(length) circle(r = M3_tap_radius);
     }
 }
 

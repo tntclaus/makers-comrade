@@ -22,21 +22,21 @@ BASE_HEIGTH) {
 
     assembly("enclosure") {
         translate([- outerXAxisWidth(AXIS_X_SIZE) / 2 - 13, 0, 0]) {
-            enclosure_front(
-            width = realYAxisLength(AXIS_Y_SIZE) + 40,
-            heigth = BASE_HEIGTH,
-            window_w = realYAxisLength(AXIS_Y_SIZE),
-            window_h = realZAxisLength(AXIS_Z_SIZE) - 20,
-            window_translate_z = 25
-            );
+//            enclosure_front(
+//            width = realYAxisLength(AXIS_Y_SIZE) + 40,
+//            heigth = BASE_HEIGTH,
+//            window_w = realYAxisLength(AXIS_Y_SIZE),
+//            window_h = realZAxisLength(AXIS_Z_SIZE) - 20,
+//            window_translate_z = 25
+//            );
 
-            plastic_doors_assembly(
-            width = realYAxisLength(AXIS_Y_SIZE),
-            heigth = realZAxisLength(AXIS_Z_SIZE) - 20,
-            side = 0,
-            thickness = 5,
-            angle = 60
-            );
+//            plastic_doors_assembly(
+//            width = realYAxisLength(AXIS_Y_SIZE),
+//            heigth = realZAxisLength(AXIS_Z_SIZE) - 20,
+//            side = 0,
+//            thickness = 5,
+//            angle = 60
+//            );
         }
 
         translate([outerXAxisWidth(AXIS_X_SIZE) / 2 + 13, 0, 0])
@@ -72,11 +72,11 @@ BASE_HEIGTH) {
         rotate([0,0,180])
         translate_z(BASE_HEIGTH + enclosure_cap_heigth() - 5)
         enclosure_door_top(
-            outerXAxisWidth+40,outerYAxisWidth+20, angle = 30
+            outerXAxisWidth+40,outerYAxisWidth+20, angle = 40
         //, $preview_screws = false
         );
     }
 }
 
 
-//STEEL_3mm_enclosure_front_470x490mm_w430x360_lh67_dxf();
+//STEEL_3mm_enclosure_back_476x490mm_w430_lh67_dxf();

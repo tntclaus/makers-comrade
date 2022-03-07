@@ -3,10 +3,20 @@ include <NopSCADlib/utils/rounded_polygon.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
 MATERIAL_STEEL_THICKNESS = 3;
+MATERIAL_DOOR_TOP_THICKNESS = 5;
 CAP_HEIGTH = 135 + 40 + 40;
 
 function enclosure_material_thickness() = MATERIAL_STEEL_THICKNESS;
 function enclosure_cap_heigth() = CAP_HEIGTH;
+
+
+module enclosure_cap_place_mounts() {
+    translate([0, -10 - MATERIAL_STEEL_THICKNESS - MATERIAL_DOOR_TOP_THICKNESS, 0])
+        children();
+
+    translate([0, -CAP_HEIGTH/2+42, 0])
+        children();
+}
 
 function ENCLOSURE_FULL_SHAPE(w, h, lh, rc = 0, r = 5) = [
     // corners
@@ -90,11 +100,12 @@ module enclosure_base_sketch(width, heigth, lh, overlap) {
                 square([width, CAP_HEIGTH + 20], center = true);
         }
         // vertical screw mount perforation
-        enclosure_base_place_dual_vertical_perforation(width, heigth, overlap) circle(d = 5);
+        enclosure_base_place_dual_vertical_perforation(width, heigth, overlap)
+        circle(r = M5_clearance_radius);
 
         // bottom horizontal screw mount perforation
-        enclosure_base_place_horizontal_perforation(width, heigth, lh + MATERIAL_STEEL_THICKNESS, overlap) circle(d = 5)
-            ;
+        enclosure_base_place_horizontal_perforation(width, heigth, lh + MATERIAL_STEEL_THICKNESS, overlap)
+        circle(r = M5_clearance_radius);
     }
 }
 
@@ -102,7 +113,8 @@ module enclosure_base_front_back_sketch(width, heigth, window_w, lh, overlap) {
     difference() {
         enclosure_base_sketch(width, heigth, lh, overlap);
 
-        enclosure_front_back_place_horizontal_top_perforation(width, heigth) circle(d = 5);
+        enclosure_front_back_place_horizontal_top_perforation(width, heigth)
+        circle(r = M5_clearance_radius);
 
         translate([0, heigth / 2 - 5])
             rounded_square([window_w, 25], 5, center = true);

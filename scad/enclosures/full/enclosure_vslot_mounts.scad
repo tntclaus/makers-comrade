@@ -4,7 +4,8 @@ include <NopSCADlib/utils/rounded_polygon.scad>
 module enclosure_vslot_mount_line_vertical(length) {
     color("silver")
         enclosure_vslot_mount_line(length, "vertical")
-        enclosure_base_place_vertical_perforation(length) circle(d = 4.1);
+        enclosure_base_place_vertical_perforation(length)
+        circle(r = M5_tap_radius);
 }
 
 module enclosure_vslot_mount_line_horizontal(length, overlap) {
@@ -12,7 +13,7 @@ module enclosure_vslot_mount_line_horizontal(length, overlap) {
         enclosure_vslot_mount_line(length - 40, str("horizontal_bottom_o", overlap, "_leg", $LEG_HEIGTH), vertical =
         false)
         enclosure_base_place_horizontal_perforation(length + overlap * 2, $LEG_HEIGTH * 2 + 20, $LEG_HEIGTH, 0)
-        circle(d = 4.1);
+        circle(r = M5_tap_radius);
 }
 
 module enclosure_vslot_mount_line(length, name, vertical = true) {
@@ -37,6 +38,17 @@ module screw_mount_line_sketch(length, vertical = true) {
 
 module enclosure_shared_parts(width, heigth, overlap = 0, top_horizontal_shift = 0) {
     translate_z(- MATERIAL_STEEL_THICKNESS * 2 - 1.8){
+        ch =       (heigth + CAP_HEIGTH/2)/2 + CAP_HEIGTH/2 - MATERIAL_STEEL_THICKNESS - MATERIAL_DOOR_TOP_THICKNESS;
+
+        translate([width / 2 - 10, ch, 0])
+            rotate([180,0,0])
+            enclosure_vslot_mount_line_vertical(CAP_HEIGTH / 2);
+        translate([- (width / 2 - 10), ch, 0])
+            rotate([180,0,0])
+            enclosure_vslot_mount_line_vertical(CAP_HEIGTH / 2);
+
+
+
         translate([width / 2 - 10, 0, 0])
             enclosure_vslot_mount_line_vertical(heigth);
         translate([- (width / 2 - 10), 0, 0])
@@ -53,21 +65,22 @@ module enclosure_shared_parts(width, heigth, overlap = 0, top_horizontal_shift =
 module STEEL_3mm_enclosure_slot_mount_line_l430_horizontal_bottom_o3_leg70_dxf() {
     screw_mount_line_sketch(430, vertical = false)
     enclosure_base_place_horizontal_perforation(430 + 40 + 3 * 2, 160, 70, 0)
-    circle(d = 4.1);
+    circle(r = M5_tap_radius);
 }
 
 module STEEL_3mm_enclosure_slot_mount_line_l430_horizontal_bottom_o0_leg70_dxf() {
     screw_mount_line_sketch(430, vertical = false)
     enclosure_base_place_horizontal_perforation(430 + 40, 160, 70, 0)
-    circle(d = 4.1);
+    circle(r = M5_tap_radius);
 }
 module STEEL_3mm_enclosure_slot_mount_line_l460_horizontal_bottom_o0_leg70_dxf() {
     screw_mount_line_sketch(460, vertical = false)
     enclosure_base_place_horizontal_perforation(460 + 40, 160, 70, 0)
-    circle(d = 4.1);
+    circle(r = M5_tap_radius);
 }
 module STEEL_3mm_enclosure_slot_mount_line_l490_vertical_dxf() {
     screw_mount_line_sketch(490, vertical = true)
-    enclosure_base_place_vertical_perforation(490) circle(d = 4.1);
+    enclosure_base_place_vertical_perforation(490)
+    circle(r = M5_tap_radius);
 }
 

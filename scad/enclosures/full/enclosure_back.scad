@@ -45,7 +45,15 @@ module enclosure_back_sketch(width, heigth, window_w, lh) {
         enclosure_door_top_place_hinges(0, width)
         mirror([1,0,0])
         tool_cutter_fastener_place(4, 1)
-        circle(d = 2.3);
+        circle(r = M3_tap_radius);
+
+        translate([width/2-10-MATERIAL_STEEL_THICKNESS, heigth/2+CAP_HEIGTH])
+            enclosure_cap_place_mounts()
+            circle(r = M5_clearance_radius);
+
+        translate([-(width/2-10-MATERIAL_STEEL_THICKNESS), heigth/2+CAP_HEIGTH])
+            enclosure_cap_place_mounts()
+            circle(r = M5_clearance_radius);
     }
 }
 
@@ -53,4 +61,4 @@ module STEEL_3mm_enclosure_back_476x490mm_w430_lh67_dxf() {
         enclosure_back_sketch(width = 476, heigth = 490, window_w = 430, lh = 67);
 }
 
-//STEEL_3mm_enclosure_back_470x490mm_w430_lh67_dxf();
+//STEEL_3mm_enclosure_back_476x490mm_w430_lh67_dxf();

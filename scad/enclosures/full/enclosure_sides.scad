@@ -31,14 +31,24 @@ module enclosure_side_window_shape(heigth, with_holes = true) {
         rounded_square([20, heigth], 5);
     }
 
-    if (with_holes) enclosure_side_window_place_holes(heigth) circle(d = 5);
+    if (with_holes) enclosure_side_window_place_holes(heigth) circle(r = M5_clearance_radius);
 }
 
 module enclosure_base_side_sketch(width, heigth, window_h, lh, overlap) {
     difference() {
         enclosure_base_sketch(width, heigth, lh, overlap);
 
-        enclosure_side_place_horizontal_top_perforation(width, heigth) circle(d = 5);
+        enclosure_side_place_horizontal_top_perforation(width, heigth) circle(r = M5_clearance_radius);
+
+
+
+        translate([width/2-10, heigth/2+CAP_HEIGTH])
+            enclosure_cap_place_mounts()
+            circle(r = M5_clearance_radius);
+
+        translate([-(width/2-10), heigth/2+CAP_HEIGTH])
+            enclosure_cap_place_mounts()
+            circle(r = M5_clearance_radius);
     }
 }
 
@@ -110,11 +120,11 @@ module enclosure_base_side_dual_z_sketch(width, heigth, window_h, x_length, lh, 
 
         enclosure_side_place_psu_case()
         electronics_box_psu_case_mounts()
-        circle(d = 4);
+        circle(r = M4_clearance_radius);
 
         enclosure_side_place_gas_lift_wall(width-10, heigth)
         gas_lift_mounts()
-        circle(d = M4_tap_radius);
+        circle(r = M4_tap_radius);
     }
 }
 
@@ -129,7 +139,7 @@ module enclosure_side_z_axis_mount_line(length) {
             linear_extrude(MATERIAL_STEEL_THICKNESS)
                 screw_mount_line_sketch(length, true)
                 translate([0, - 35, 0])
-                    enclosure_side_window_place_holes(length) circle(d = 4.1);
+                    enclosure_side_window_place_holes(length) circle(r = M5_tap_radius);
 }
 
 
@@ -251,7 +261,7 @@ module STEEL_3mm_enclosure_slot_z_mount_line_l380_dxf() {
     length = 380;
     screw_mount_line_sketch(length, true)
     translate([0, - 35, 0])
-        enclosure_side_window_place_holes(length) circle(d = 4.1);
+        enclosure_side_window_place_holes(length) circle(r = M5_tap_radius);
 }
 
 

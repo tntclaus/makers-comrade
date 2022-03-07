@@ -60,8 +60,10 @@ module enclosure_bottom_plate_sketch(width, length, xAxisSize, lengthX) {
                 square(40, center = true);
 
             enclosure_bottom_plate_place_mounts(width, length){
-                enclosure_place_horizontal_perforation(width) circle(d = 5.1);
-                enclosure_place_horizontal_perforation(length) circle(d = 5.1);
+                enclosure_place_horizontal_perforation(width)
+                circle(r = M5_clearance_radius);
+                enclosure_place_horizontal_perforation(length)
+                circle(r = M5_clearance_radius);
             }
         }
 

@@ -96,16 +96,16 @@ module plastic_door_sketch(door_width, door_heigth) {
             for (pos = door_hinge_pos(- door_width, door_heigth))
             translate(pos)
                 //            mirror([1, 0])
-                tool_cutter_fastener_place(6, 1) circle(d = 3);
+                tool_cutter_fastener_place(6, 1) circle(r = M3_clearance_radius);
 
 
 
             // магнит
             translate([- 10, door_heigth / 2 - 10 - DOOR_OVERLAP / 2, 0])
-                circle(d = 3);
+                circle(r = M3_clearance_radius);
 
             translate([- 10, - door_heigth / 2 + 10 + DOOR_OVERLAP / 2, 0])
-                circle(d = 3);
+                circle(r = M3_clearance_radius);
         }
 }
 

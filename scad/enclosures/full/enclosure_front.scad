@@ -42,24 +42,33 @@ module enclosure_front(width, heigth, window_w, window_h, window_translate_z) {
 
 module enclosure_front_sketch(width, heigth, window_w, window_h, window_translate_z, lh) {
     difference() {
-        enclosure_base_front_back_sketch(width, heigth, window_w = window_w, lh = lh, overlap = MATERIAL_STEEL_THICKNESS
-        );
+        enclosure_base_front_back_sketch(width, heigth, window_w = window_w, lh = lh, overlap = MATERIAL_STEEL_THICKNESS);
 
         translate([0, window_translate_z]) {
             rounded_square([window_w, window_h], 10, center = true);
 
             for (pos = door_hinge_pos(door_width(window_w), door_heigth(window_h)))
             translate(pos)
-                tool_cutter_fastener_place(6, 1) circle(d = 2.2);
+                tool_cutter_fastener_place(6, 1) circle(r = M3_tap_radius);
 
             mirror([1, 0])
                 for (pos = door_hinge_pos(door_width(window_w), door_heigth(window_h)))
                 translate(pos)
-                    tool_cutter_fastener_place(6, 1) circle(d = 2.2);
+                    tool_cutter_fastener_place(6, 1) circle(r = M3_tap_radius);
         }
+
+        translate([width/2-10-MATERIAL_STEEL_THICKNESS, heigth/2+CAP_HEIGTH])
+            enclosure_cap_place_mounts()
+                circle(r = M5_clearance_radius);
+
+        translate([-(width/2-10-MATERIAL_STEEL_THICKNESS), heigth/2+CAP_HEIGTH])
+            enclosure_cap_place_mounts()
+                circle(r = M5_clearance_radius);
     }
 }
 
 module STEEL_3mm_enclosure_front_476x490mm_w430x360_lh67_wtz25_dxf() {
     enclosure_front_sketch(width = 476, heigth = 490, window_w = 430, window_h = 360, window_translate_z = 25, lh = 67);
 }
+
+//STEEL_3mm_enclosure_front_476x490mm_w430x360_lh67_wtz25_dxf();
