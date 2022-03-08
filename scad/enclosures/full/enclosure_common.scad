@@ -4,6 +4,7 @@ include <NopSCADlib/vitamins/screws.scad>
 
 MATERIAL_STEEL_THICKNESS = 3;
 MATERIAL_DOOR_TOP_THICKNESS = 5;
+MATERIAL_SIDE_WINDOW_THICKNESS = 2;
 CAP_HEIGTH = 135 + 40 + 40;
 
 function enclosure_material_thickness() = MATERIAL_STEEL_THICKNESS;

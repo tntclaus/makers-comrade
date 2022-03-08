@@ -16,7 +16,8 @@ module ABS_door_hinge_stl() {
 module hinge(angle = 0) {
     stl("ABS_door_hinge");
 
-    color("teal") rotate([0.0, 0.0, 0.0]) {
+    color("teal")
+    rotate([0.0, 0.0, 0.0]) {
         leaf(C_FEMALE);
         rotate([0.0, angle, 0.0]) leaf(C_MALE);
     }
@@ -34,10 +35,10 @@ module door_hinge_assembly(angle = 0) {
 
         if ($preview_screws)
         translate_z(- 1) {
-            tool_cutter_fastener_place(6, 1) screw(M3_pan_screw, 12);
+            tool_cutter_fastener_place(4, 1) screw(M3_pan_screw, 12);
 
             rotate_about_pt(y = angle, pt = [0, 0, 0])
-            mirror([1, 0, 0]) tool_cutter_fastener_place(6, 1) {
+            mirror([1, 0, 0]) tool_cutter_fastener_place(4, 1) {
                 screw(M3_pan_screw, 12);
                 translate_z(- 12)
                 nut(screw_nut(M3_pan_screw));
@@ -96,7 +97,7 @@ module plastic_door_sketch(door_width, door_heigth) {
             for (pos = door_hinge_pos(- door_width, door_heigth))
             translate(pos)
                 //            mirror([1, 0])
-                tool_cutter_fastener_place(6, 1) circle(r = M3_clearance_radius);
+                tool_cutter_fastener_place(4, 1) circle(r = M3_clearance_radius);
 
 
 
@@ -112,7 +113,8 @@ module plastic_door_sketch(door_width, door_heigth) {
 module platic_door_hinge_spacer() {
     dxf("PC_5mm_door_hinge_spacer")
     difference() {
-        rotate([0.0, 180.0, 0.0]) leaf(C_FEMALE);
+        rotate([0.0, 180.0, 0.0])
+            leaf(C_FEMALE);
 
         translate([35 / 2 - 5, 0, 1])
             cube([35, 100, 20], center = true);

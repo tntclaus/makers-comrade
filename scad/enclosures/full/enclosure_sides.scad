@@ -9,6 +9,7 @@ include <NopSCADlib/utils/core/rounded_rectangle.scad>
 use <../../electronics_box.scad>
 use <../../spool_holder.scad>
 
+
 module enclosure_side_window_place_holes(heigth) {
     translate([0, 35]) {
         translate([0, (heigth - 60) / 2, 0]) children();
@@ -20,10 +21,9 @@ module enclosure_side_window_place_holes(heigth) {
 }
 
 
-module enclosure_side_window_shape(heigth, with_holes = true) {
+module enclosure_side_window_shape(heigth, lh, with_holes = true) {
     tongueOffset = (heigth) / 2;
 
-    //        rounded_polygon(enclosure_side_window_shape(80, heigth, 20, 30));
     translate([- 20, 35]) difference() {
         rounded_square([20, heigth], 5);
     }
@@ -31,7 +31,9 @@ module enclosure_side_window_shape(heigth, with_holes = true) {
         rounded_square([20, heigth], 5);
     }
 
-    if (with_holes) enclosure_side_window_place_holes(heigth) circle(r = M5_clearance_radius);
+    if (with_holes)
+    enclosure_side_window_place_holes(heigth)
+    circle(r = M5_clearance_radius);
 }
 
 module enclosure_base_side_sketch(width, heigth, window_h, lh, overlap) {
@@ -56,7 +58,7 @@ module enclosure_base_side_sketch(width, heigth, window_h, lh, overlap) {
 module enclosure_base_side_single_z_sketch(width, heigth, window_h, lh, overlap) {
     difference() {
         enclosure_base_side_sketch(width, heigth, window_h, lh, overlap);
-        enclosure_side_window_shape(window_h);
+        enclosure_side_window_shape(window_h, lh);
     }
 }
 
@@ -102,7 +104,7 @@ module enclosure_base_side_dual_z_sketch(width, heigth, window_h, x_length, lh, 
     difference() {
         enclosure_base_side_sketch(width, heigth, window_h, lh, overlap);
         enclosure_side_window_place_dual_windows(x_length)
-        enclosure_side_window_shape(window_h);
+        enclosure_side_window_shape(window_h, lh);
 
         translate([- width / 2, heigth / 2 + MOTOR_LEFT_ELEVATION_PLATES_COUNT() * 3])
             rounded_polygon(MOTOR_WINDOW_COORDINATES());
@@ -130,7 +132,7 @@ module enclosure_base_side_dual_z_sketch(width, heigth, window_h, x_length, lh, 
 
 
 
-module enclosure_side_z_axis_mount_line(length) {
+module enclosure_side_z_axis_mount_line(length, lh) {
     name = str("STEEL_3mm_enclosure_slot_z_mount_line_l", length);
     dxf(name);
 
@@ -145,8 +147,6 @@ module enclosure_side_z_axis_mount_line(length) {
 
 
 module enclosure_side_place_spool_holder(x_length) {
-//    echo("dual", zAxisDualPosition(x_length));
-
     pos = zAxisDualPosition(x_length) > 195 ? 195 : zAxisDualPosition(x_length)+70;
 
     translate([pos, 0, 0])
@@ -157,6 +157,27 @@ module enclosure_side_place_psu_case() {
     translate([-25,-50, 0])
         rotate([0,0,-90])
     children();
+}
+
+module enclosure_side_window(heigth) {
+    name = str("PC_", MATERIAL_SIDE_WINDOW_THICKNESS, "mm", "_enclosure_side_window_h", heigth);
+    dxf(name);
+
+    translate([0,35,0])
+    color("blue", 0.5)
+    enclosure_side_window_sketch(heigth);
+}
+module enclosure_side_window_sketch(heigth) {
+    difference() {
+        rounded_square([60 + 2, heigth+2], 5);
+
+//        translate([0,35,0])
+        circle(r = screw_head_radius(M5_cap_screw)+1);
+
+        translate([0,-35,0])
+        enclosure_side_window_place_holes(heigth)
+        circle(r = M5_clearance_radius);
+    }
 }
 
 module enclosure_side_dual_z(width, heigth, window_h, x_length) {
@@ -193,7 +214,11 @@ module enclosure_side_dual_z(width, heigth, window_h, x_length) {
         enclosure_shared_parts(width, heigth, top_horizontal_shift = 20);
 
         enclosure_side_window_place_dual_windows(x_length)
-        enclosure_side_z_axis_mount_line(window_h);
+        enclosure_side_z_axis_mount_line(window_h, lh);
+
+        translate_z(MATERIAL_SIDE_WINDOW_THICKNESS/4)
+        enclosure_side_window_place_dual_windows(x_length)
+        enclosure_side_window(window_h);
 
         if ($preview_screws) {
             enclosure_base_place_dual_vertical_perforation(width_full, heigth, 0)
@@ -232,7 +257,10 @@ module enclosure_side_single_z(width, heigth, window_h) {
 
         enclosure_shared_parts(width, heigth, top_horizontal_shift = 20);
 
-        enclosure_side_z_axis_mount_line(window_h);
+        enclosure_side_z_axis_mount_line(window_h, lh);
+
+        translate_z(MATERIAL_SIDE_WINDOW_THICKNESS/2)
+        enclosure_side_window(window_h);
 
         if ($preview_screws) {
             enclosure_base_place_dual_vertical_perforation(width_full, heigth, 0)
@@ -264,9 +292,14 @@ module STEEL_3mm_enclosure_slot_z_mount_line_l380_dxf() {
         enclosure_side_window_place_holes(length) circle(r = M5_tap_radius);
 }
 
+module PC_2mm_enclosure_side_window_h380_dxf() {
+    enclosure_side_window_sketch(heigth = 380);
+}
 
-////////
-// ELECTRONIX BOX
-////////
+enclosure_side_single_z(
+500, 490, 380, $LEG_HEIGTH = 70,
+$preview_left_side_parts = true,
+$preview_screws = false
+);
 
 

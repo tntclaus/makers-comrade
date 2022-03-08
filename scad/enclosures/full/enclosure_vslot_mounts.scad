@@ -1,6 +1,8 @@
 include <enclosure_common.scad>
 include <NopSCADlib/utils/rounded_polygon.scad>
 
+use <../../../lib/utils.scad>
+
 module enclosure_vslot_mount_line_vertical(length) {
     color("silver")
         enclosure_vslot_mount_line(length, "vertical")
@@ -17,7 +19,11 @@ module enclosure_vslot_mount_line_horizontal(length, overlap) {
 }
 
 module enclosure_vslot_mount_line(length, name, vertical = true) {
-    name = str("STEEL_3mm_enclosure_slot_mount_line_l", length, "_", name);
+    name = str(
+        "STEEL_3mm_enclosure_slot_mount_line_l",
+        str_replace(str(length), ".", "_"),
+        "_", name);
+
     dxf(name);
 
     linear_extrude(MATERIAL_STEEL_THICKNESS)
@@ -73,14 +79,21 @@ module STEEL_3mm_enclosure_slot_mount_line_l430_horizontal_bottom_o0_leg70_dxf()
     enclosure_base_place_horizontal_perforation(430 + 40, 160, 70, 0)
     circle(r = M5_tap_radius);
 }
+
 module STEEL_3mm_enclosure_slot_mount_line_l460_horizontal_bottom_o0_leg70_dxf() {
     screw_mount_line_sketch(460, vertical = false)
     enclosure_base_place_horizontal_perforation(460 + 40, 160, 70, 0)
     circle(r = M5_tap_radius);
 }
+
 module STEEL_3mm_enclosure_slot_mount_line_l490_vertical_dxf() {
     screw_mount_line_sketch(490, vertical = true)
     enclosure_base_place_vertical_perforation(490)
     circle(r = M5_tap_radius);
 }
 
+module STEEL_3mm_enclosure_slot_mount_line_l107_5_vertical_dxf() {
+    screw_mount_line_sketch(107.5, vertical = true)
+    enclosure_base_place_vertical_perforation(107.5)
+    circle(r = M5_tap_radius);
+}

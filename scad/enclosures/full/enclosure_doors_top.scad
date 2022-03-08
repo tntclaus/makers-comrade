@@ -123,12 +123,15 @@ module enclosure_door_top_frame_sketch(length) {
 }
 
 module enclosure_door_top(width, length, angle = 0) {
+    name = str("PC_",MATERIAL_DOOR_TOP_THICKNESS, "mm", "_enclosure_top_door_", width, "x", length);
+
+    dxf(name);
     translate_z(10){
         translate_z(- 10)
 //        translate([-5,0,0])
         rotate_about_pt(y = - angle, pt = [-width/2-(MATERIAL_STEEL_THICKNESS*2+2), 0, MATERIAL_STEEL_THICKNESS*2+4])
         color("blue", 0.5)
-            linear_extrude(5)
+            linear_extrude(MATERIAL_DOOR_TOP_THICKNESS)
                 enclosure_door_top_sketch(width, length);
 
 
@@ -163,6 +166,6 @@ module enclosure_door_top(width, length, angle = 0) {
     screw(M3_pan_screw, 8);
 }
 
-//enclosure_door_top(400,390, angle = 60
-////, $preview_screws = false
-//);
+module PC_5mm_enclosure_top_door_500x470_dxf() {
+    enclosure_door_top_sketch(500, 470);
+}
