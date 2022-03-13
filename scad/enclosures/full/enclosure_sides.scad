@@ -86,7 +86,7 @@ function MOTOR_LEFT_ELEVATION_PLATES_COUNT() = 5;
 module gas_lift_mounts() {
     for(a  = [0, 120, 240])
     rotate([0,0,a])
-    translate([0, 10.5])
+    translate([0, 10])
     children();
 }
 
@@ -296,10 +296,10 @@ module PC_2mm_enclosure_side_window_h380_dxf() {
     enclosure_side_window_sketch(heigth = 380);
 }
 
-enclosure_side_single_z(
-500, 490, 380, $LEG_HEIGTH = 70,
-$preview_left_side_parts = true,
-$preview_screws = false
-);
+//enclosure_side_single_z(
+//500, 490, 380, $LEG_HEIGTH = 70,
+//$preview_left_side_parts = true,
+//$preview_screws = false
+//);
 
 
