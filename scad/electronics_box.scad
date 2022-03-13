@@ -449,7 +449,7 @@ module blower_centered(type) {
         children();
 }
 
-module electronics_box_plastic_case_top_w120_l180_th3() {
+module electronics_box_plastic_case_top_w120_l180_th3_stl() {
     electronics_box_plastic_case_top(width = 120, length = 180, th = 3);
 }
 
@@ -1096,7 +1096,7 @@ module electronics_box_lcd_vesa_75() {
 //
 //translate_z(180)
 //rotate([0,180,0])
-//electronics_box_plastic_case_top_w120_l180_th3();
+//electronics_box_plastic_case_top_w120_l180_th3_stl();
 
 
 //projection()

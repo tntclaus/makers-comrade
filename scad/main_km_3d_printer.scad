@@ -92,7 +92,13 @@ module km_frame_assembly(zpos = 0, xypos = 0) {
             rotate([0, 0, 90])
                 y_axis_assembly(xypos, AXIS_Y_SIZE, AXIS_X_SIZE) {
                     if ($preview_tool) {
-                        //                    toolhead_spindle_assembly(
+                        toolhead_spindle_assembly(
+                        width = 60,
+                        length = 100,
+                        inset_length = 80,
+                        inset_depth = 8,
+                        heigth = 29
+                        );
                         toolhead_extruder_orbiter_mosquito_assembly(
                         width = 60,
                         length = 100,
@@ -130,8 +136,9 @@ module km_frame_assembly(zpos = 0, xypos = 0) {
                 for (iy = [y, - y])
                 translate([ix, iy, 0]) {
                     extrusion(E2020, BASE_HEIGTH);
-                    translate_z((BASE_HEIGTH + CAP_HEIGTH)/2 + CAP_HEIGTH/4 - MATERIAL_DOOR_TOP_THICKNESS - MATERIAL_STEEL_THICKNESS)
-                    extrusion(E2020, CAP_HEIGTH/2);
+                    translate_z((BASE_HEIGTH + CAP_HEIGTH) / 2 + CAP_HEIGTH / 4 - MATERIAL_DOOR_TOP_THICKNESS -
+                        MATERIAL_STEEL_THICKNESS)
+                    extrusion(E2020, CAP_HEIGTH / 2);
                 }
             }
         }
@@ -204,14 +211,14 @@ module corexy_belts(width_x, width_y, xpos, ypos) {
 use <enclosures/full/enclosure_assembly.scad>
 
 module case() {
-    translate_z(- $LEG_HEIGTH) {
-        enclosure_assembly(
-        AXIS_X_SIZE,
-        AXIS_Y_SIZE,
-        AXIS_Z_SIZE,
-        BASE_HEIGTH
-        );
-    }
+        translate_z(- $LEG_HEIGTH) {
+            enclosure_assembly(
+            AXIS_X_SIZE,
+            AXIS_Y_SIZE,
+            AXIS_Z_SIZE,
+            BASE_HEIGTH
+            );
+        }
 }
 
 

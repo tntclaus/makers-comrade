@@ -23,13 +23,13 @@ coolant_hose_size = 20;
 coolant_hose_size_out = coolant_hose_size+4;
 coolant_hose_out_wall_dia = coolant_hose_size_out+2;
 
-module motor_collet_44_100_30_RS895_stl() {
+module motor_collet_W44xL100xH29_RS895_stl() {
     $fn=180;
 
     motor_collet(
     width = 44,
     length = 100,
-    heigth = 30,
+    heigth = 29,
     type = RS895);
 }
 
@@ -343,4 +343,4 @@ module toolhead_spindle_assembly(
 
 //D16T_motor_mount_bottom_plate_W60xL100_IL80_ID8_CH8_VH11_RS895_dxf();
 //D16T_motor_mount_top_plate_W60xL100_IL80_CH8_VH11_RS895_dxf();
-motor_collet_44_100_30_RS895_stl();
+//motor_collet_W44xL100xH29_RS895_stl();

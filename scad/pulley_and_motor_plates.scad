@@ -24,9 +24,9 @@ module pulley_corner_plate() {
 
     difference() {
         rounded_polygon(CORNER_PLATE_COORDS);
-        translate([10,10,0]) circle(d = 5);
-        translate([30,30,0]) circle(d = 5);
-        translate([10,30,0]) circle(d = 4);
+        translate([10,10,0]) circle(r = M5_clearance_radius);
+        translate([30,30,0]) circle(r = M5_clearance_radius);
+        translate([10,30,0]) circle(r = M4_tap_radius);
     }
 }
 

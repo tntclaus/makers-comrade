@@ -326,6 +326,16 @@ module toolhead_titan_extruder_groove_collet_top_part2_44x29_stl() {
     toolhead_titan_extruder_groove_collet_top_part2(44, 29);
 }
 
+module toolhead_titan_extruder_groove_collet_top_part1_44x23_stl() {
+    $fn = 180;
+    toolhead_titan_extruder_groove_collet_top_part1(44, 23);
+}
+
+module toolhead_titan_extruder_groove_collet_top_part2_44x23_stl() {
+    $fn = 180;
+    toolhead_titan_extruder_groove_collet_top_part2(44, 23);
+}
+
 
 module toolhead_titan_extruder_groove_collet_top(
 width,
