@@ -49,12 +49,12 @@ module enclosure_front_sketch(width, heigth, window_w, window_h, window_translat
 
             for (pos = door_hinge_pos(door_width(window_w), door_heigth(window_h)))
             translate(pos)
-                tool_cutter_fastener_place(4, 1) circle(r = M3_tap_radius);
+                tool_cutter_fastener_place(3, 1) circle(r = M3_tap_radius);
 
             mirror([1, 0])
                 for (pos = door_hinge_pos(door_width(window_w), door_heigth(window_h)))
                 translate(pos)
-                    tool_cutter_fastener_place(4, 1) circle(r = M3_tap_radius);
+                    tool_cutter_fastener_place(3, 1) circle(r = M3_tap_radius);
         }
 
         translate([width/2-10-MATERIAL_STEEL_THICKNESS, heigth/2+CAP_HEIGTH])

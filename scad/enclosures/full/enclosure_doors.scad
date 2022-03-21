@@ -35,10 +35,10 @@ module door_hinge_assembly(angle = 0) {
 
         if ($preview_screws)
         translate_z(- 1) {
-            tool_cutter_fastener_place(4, 1) screw(M3_pan_screw, 12);
+            tool_cutter_fastener_place(3, 1) screw(M3_pan_screw, 12);
 
             rotate_about_pt(y = angle, pt = [0, 0, 0])
-            mirror([1, 0, 0]) tool_cutter_fastener_place(4, 1) {
+            mirror([1, 0, 0]) tool_cutter_fastener_place(3, 1) {
                 screw(M3_pan_screw, 12);
                 translate_z(- 12)
                 nut(screw_nut(M3_pan_screw));
@@ -97,7 +97,7 @@ module plastic_door_sketch(door_width, door_heigth) {
             for (pos = door_hinge_pos(- door_width, door_heigth))
             translate(pos)
                 //            mirror([1, 0])
-                tool_cutter_fastener_place(4, 1) circle(r = M3_clearance_radius);
+                tool_cutter_fastener_place(3, 1) circle(r = M3_clearance_radius);
 
 
 
