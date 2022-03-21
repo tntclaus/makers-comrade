@@ -48,9 +48,9 @@ module enclosure_door_top_sketch(width, length) {
         tool_cutter_fastener_place(3, 1) circle(r = M3_clearance_radius);
 
         enclosure_door_top_frame_place_screws(width) {
-            translate([0, length/2 - 5, 0])
+            translate([0, length/2 - 7, 0])
                 circle(r = M3_clearance_radius);
-            translate([0, -(length/2 - 5), 0])
+            translate([0, -(length/2 - 7), 0])
                 circle(r = M3_clearance_radius);
         }
 
@@ -139,7 +139,7 @@ module enclosure_door_top_handle_mounts() {
         children();
 }
 module enclosure_door_top_place_handle(w, l) {
-    translate([w/2,-l/2+5,0])
+    translate([w/2,-l/2+7,0])
     rotate([0,0,-90])
     children();
 }
@@ -202,10 +202,10 @@ module enclosure_door_top(width, length, angle = 0) {
 
     rotate_about_pt(y = - angle, pt = [-width/2-(MATERIAL_STEEL_THICKNESS*2+2), 0, MATERIAL_STEEL_THICKNESS*2+4])
     translate_z(-MATERIAL_STEEL_THICKNESS){
-        translate([0,length/2-5,0])
+        translate([0,length/2-7,0])
         enclosure_door_top_frame(width);
 
-        translate([0,-(length/2-5),0])
+        translate([0,-(length/2-7),0])
         enclosure_door_top_frame(width);
 
         translate([(width/2-5),0,0])
