@@ -2,9 +2,6 @@ include <NopSCADlib/utils/core/core.scad>
 include <NopSCADlib/vitamins/screws.scad>
 include <NopSCADlib/vitamins/leadnuts.scad>
 
-leadscrew_anti_z_wobble_assembly();
-//leadscrew_anti_z_wobble_base_nut_mount();
-
 /**
 * ! Anti wobble ring for 8mm leadscrew.
 * ! Requires glueing parts.
@@ -38,16 +35,19 @@ module leadscrew_anti_z_wobble_base_nut_mount_stl() {
     $fn = 180;
     leadscrew_anti_z_wobble_base_nut_mount();
 }
+
 module leadscrew_anti_z_wobble_base_nut_mount() {
-    stl("leadscrew_anti_z_wobble_base_nut_mount");
+    stl("ABS_leadscrew_anti_z_wobble_base_nut_mount");
     translate_z(2.25)
     difference() {
         union() {
             cylinder(d = 22, h = 1.5, center = true);
             translate_z(-leadnut_flange_t(LSN8x2)+.75)
             leadnut_screw_positions(LSN8x2)
-            cylinder(d = 3, h = 4);
+            cylinder(d = 3, h = 5.5);
         }
+
+        cylinder(d = 10.4, h = 50, center = true);
     }
 }
 
@@ -58,7 +58,7 @@ module leadscrew_anti_z_wobble_base_lock_stl() {
 }
 
 module leadscrew_anti_z_wobble_base_lock() {
-    stl("leadscrew_anti_z_wobble_base_lock");
+    stl("ABS_leadscrew_anti_z_wobble_base_lock");
     rotate([180, 0, 0])
         difference() {
             union() {
@@ -88,7 +88,7 @@ module leadscrew_anti_z_wobble_middle_half_stl() {
     leadscrew_anti_z_wobble_middle_half();
 }
 module leadscrew_anti_z_wobble_middle_half() {
-    stl("leadscrew_anti_z_wobble_middle_half");
+    stl("ABS_leadscrew_anti_z_wobble_middle_half");
 
     rotate([180, 0, 0])
         translate_z(- 5)
@@ -148,8 +148,10 @@ module rotation_tooth_sketch() {
     }
 }
 
+//leadscrew_anti_z_wobble_assembly();
+
 //translate([50,0,0])
-//leadscrew_anti_z_wobble_base_nut_mount_stl();
+leadscrew_anti_z_wobble_base_nut_mount_stl();
 //leadscrew_anti_z_wobble_base_lock_stl();
 //translate([-50,0,0])
 //leadscrew_anti_z_wobble_middle_half_stl();
