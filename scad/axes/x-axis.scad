@@ -543,7 +543,7 @@ module caret_endstop_anchor(anchor_width) {
 //D16T_x_caret_connector_lock_26x23_6();
 
 
-//xAxisRails(50, 300);
+//x_axis_assembly(50, 300);
 
 
 //rotate([0,0,-90])
