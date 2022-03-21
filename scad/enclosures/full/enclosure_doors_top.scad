@@ -239,5 +239,5 @@ module PC_5mm_enclosure_top_door_500x470_dxf() {
 
 //PC_5mm_enclosure_top_door_500x470_dxf();
 
-$preview_screws = false;
-enclosure_door_top(width = 500, length = 470);
+//$preview_screws = false;
+//enclosure_door_top(width = 500, length = 470);
