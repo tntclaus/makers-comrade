@@ -2,7 +2,6 @@ include <NopSCADlib/core.scad>
 include <NopSCADlib/utils/rounded_polygon.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
-
 show_magnets = true;
 TOOLHEAD_PLATES_BELT_INSET = 10;
 
@@ -115,14 +114,8 @@ module mount_magnet_mount_hole(thickness) {
 }
 
 
-
 module magnet_round_hole(d, h, dia_inner1, dia_inner2) {
-    // https://mirmagnitov.ru/product/nyeodimovyy-magnit-disk-10kh3-mm-s-zyenkovkoy-3-5-7-mm-n35uh/
-    vitamin(str(
-        "Magnet N35UH", "_",
-        d, "x", h, "_",
-        dia_inner1,"x",dia_inner2
-    ));
+
 
     difference() {
         cylinder(d = d, h = h);
@@ -133,21 +126,7 @@ module magnet_round_hole(d, h, dia_inner1, dia_inner2) {
 
 }
 
-module magnet_square(
-        width,
-        length,
-        heigth
-) {
-    vitamin(str(
-        "Magnet", "_",
-        width, "x",
-        length, "x",
-        heigth
-    ));
 
-    translate_z(heigth/2)
-    cube([width, length, heigth], center = true);
-}
 
 
 module toolhead_screw_mount_locations(locations, z = 0) {

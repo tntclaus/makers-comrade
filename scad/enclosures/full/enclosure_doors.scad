@@ -2,6 +2,8 @@ include <enclosure_common.scad>
 
 use <parametric_hinge_door_front.scad>
 
+use <../../../lib/magnet.scad>
+
 C_CONSTANT = 0 + 0;
 
 C_FEMALE = C_CONSTANT + 0;
@@ -57,12 +59,18 @@ module plastic_door_assembly(width, heigth, thickness, angle = 0) {
         door_width = door_width(width);
         door_heigth = door_heigth(heigth);
 
-        color("blue", 0.5)
-            translate([- door_width / 2, 0, 0])
-                render()
-                    rotate_about_pt(y = - angle, pt = [0, 0, 10])
-                    linear_extrude(thickness)
-                        plastic_door_sketch(door_width, door_heigth);
+        translate([- door_width / 2, 0, 0])
+            rotate_about_pt(y = - angle, pt = [0, 0, 10])   {
+                color("blue", 0.5)
+                linear_extrude(thickness)
+                    plastic_door_sketch(door_width, door_heigth);
+
+                translate([door_width / 2, 0, -3])
+                plastic_door_place_magnet(door_heigth) {
+                    magnet_round_with_cone_hole(d = 10, h = 3, dia_inner1 = 3, dia_inner2 = 7);
+//                    cylinder(d = 10, h = 3);
+                }
+            }
 
         translate_z(5 + thickness) {
             for (pos = door_hinge_pos(door_width, door_heigth))
@@ -84,6 +92,14 @@ module PC_5mm_door_220x370_dxf() {
     plastic_door_sketch(440, 370);
 }
 
+module plastic_door_place_magnet(door_heigth) {
+    translate([- 6, door_heigth / 2 - 5 - DOOR_OVERLAP / 2, 0])
+        children();
+
+    translate([- 6, - door_heigth / 2 + 5 + DOOR_OVERLAP / 2, 0])
+        children();
+}
+
 module plastic_door_sketch(door_width, door_heigth) {
     dxf(str("PC_5mm_door_", door_width / 2, "x", door_heigth));
 
@@ -95,17 +111,11 @@ module plastic_door_sketch(door_width, door_heigth) {
                 square([door_width, door_heigth + 1], center = true);
 
             for (pos = door_hinge_pos(- door_width, door_heigth))
-            translate(pos)
-                //            mirror([1, 0])
-                tool_cutter_fastener_place(3, 1) circle(r = M3_clearance_radius);
-
-
+                translate(pos)
+                    tool_cutter_fastener_place(3, 1) circle(r = M3_clearance_radius);
 
             // магнит
-            translate([- 10, door_heigth / 2 - 10 - DOOR_OVERLAP / 2, 0])
-                circle(r = M3_clearance_radius);
-
-            translate([- 10, - door_heigth / 2 + 10 + DOOR_OVERLAP / 2, 0])
+            plastic_door_place_magnet(door_heigth)
                 circle(r = M3_clearance_radius);
         }
 }
