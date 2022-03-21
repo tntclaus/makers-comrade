@@ -212,7 +212,7 @@ counter_sink_depth               = 2.5;
 fastener_thread_diameter         = 3.5;
 // Add 0.5mm to 1.0mm to the fastener head diameter, to allow for head clearance.
 fastener_head_diameter           = 7.0;
-fastener_count                   = 4;   // [3:32]
+fastener_count                   = 3;   // [3:32]
 fastener_column_count            = 1;   // [1,2]
 // Distance from the edge of the head diameter, to the edges of the leaves.
 fastener_margin                  = 5;

@@ -40,11 +40,11 @@ module enclosure_back_sketch(width, heigth, window_w, lh) {
     difference() {
         enclosure_base_front_back_sketch(width, heigth, window_w, lh = lh, overlap = MATERIAL_STEEL_THICKNESS);
 
-        translate([-MATERIAL_STEEL_THICKNESS/2, (heigth)/2 + CAP_HEIGTH + 10])
+        translate([0, (heigth)/2 + CAP_HEIGTH + 10])
         rotate([0,0,90])
-        enclosure_door_top_place_hinges(0, width)
+        enclosure_door_top_place_hinges(0, width-MATERIAL_STEEL_THICKNESS)
         mirror([1,0,0])
-        tool_cutter_fastener_place(4, 1)
+        tool_cutter_fastener_place(3, 1)
         circle(r = M3_tap_radius);
 
         translate([width/2-10-MATERIAL_STEEL_THICKNESS, heigth/2+CAP_HEIGTH])

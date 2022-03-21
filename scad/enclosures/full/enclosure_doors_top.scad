@@ -41,7 +41,7 @@ module enclosure_door_top_sketch(width, length) {
         square([width, length],center = true);
 
         enclosure_door_top_place_hinges(width+MATERIAL_STEEL_THICKNESS*2, length)
-        tool_cutter_fastener_place(4, 1) circle(r = M3_clearance_radius);
+        tool_cutter_fastener_place(3, 1) circle(r = M3_clearance_radius);
 
         enclosure_door_top_frame_place_screws(width) {
             translate([0, length/2 - 5, 0])
@@ -78,7 +78,7 @@ module enclosure_door_top_frame_hinge_part(length) {
     translate([0,8,12])
     rotate([0,0,-90])
     enclosure_door_top_place_hinges(0, length+20)
-    tool_cutter_fastener_place(4, 1)
+    tool_cutter_fastener_place(3, 1)
     screw(M3_pan_screw, 12);
 }
 
@@ -90,7 +90,7 @@ module enclosure_door_top_frame_hinge_part_sketch(length) {
         translate([0,8,0])
         rotate([0,0,-90])
         enclosure_door_top_place_hinges(0, length+20)
-        tool_cutter_fastener_place(4, 1) circle(r = M3_tap_radius);
+        tool_cutter_fastener_place(3, 1) circle(r = M3_tap_radius);
     }
 }
 
@@ -159,7 +159,7 @@ module enclosure_door_top(width, length, angle = 0) {
 
     if($preview_screws)
     enclosure_door_top_place_hinges(width, length)
-    mirror([1,0,0])tool_cutter_fastener_place(4, 1)
+    mirror([1,0,0])tool_cutter_fastener_place(3, 1)
     translate_z(-9)
     rotate([0,90,0])
     translate_z(-16)
@@ -169,3 +169,5 @@ module enclosure_door_top(width, length, angle = 0) {
 module PC_5mm_enclosure_top_door_500x470_dxf() {
     enclosure_door_top_sketch(500, 470);
 }
+
+//PC_5mm_enclosure_top_door_500x470_dxf();
