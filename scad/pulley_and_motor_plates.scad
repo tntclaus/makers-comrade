@@ -44,14 +44,17 @@ module ABS_pulley_spacer_8_2_stl() {
 }
 
 module corner_pulley_assembly(pos1, pos2, length, plate_thickness) {
-    mirror([0,0,1]) screw(M4_cs_cap_cross_screw, length);
-    translate_z(plate_thickness) nut(M4_nut);
+//    mirror([0,0,1])
+    translate_z(length)
+        screw(M4_cs_cap_cross_screw, length);
 
-    translate_z(plate_thickness+3.5) pulley_spacer(5);
-    translate_z(plate_thickness+3.5+pos1+5.1) pulley_spacer(8.2);
+//    translate_z(plate_thickness) nut(M4_nut);
 
-//    translate_z(plate_thickness+pos1) pulley(GT2x20_plain_idler);
-//    translate_z(plate_thickness+pos2) pulley(GT2x20_plain_idler);
+    translate_z(plate_thickness) pulley_spacer(8.5);
+    translate_z(plate_thickness+3.5+pos1+5) pulley_spacer(8.5);
+
+    translate_z(plate_thickness+pos1) pulley(GT2x20_plain_idler);
+    translate_z(plate_thickness+pos2) pulley(GT2x20_plain_idler);
 }
 
 module corner_pulley_block(pos1, pos2, length = 40, plate_thickness=3) {
@@ -140,3 +143,14 @@ module xyAxisMotor(left = false, wallThickness = 3) {
     rotate([0,-90,0]) motor_assembly(6, NEMA17M);
     //    motorPulley(6, NEMA17M, GT2x16_toothed_idler, 4);
 }
+
+//
+//rotate([0, 0, 90])
+//    color("silver")
+//        linear_extrude(3)
+//            pulley_corner_plate();
+//
+//translate([- 30, + 10, 0])
+//    corner_pulley_assembly(8.5, 25.5, 40, 3);
+
+//pulley_spacer(8.5);
