@@ -45,13 +45,13 @@ module x_axis_assembly(position = 0, xAxisLength, railsWidth = 30) {
         caretSafeMargin = safeMarginXAxis();
 
         // endstop y
-        translate([- railsRealLength / 2 - 2, - railsAdjustedWidth, 0])
-            rotate([0, 90, 0])
+        translate([ railsRealLength / 2 + 2, railsAdjustedWidth, 0])
+            rotate([0, 90, 180])
                 y_caret_endstop_anchor();
 
         // endstop x
-        translate([- railsRealLength / 2 - 2, railsAdjustedWidth, 0])
-            rotate([0, 90, 0])
+        translate([- railsRealLength / 2 - 2, - railsAdjustedWidth, 0])
+            rotate([0, -90, 180])
                 x_caret_endstop_anchor();
 
 
@@ -509,12 +509,12 @@ module y_caret_endstop_anchor_stl() {
 }
 
 module x_caret_endstop_anchor() {
-    stl("x_caret_endstop_anchor");
+    stl("ABS_x_caret_endstop_anchor");
     caret_endstop_anchor(anchor_width = 20);
 }
 
 module y_caret_endstop_anchor() {
-    stl("y_caret_endstop_anchor");
+    stl("ABS_y_caret_endstop_anchor");
     caret_endstop_anchor(anchor_width = 30);
 }
 

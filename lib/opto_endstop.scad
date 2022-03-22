@@ -1,5 +1,5 @@
 
-//rotate ([0,0,180]) 
+//rotate ([0,0,180])
 opto_endstop();
 
 
@@ -33,8 +33,13 @@ module optoswitch() {
             color("gray")translate([6.63,0,0]) cube([4.45,11.3,6.3]);
             color("gray")translate([13.63,0,0]) cube([4.45,11.3,6.3]);
         }
-        for ( hole = [2.75,24.5-2.75] ){
-            rotate([90,0,0]) translate([hole,6.4/2,-4]) cylinder(r=1.5, h=4.5,$fn=40);
-        }	
+        opto_endstop_place_mounts()
+        cylinder(r=1.5, h=4.5,$fn=40);
+    }
+}
+
+module opto_endstop_place_mounts() {
+    for ( hole = [2.75,24.5-2.75] ){
+        rotate([90,0,0]) translate([hole,6.4/2,-4]) children();
     }
 }

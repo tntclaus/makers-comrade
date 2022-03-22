@@ -15,6 +15,8 @@ include <brackets.scad>
 use <../pulley_spacer.scad>
 
 
+use <../endstops_xy.scad>
+
 //include <NopSCADlib/vitamins/pulleys.scad>
 //use <NopSCADlib/vitamins/pulley.scad>
 include <carets.scad>
@@ -63,6 +65,8 @@ module y_axis_assembly(
     xAxisLength,
     railSpacing = 60) {
     assembly("y_axis"){
+
+
         dxf(str("D16T_y_caret_", railSpacing));
         dxf(str("D16T_y_caret_", railSpacing));
 
@@ -108,8 +112,22 @@ module y_axis_assembly(
                         translate([- PULLEY2_X_COORDINATE, - PULLEY_Y_COORDINATE, 0]) y_pulley_block(37, 3);
                     }
                 }
+
+
+        translate([-(outerXAxisWidth/2-5),railsRealLength/2-5,10])
+            endstop_x();
     }
 }
 
-//yAxisRails(300, 300, 10, 300);
-//y_axis_assembly(50, 300, 300);
+//y_axis_assembly(298, 300, 300);
+//
+//translate([-235,210,10]) {
+//    translate([10,-210,-10])
+//        rotate([90,0,0])
+//            extrusion(E2020, 250*2);
+//
+//    linear_extrude(3)
+//        pulley_corner_plate();
+//
+////    endstop_x();
+//}
