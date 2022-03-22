@@ -3,6 +3,8 @@ include <enclosure_common.scad>
 use <parametric_hinge_door_front.scad>
 
 use <../../../lib/magnet.scad>
+include <NopSCADlib/vitamins/screws.scad>
+
 
 C_CONSTANT = 0 + 0;
 
@@ -68,8 +70,11 @@ module plastic_door_assembly(width, heigth, thickness, angle = 0) {
                 translate([door_width / 2, 0, -3])
                 plastic_door_place_magnet(door_heigth) {
                     magnet_round_with_cone_hole(d = 10, h = 3, dia_inner1 = 3, dia_inner2 = 7);
-//                    cylinder(d = 10, h = 3);
                 }
+
+                translate([door_width / 2, 0,5])
+                plastic_door_place_handle()
+                plastic_door_handle();
             }
 
         translate_z(5 + thickness) {
@@ -100,6 +105,43 @@ module plastic_door_place_magnet(door_heigth) {
         children();
 }
 
+module plastic_door_place_handle(){
+    translate([-20, 0, 0])
+    children();
+}
+module plastic_door_handle_mounts(){
+    dy = 50;
+    translate([0, -dy, 0])
+        children();
+    translate([0, dy, 0])
+        children();
+}
+module plastic_door_handle(){
+
+    module part() {
+        translate_z(5)
+        sphere(d = 10);
+        cylinder(d = 7, h = 5, center = true);
+    }
+
+    translate_z(2.5)
+    difference() {
+        hull() {
+            translate([0, -50, 0])
+                part();
+            translate([0, 50, 0])
+                part();
+        }
+
+        plastic_door_handle_mounts(){
+            cylinder(r = screw_clearance_radius(M3_pan_screw), h = 100, center = true);
+            translate_z(5)
+            cylinder(r = screw_head_radius(M3_pan_screw), h = 100);
+        }
+    }
+}
+
+
 module plastic_door_sketch(door_width, door_heigth) {
     dxf(str("PC_5mm_door_", door_width / 2, "x", door_heigth));
 
@@ -116,7 +158,12 @@ module plastic_door_sketch(door_width, door_heigth) {
 
             // магнит
             plastic_door_place_magnet(door_heigth)
-                circle(r = M3_clearance_radius);
+                circle(r = M3_tap_radius);
+
+            // ручка
+            plastic_door_place_handle()
+            plastic_door_handle_mounts()
+                circle(r = M3_tap_radius);
         }
 }
 
@@ -146,4 +193,7 @@ module plastic_doors_assembly(width, heigth, side, thickness, angle = 0) {
     }
 }
 
-
+//$LEG_HEIGTH = 0;
+//$preview_screws = true;
+//plastic_doors_assembly(440, 370, 0, 5, 0);
+//PC_5mm_door_220x370_dxf();
