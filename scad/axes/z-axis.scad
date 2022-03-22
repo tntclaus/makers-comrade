@@ -160,7 +160,7 @@ module ABS_PC_z_gantry_block_right_stl() {
 module z_gantry_block(angle = 0) {
     block_h = 8;
     block_w = 20;
-    block_w_i = 8;
+    block_w_i = 9;
     translate_z(block_h / 2)
     difference() {
         hull() {
@@ -174,9 +174,9 @@ module z_gantry_block(angle = 0) {
             translate([- 1, 0, - block_h / 2])
                 {
                     translate([0, 3.8, 5 + 1])
-                        vtulka(22);
+                        vtulka(24);
                     translate([0, - 3.8, 5 + 1])
-                        vtulka(22);
+                        vtulka(24);
                 }
 
         translate([0, 0, 3])
@@ -210,7 +210,7 @@ module z_gantry_block(angle = 0) {
             for (a = [- 45:90:315])
             rotate([0, 0, a])
                 translate([leadnut_hole_pitch(Z_AXIS_LEADNUT), 0])
-                    cylinder(d = 3, h = 100, center = true);
+                    cylinder(r = M3_clearance_radius, h = 100, center = true);
         }
     }
 
@@ -219,7 +219,7 @@ module z_gantry_block(angle = 0) {
 module vtulka(l = 20) {
     rotate([0, 90, 0])
         color("silver")
-            cylinder(d = 2, h = l, center = true);
+            cylinder(d = 2.5, h = l, center = true);
 }
 
 module z_gantry_block_assembly(angle = 0, show_beam = false) {
@@ -477,3 +477,4 @@ module pillow_block() {
 //ABS_PC_z_gantry_block_right_stl();
 //STEEL_gantry_sq_plate_60x60x3_22_dxf();
 //STEEL_z_gantry_plate_60_dxf();
+//z_gantry_block(0);
