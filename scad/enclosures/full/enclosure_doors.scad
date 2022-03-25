@@ -116,7 +116,11 @@ module plastic_door_handle_mounts(){
     translate([0, dy, 0])
         children();
 }
+module ABS_plastic_door_handle_stl(){
+    plastic_door_handle();
+}
 module plastic_door_handle(){
+    stl("ABS_plastic_door_handle");
 
     module part() {
         translate_z(5)
@@ -197,3 +201,5 @@ module plastic_doors_assembly(width, heigth, side, thickness, angle = 0) {
 //$preview_screws = true;
 //plastic_doors_assembly(440, 370, 0, 5, 0);
 //PC_5mm_door_220x370_dxf();
+
+ABS_plastic_door_handle_stl();
