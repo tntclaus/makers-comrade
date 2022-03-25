@@ -202,4 +202,4 @@ module plastic_doors_assembly(width, heigth, side, thickness, angle = 0) {
 //plastic_doors_assembly(440, 370, 0, 5, 0);
 //PC_5mm_door_220x370_dxf();
 
-ABS_plastic_door_handle_stl();
+//ABS_plastic_door_handle_stl();
