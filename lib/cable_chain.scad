@@ -36,7 +36,11 @@ module cable_chain_section_cap(l, w, h, expansion = 0) {
     }
 }
 
-module cable_chain_section_body(l, w, h) {
+module cable_chain_section_body(
+    l, w, h,
+    d_cooler = 24.5,
+    d_blower1 = 4.5
+) {
     module ear_mount() {
         translate_z(h/2)
         cube([3.2, h/2, h/2], center = true);
@@ -89,41 +93,38 @@ module cable_chain_section_body(l, w, h) {
         cable_chain_section_cap(l, w, h, expansion = 1);
     }
 
+    module attach_coil(d) {
+        difference() {
+            hull() {
+                cylinder(d = d + 4, h = 2, center = true);
+                translate([0,-d/2-2,-1])
+                    cube([d/2,d/2, 2]);
+            }
+            cylinder(d = d, h = 5, center = true);
+            translate([-d/4,-d/6,-d/2])
+                cube([d,d*2,d]);
+        }
+    }
+
+    if(d_cooler > 0) {
+        translate([-d_cooler/2-w/2,0,d_cooler/2+2-h/2])
+        rotate([90,0,0])
+            attach_coil(d = d_cooler);
+    }
+
+    if(d_blower1 > 0) {
+        translate([d_blower1/2+w/2,0,d_blower1/2+2-h/2])
+            mirror([1,0,0])
+            rotate([90,0,0])
+                attach_coil(d = d_blower1);
+    }
 
 }
-//XS2Qgv9h6NbKTq
-//
-//tls_ca_file: /etc/pki/cyrus-imapd/server.pem
-//tls_cert_file: /etc/pki/cyrus-imapd/server.pem
-//tls_key_file: /etc/pki/cyrus-imapd/server.pem
-//
-//# TLS parameters
-//smtpd_tls_key_file = /etc/pki/cyrus-imapd/server.pem
-//smtpd_tls_cert_file = /etc/pki/cyrus-imapd/server.pem
-//smtpd_tls_CAfile = /etc/pki/cyrus-imapd/server.pem
-//smtpd_use_tls=yes
-//smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
-//smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
-//
-//
-//myhostname = mx.cityscreen.cloud
-//alias_maps = hash:/etc/aliases
-//alias_database = hash:/etc/aliases
-//myorigin = /etc/mailname
-//mydestination = cityscreen.cloud
-//mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
-//mailbox_size_limit = 0
-//recipient_delimiter = +
-//
-//# These are the "no relay" restrictions
-//smtpd_recipient_restrictions = permit_mynetworks permit_inet_interfaces permit_sasl_authenticated reject_unauth_destination
-//
-
 
 module cable_chain(type) {
-    l = 20;
+    l = 30;
     w = 30;
-    h = 14;
+    h = 16;
 
     module rotated_section(angle = 0, color = "yellow") {
         rotate([angle,0,0])
@@ -144,7 +145,8 @@ module cable_chain(type) {
 
 //color("blue")
 //render()
-cable_chain_section_body_and_cap(l = 20, w = 30, h = 14);
+//cable_chain_section_body_and_cap(l = 30, w = 30, h = 16);
+cable_chain_section_body(l = 30, w = 30, h = 16);
 
 
 //cube([10,10,10]);
