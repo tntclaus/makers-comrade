@@ -670,6 +670,7 @@ module electronics_box_plastic_case(w, l, th) {
         }
     }
 
+
     difference() {
         union() {
             chamfer_walls([w, l, ELECTRONICS_BOX_HEIGTH()], th, 25);
@@ -722,23 +723,23 @@ module electronics_box_plastic_case(w, l, th) {
                 vent_hole();
         }
 
-        rotate([0, 0, 90]) {
-            w = (ELECTRONICS_BOX_WIDTH - 16);
-            for (i = [- w / 2 : 8 : w / 2])
-            translate([0, i, 0])
-                vent_hole(15);
-        }
+//        rotate([0, 0, 90]) {
+//            w = (ELECTRONICS_BOX_WIDTH - 16);
+//            for (i = [- w / 2 : 8 : w / 2])
+//            translate([0, i, 0])
+//                vent_hole(15);
+//        }
 
-        rotate([0, 0, - 90]) {
-            w = (ELECTRONICS_BOX_WIDTH - 16);
-            for (i = [- w / 2 : 8 : - 16])
-            translate([0, i, 0])
-                vent_hole(15);
-
-            for (i = [16 : 8 : w / 2])
-            translate([0, i, 0])
-                vent_hole(15);
-        }
+//        rotate([0, 0, - 90]) {
+//            w = (ELECTRONICS_BOX_WIDTH - 16);
+//            for (i = [- w / 2 : 8 : - 16])
+//            translate([0, i, 0])
+//                vent_hole(15);
+//
+//            for (i = [16 : 8 : w / 2])
+//            translate([0, i, 0])
+//                vent_hole(15);
+//        }
 
         // нижнее отверстие для проводов
         rotate([90, 0, 0])
@@ -815,8 +816,8 @@ module electronics_box_plastic_case(w, l, th) {
             }
     }
     module lcd_hinge_mounts() {
-        translate([10 / 2, - 30, - 10 / 2])
-            lcd_hinge_mount();
+//        translate([10 / 2, - 30, - 10 / 2])
+//            lcd_hinge_mount();
 
         translate([10 / 2, 30, - 10 / 2])
             lcd_hinge_mount();
@@ -1090,7 +1091,8 @@ module electronics_box_lcd_vesa_75() {
 //color("orange")
 //electronics_box_plastic_case_w126_l186_th3_stl();
 
-//electronics_box_plastic_case(w = 126, l = 186, th = 3);
+electronics_box_plastic_case(w = 126, l = 186, th = 3);
+
 //electronics_box_mounts();
 
 //
