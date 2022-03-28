@@ -97,13 +97,13 @@ module toolhead_extruder_orbiter_top_plate(width, length, inset_length, thicknes
         toolhead_extruder_orbiter_top_plate_sketch(width, length, inset_length);
 }
 
-toolhead_extruder_orbiter_mosquito_assembly(
-    width = 60,
-    length = 100,
-    inset_length = 80,
-    inset_depth = 8,
-    heigth = 29
-);
+//toolhead_extruder_orbiter_mosquito_assembly(
+//    width = 60,
+//    length = 100,
+//    inset_length = 80,
+//    inset_depth = 8,
+//    heigth = 29
+//);
 //toolhead_extruder_orbiter_mount_60x100x80_NEMA17S_5_stl();
 //rotate([0,180,0])
 //toolhead_extruder_heatbreak_mosquito_fan_duct_nozzle();
