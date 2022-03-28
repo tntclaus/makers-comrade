@@ -500,16 +500,32 @@ module toolhead_extruder_generic_bottom_plate(
     linear_extrude(thickness)
     children();
 
+    toolhead_extruder_generic_collets(
+        width = width,
+        length = length,
+        inset_length = inset_length,
+        inset_depth = inset_depth,
+        heigth = heigth,
+        thickness = 3
+    );
+}
+
+module toolhead_extruder_generic_collets(
+    width,
+    length,
+    inset_length,
+    inset_depth,
+    heigth,
+    thickness = 3
+) {
     groove_collet_width = width - inset_depth * 2;
 
     toolhead_titan_extruder_groove_collet(groove_collet_width, heigth, length);
 
     translate([0,0,0])
-    mirror([1, 0, 0])
-        toolhead_titan_extruder_groove_collet(groove_collet_width, heigth, length);
+        mirror([1, 0, 0])
+            toolhead_titan_extruder_groove_collet(groove_collet_width, heigth, length);
 
     translate_z(hot_end_groove(E3DVulcano))
     toolhead_titan_extruder_groove_collet_top(groove_collet_width, heigth);
-
 }
-
