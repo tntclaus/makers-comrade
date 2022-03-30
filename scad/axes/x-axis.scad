@@ -17,6 +17,7 @@ use <../fan_duct/fan_duct.scad>
 
 use <../../lib/opto_endstop.scad>
 
+use <caret_cable_chain.scad>
 
 include <NopSCADlib/vitamins/stepper_motors.scad>
 
@@ -296,8 +297,8 @@ module x_caret_with_cable_chain_sketch() {
         translate([-110,0]) {
             difference() {
                 rounded_square([20,30], r = 1, center = true);
-                translate([0,6,0]) circle(d = 2.3);
-                translate([0,-6,0]) circle(d = 2.3);
+                caret_cable_chain_mounts()
+                circle(d = 2.3);
             }
         }
     }
@@ -307,11 +308,16 @@ module x_caret_with_cable_chain_sketch() {
 }
 module x_caret_with_cable_chain() {
     dxf("D16T_x_caret_with_cable_chain");
+
+    color("silver")
     translate_z(-X_RAIL[1][1][2])
     linear_extrude(X_RAIL[1][1][2])
         x_caret_with_cable_chain_sketch();
+
+    translate([-110,0,-X_RAIL[1][1][2]])
+    mirror([0,0,1])
+    cable_chain_caret_section();
 }
-//x_caret_with_cable_chain();
 
 module x_caret_1_assembly() {
     x_caret_with_cable_chain();
@@ -319,15 +325,6 @@ module x_caret_1_assembly() {
     // стальные опоры
     toolhead_supports();
 
-//    translate([-48.1,0,-3]) {
-//        rotate([0,180,180]) {
-//            color("blue")
-//            precision_piezo_holder_stl();
-//            translate([8.2,0,3])
-//            screw(M5_pan_screw, 5);
-//        }
-//    }
-//
     children();
 }
 
@@ -568,3 +565,4 @@ module caret_endstop_anchor(anchor_width) {
 //piezo_shield_25_stl();
 //endstop_x_stl();
 
+//x_caret_with_cable_chain();
