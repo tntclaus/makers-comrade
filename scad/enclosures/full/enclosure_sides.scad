@@ -203,7 +203,14 @@ module enclosure_side_dual_z(width, heigth, window_h, x_length) {
 
             enclosure_side_place_psu_case()
             electronics_box_psu_case_assembly();
+
+
         }
+
+        translate([0, heigth/2+ELECTRONICS_BOX_LENGTH()/2 + 75,-MATERIAL_STEEL_THICKNESS])
+            rotate([180,0,180])
+                cable_chain_enclousure_inner_mount()
+                cable_chain(CABLE_CHAIN);
 
 
         translate_z(- MATERIAL_STEEL_THICKNESS)
@@ -278,6 +285,91 @@ module enclosure_side_single_z(width, heigth, window_h) {
     }
 }
 
+include <../../../lib/cable_chain.scad>
+
+module cable_chain_enclousure_outer_mount() {
+
+}
+ang = 1.5;
+CABLE_CHAIN = [30, 30, 16, [25,25,25,20,15,10,ang,ang,ang,ang,ang,ang,10,12,25,25,40,40,40,40]];
+
+module ABS_cable_chain_enclousure_inner_mount_w30xh18_stl() {
+    cable_chain_enclousure_inner_mount(w = 30, h = 18);
+}
+
+module cable_chain_enclousure_inner_mount(
+w = 30,
+h = 16
+) {
+    l = 10;
+    d_o = 29;
+
+    name = str("ABS_cable_chain_enclousure_inner_mount_",
+        "w", w, "x",
+        "h", h
+    );
+    stl(name);
+
+    module fan_duct_path() {
+        translate([-d_o+2,4.5,d_o/2])
+            rotate([0, 00, 0])
+                translate([d_o-2,0,0])
+                    rotate_extrude(angle = -95, convexity = 10)
+                        translate([- (w / 2 + d_o / 2 - 2), 0, 0])
+                            children();
+
+        translate([-(d_o-1.5),0.2,d_o/2])
+        rotate([90,0,0]) difference() {
+            cylinder(d = d_o, h = 10, center = true);
+            cylinder(d = 25.5, h = 10*2, center = true);
+        }
+    }
+
+    translate([-20,-40,h/2+3])
+    rotate([0,0,90]) {
+        difference() {
+            union() {
+                cable_chain_section_body_base(l = l, w = w, h = h, start = false);
+                cable_chain_section_body_base(l = l, w = w + 3, h = h, start = false);
+                cable_chain_section_body_base(l = l, w = w + 6, h = h, start = false);
+            }
+            cube([w - 3, l * 2, h * 2], center = true);
+        }
+        translate([0,5,0])
+        children();
+    }
+
+    difference() {
+        linear_extrude(3, convexity = 3) difference() {
+            translate([0, - 22])
+                rounded_square([70, 76], r = 5, center = true);
+            mirror([1, 0, 0])
+                cooling_hose_perforation(mount_radius = M3_clearance_radius, hotend_cooling_dia = 27);
+
+        }
+        translate_z(1.5)
+        mirror([1,0,0])
+            cooling_hose_mounts() cylinder(r = nut_radius(M3_nut), h = 2, $fn = 6);
+    }
+
+    difference() {
+        translate([- 30, 14, -10])
+            rotate([0, 90, -90])
+                fan_duct_path() {
+                    difference() {
+                        circle(d = d_o, $fn = 100);
+                        circle(d = 25.5, $fn = 100);
+                    }
+                }
+
+        translate([0, - 20, -30])
+        linear_extrude(30) {
+                rounded_square([70, 100], r = 5, center = true);
+        }
+    }
+}
+
+
 module STEEL_3mm_enclosure_side_dual_z_500x490mm_w380_xl300_lh67_dxf() {
     enclosure_base_side_dual_z_sketch(width = 500, heigth = 490, window_h = 380, x_length = 300, lh = 67, overlap = 0);
 }
@@ -296,10 +388,12 @@ module PC_2mm_enclosure_side_window_h380_dxf() {
     enclosure_side_window_sketch(heigth = 380);
 }
 
-//enclosure_side_single_z(
-//500, 490, 380, $LEG_HEIGTH = 70,
+//enclosure_side_dual_z(
+//500, 490, 380, 300, $LEG_HEIGTH = 70,
 //$preview_left_side_parts = true,
 //$preview_screws = false
 //);
 
+//cable_chain_enclousure_inner_mount();
 
+ABS_cable_chain_enclousure_inner_mount_w30xh18_stl();

@@ -828,6 +828,39 @@ module electronics_box_plastic_case(w, l, th) {
 
 }
 
+module cooling_hose_mounts() {
+    // hotend cooling hose mounts
+    translate([-24,0])
+        children();
+    translate([ 24,11])
+        children();
+
+    translate([-24,-50])
+        children();
+    translate([ 24,-50])
+        children();
+}
+
+module cooling_hose_perforation(mount_radius, hotend_cooling_dia = 30) {
+    // hotend cooling hose ø24mm
+    circle(d = hotend_cooling_dia);
+
+    cooling_hose_mounts() circle(r = mount_radius);
+
+    // part cooling hose 2 x ø10 mm
+    translate([0,-30])
+        hull() {
+            translate([-10,0]) circle(d = 10);
+            translate([ 10,0]) circle(d = 10);
+        }
+    translate([0,-50])
+        hull() {
+            translate([-10,0]) circle(d = 10);
+            translate([ 10,0]) circle(d = 10);
+        }
+
+}
+
 module electronics_box_mounts(w = ELECTRONICS_BOX_WIDTH + ELECTRONICS_BOX_THICKNESS * 2, l = ELECTRONICS_BOX_LENGTH +
         ELECTRONICS_BOX_THICKNESS * 2) {
     module screw_mount() circle(d = 2.5);
@@ -846,32 +879,7 @@ module electronics_box_mounts(w = ELECTRONICS_BOX_WIDTH + ELECTRONICS_BOX_THICKN
     }
 
     translate([0, ELECTRONICS_BOX_LENGTH/2 + 75, 0]) {
-        // hotend cooling hose ø24mm
-        circle(d = 30);
-
-        // hotend cooling hose mounts
-        translate([-24,0])
-            circle(d = 2.5);
-        translate([ 24,0])
-            circle(d = 2.5);
-
-        translate([-24,-50])
-            circle(d = 2.5);
-        translate([ 24,-50])
-            circle(d = 2.5);
-
-        // part cooling hose 2 x ø10 mm
-        translate([0,-30])
-            hull() {
-                translate([-10,0]) circle(d = 10);
-                translate([ 10,0]) circle(d = 10);
-            }
-        translate([0,-50])
-            hull() {
-                translate([-10,0]) circle(d = 10);
-                translate([ 10,0]) circle(d = 10);
-            }
-
+        cooling_hose_perforation(mount_radius = 3.1/2);
     }
 
     translate([0, ELECTRONICS_BOX_LENGTH/2-20, 0]) {

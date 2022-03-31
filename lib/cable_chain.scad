@@ -3,19 +3,22 @@ include <NopSCADlib/core.scad>
 /**
 * STL helper
 */
-module cable_chain_section_body_and_cap(l, w, h) {
+module cable_chain_section_body_and_cap(l, w, h, coil) {
     $fn = 90;
     translate([0,0,h/2]) {
             translate([0, - l, -h+1.5])
             rotate([0, 0, 0])
                 cable_chain_section_cap(l, w, h);
 
-        cable_chain_section_body(l, w, h);
+        cable_chain_section_body(l, w, h, coil = coil);
     }
 }
 
-module cable_chain_section(l, w, h, color = "yellow") {
-    name = str("ABS_cable_chain_section_body_and_cap_",
+module cable_chain_section(l, w, h, color = "yellow", coil = true) {
+
+    has_coil = coil ? "with_coil" : "no_coil";
+
+    name = str("ABS_cable_chain_section_body_and_cap_", has_coil, "_",
     "l", l, "w", w, "h", h
     );
     stl(name);
@@ -26,7 +29,7 @@ module cable_chain_section(l, w, h, color = "yellow") {
 
     color(color)
     render()
-    cable_chain_section_body(l, w, h);
+    cable_chain_section_body(l, w, h, coil = coil);
 }
 
 module cable_chain_section_cap(l, w, h, expansion = 0) {
@@ -99,7 +102,8 @@ module cable_chain_section_body_base(
 module cable_chain_section_body(
     l, w, h,
     d_cooler = 24.5,
-    d_filament_feeder = 4.5
+    d_filament_feeder = 4.5,
+    coil = true
 ) {
     coil_th = 8;
     coil_h = 4;
@@ -131,22 +135,25 @@ module cable_chain_section_body(
     difference() {
         union() {
             cable_chain_section_body_base(l = l, w = w, h = h);
-            if(d_cooler > 0) {
-                translate([-d_cooler/2-w/2,0,d_cooler/2+coil_th/2-h/2])
-                    rotate([90,0,0])
-                        attach_coil(d = d_cooler, cooler = true);
-            }
-
-            if(d_filament_feeder > 0) {
-                translate([-d_cooler/2-w/2,0,0]) {
-                    translate([- d_filament_feeder / 2 - d_cooler / 2 - coil_th / 2, 0, d_filament_feeder / 2 + coil_th
-                        / 2 - h / 2]) {
-                        rotate([90, 0, 0])
-                            attach_coil(d = d_filament_feeder);
-                    }
-                    translate([- coil_th / 2, 0, - h/2+coil_th/4])
-                        cube([d_cooler, coil_h, coil_th/2], center = true);
+            if(coil) {
+                if (d_cooler > 0) {
+                    translate([(d_cooler / 2 + w / 2), 0, d_cooler / 2 + coil_th / 2 - h / 2])
+                        rotate([90, 0, 180])
+                            attach_coil(d = d_cooler, cooler = true);
                 }
+
+//                if (d_filament_feeder > 0) {
+//                    translate([(d_cooler / 2 + w / 2), 0, 0]) {
+//                        translate([(d_filament_feeder / 2 + d_cooler / 2) + coil_th / 2, 0, d_filament_feeder / 2 +
+//                                coil_th
+//                                / 2 - h / 2]) {
+//                            rotate([90, 0, 180])
+//                                attach_coil(d = d_filament_feeder);
+//                        }
+//                        translate([coil_th / 2, 0, - h / 2 + coil_th / 4])
+//                            cube([d_cooler, coil_h, coil_th / 2], center = true);
+//                    }
+//                }
             }
         }
 
@@ -157,27 +164,45 @@ module cable_chain_section_body(
 
 }
 
-module cable_chain(type) {
-    l = 40;
-    w = 30;
-    h = 16;
+function cable_chain_segment_length(type) = type[0];
+function cable_chain_segment_width(type) = type[1];
+function cable_chain_segment_heigth(type) = type[2];
+function cable_chain_segment_angles(type) = type[3];
 
-    module rotated_section(angle = 0, color = "yellow") {
+module cable_chain(type) {
+    l = cable_chain_segment_length(type);
+    w = cable_chain_segment_width(type);
+    h = cable_chain_segment_heigth(type);
+    angles =   cable_chain_segment_angles(type);
+
+    module rotated_section(angles = 0, coil) {
+        angle = angles[0];
+
+        set_color = coil ? "green" : "white";
+
         rotate([angle,0,0])
             translate([0, l/2,0])
-            cable_chain_section(l = l, w = w, h = h, color = color);
+                cable_chain_section(l = l, w = w, h = h, color = set_color, coil = coil);
 
-        rotate([angle,0,0])
-        translate([0,l,l*sin(angle)])
-                children();
+        if(len(angles) > 1) {
+            remaining_angles = [for (a = [1 : len(angles) - 1]) angles[a]];
+            rotate([angle,0,0])
+                translate([0,l,0])
+                    rotated_section(remaining_angles, coil = !coil)
+                        children();
+
+        } else {
+            children();
+        }
     }
 
-        rotated_section(color = "green")
-        rotated_section(angle=0)
-        rotated_section(angle=0, color = "blue")
-        children();
+
+    rotated_section(angles, coil = false)
+    children();
 }
 
+//CABLE_CHAIN = [40, 30, 16, [30,45,10]];
+//cable_chain(CABLE_CHAIN);
 //cable_chain([]);
 
 //color("blue")
