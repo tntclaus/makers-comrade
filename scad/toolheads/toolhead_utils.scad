@@ -74,24 +74,13 @@ module toolhead_bottom_plate_sketch(
     inset_length,
     inset_depth) {
 
-    difference() {
-        rounded_polygon(BOTTOM_PLATE(width, length, inset_length, inset_depth));
-
-        plate_corner_position(width, length, 10)
-        mount_magnet_mount_hole(0);
-    }
+    rounded_polygon(BOTTOM_PLATE(width, length, inset_length, inset_depth));
 }
 
 module toolhead_top_plate_sketch(
         width, inset_length
     ) {
-
-    difference() {
-        rounded_polygon(TOP_PLATE(width, inset_length));
-
-        plate_corner_position(width, inset_length, 10)
-            mount_magnet_mount_hole(0);
-    }
+    rounded_polygon(TOP_PLATE(width, inset_length));
 }
 //toolhead_bottom_plate_sketch(44, 100, 80, 4);
 
@@ -105,13 +94,13 @@ module mount_magnet() {
 
 
 
-module mount_magnet_mount_hole(thickness) {
-    d = 2;
-    if(thickness == 0)
-        circle(d = d);
-    else
-        cylinder(d = d, h=thickness*2);
-}
+//module mount_magnet_mount_hole(thickness) {
+//    d = 2;
+//    if(thickness == 0)
+//        circle(d = d);
+//    else
+//        cylinder(d = d, h=thickness*2);
+//}
 
 
 module magnet_round_hole(d, h, dia_inner1, dia_inner2) {

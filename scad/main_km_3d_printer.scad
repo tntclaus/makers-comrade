@@ -13,6 +13,7 @@ use <heatbed.scad>
 use <toolheads/toolhead_extruder_orbiter_mosquito.scad>
 use <toolheads/toolhead_extruder_titan_e3d.scad>
 use <toolheads/toolhead_spindle.scad>
+use <toolheads/lasers/toolhead_laser_lasertree_80w.scad>
 
 use <pulley_and_motor_plates.scad>
 
@@ -106,6 +107,7 @@ module km_frame_assembly(zpos = 0, xypos = 0) {
                         inset_depth = 8,
                         heigth = 29
                         );
+                        toolhead_laser_lasertree_80w_assembly();
                     }
                 }
 
@@ -221,4 +223,6 @@ module case() {
         }
 }
 
-
+//x_axis_assembly(50, AXIS_X_SIZE) {
+//        toolhead_laser_lasertree_80w_assembly();
+//}
