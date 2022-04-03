@@ -597,7 +597,7 @@ module electronics_box_plastic_case_top(width, length, th) {
         }
         // крепеж к корпусу
         electronics_box_place_screws(w - 10, l - 10, rot = [0, 90, - 90, 180]) difference() {
-            cylinder(d = 3.1, h = th * 4, center = true);
+            cylinder(r = M3_clearance_radius, h = th * 4, center = true);
         }
 
         // отверстие для HDMI кабеля
@@ -697,6 +697,13 @@ module electronics_box_plastic_case(w, l, th) {
 
         }
 
+        place_filament_sensor_mounts()
+        rotate([0,0,180])
+        filament_sensor_bmg_place_mounts(){
+//            cylinder(r = M3_clearance_radius, h = 10, center = true);
+            cylinder(r = 4, h = 10, center = true);
+        }
+
         for (i = [- 82 : 8 : - 56])
         translate([0, i, 0])
             vent_hole();
@@ -758,23 +765,25 @@ module electronics_box_plastic_case(w, l, th) {
                 cylinder(d = 5, h = ELECTRONICS_BOX_WIDTH * 2, center = true);
             }
 
+
+
         PSU_ACDC_5V_position()
         pcb_screw_positions(PSU_ACDC_5V)
-        cylinder(d = 3, h = 100, center = true);
+        cylinder(r = M3_clearance_radius, h = 100, center = true);
 
         RPI3_position()
         translate(RPI_OFFSET)
             pcb_screw_positions(RPI3)
-            cylinder(d = 3, h = 100, center = true);
+            cylinder(r = M3_clearance_radius, h = 100, center = true);
 
         RAMPS_position()
         translate(RAMPS_OFFSET)
             pcb_screw_positions(ArduinoMega)
-            cylinder(d = 3, h = 100, center = true);
+            cylinder(r = M3_clearance_radius, h = 100, center = true);
 
         RAMPS_position()
         pcb_screw_positions(BTT_SKR_V1_4_TURBO)
-        cylinder(d = 3, h = 100, center = true);
+        cylinder(r = M3_clearance_radius, h = 100, center = true);
     }
 
     module mount_profile() {
@@ -790,7 +799,7 @@ module electronics_box_plastic_case(w, l, th) {
 
     electronics_box_place_screws(w - 10, l - 10, rot = [0, 90, - 90, 180]) difference() {
         mount_profile();
-        cylinder(d = 3, h = 5, center = true);
+        cylinder(r = M3_clearance_radius, h = 5, center = true);
     }
 
     translate_z(ELECTRONICS_BOX_HEIGTH - th + 1)
@@ -801,7 +810,7 @@ module electronics_box_plastic_case(w, l, th) {
                 sphere(d = 1);
         }
         cylinder(d = 4.2, h = 1.5, center = true);
-        cylinder(d = 3, h = 30, center = true);
+        cylinder(r = M3_clearance_radius, h = 30, center = true);
     }
 
     module lcd_hinge_mount() {
@@ -826,7 +835,28 @@ module electronics_box_plastic_case(w, l, th) {
     translate([ELECTRONICS_BOX_WIDTH / 2 + ELECTRONICS_BOX_THICKNESS, 40, ELECTRONICS_BOX_HEIGTH])
         lcd_hinge_mounts();
 
+
+    module place_filament_sensor_mounts() {
+        translate([-w/2, -l/2+20, 50])
+        rotate([0, 90, 0])
+        children();
+    }
+
+    place_filament_sensor_mounts()
+    rotate([0,0,180])
+    translate_z(-.5)
+    difference() {
+        union() {
+            filament_sensor_bmg_place_mounts()
+            cylinder(d = 8, h = 3, center = true, $fn = 30);
+            filament_sensor_bmg_case_contour(d_o = 33, d_i = 26, h = 3, $fn = 90);
+        }
+        filament_sensor_bmg_place_mounts()
+        cylinder(r = M3_clearance_radius, h = 5, center = true, $fn = 30);
+    }
 }
+
+use <../lib/filament_sensor_bmg.scad>
 
 module cooling_hose_mounts() {
     // hotend cooling hose mounts
@@ -870,7 +900,7 @@ module electronics_box_mounts(w = ELECTRONICS_BOX_WIDTH + ELECTRONICS_BOX_THICKN
         hull() {
             for (x = [- 12.5, 12.5])
             translate([x, 0, 0])
-                circle(d = 3);
+                circle(r = M3_clearance_radius);
         }
 
         camera_bracket_position(ELECTRONICS_BOX_CAMERA)
