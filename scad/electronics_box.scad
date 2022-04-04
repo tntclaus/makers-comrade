@@ -493,7 +493,6 @@ module electronics_box_plastic_case_top(width, length, th) {
     "th", str_replace(str(th), ".", "_")
     );
     stl(name);
-//    echo(name);
 
     w = width + th * 2;
     l = length + th * 2;
@@ -594,12 +593,22 @@ module electronics_box_plastic_case_top(width, length, th) {
                     translate([0, - 15, ox])
                         cube([16, 1, 8], center = true);
                 }
+
+            electronics_box_place_screws(w - 10, l - 10, rot = [0, 90, - 90, 180])
+                cylinder(d = 10, h = h- th);
         }
         // крепеж к корпусу
-        electronics_box_place_screws(w - 10, l - 10, rot = [0, 90, - 90, 180]) difference() {
+        electronics_box_place_screws(w - 10, l - 10, rot = [0, 90, - 90, 180]) {
+            translate_z(-th*2)
+            cylinder(d = 8, h = h);
+
+            translate_z(-th*2) {
+                cylinder(r2 = 4, r1 = 6, h = 4);
+            }
+
+            translate_z(h-th*2)
             cylinder(r = M3_clearance_radius, h = th * 4, center = true);
         }
-
         // отверстие для HDMI кабеля
         translate([0, - 10 + RPI_OFFSET.x, h - th])
             rotate([0, - 90, 0])
@@ -1129,14 +1138,14 @@ module electronics_box_lcd_vesa_75() {
 //color("orange")
 //electronics_box_plastic_case_w126_l186_th3_stl();
 
-electronics_box_plastic_case(w = 126, l = 186, th = 3);
+//electronics_box_plastic_case(w = 126, l = 186, th = 3);
 
 //electronics_box_mounts();
 
-//
+//color("green")
 //translate_z(180)
 //rotate([0,180,0])
-//electronics_box_plastic_case_top_w120_l180_th3_stl();
+electronics_box_plastic_case_top_w120_l180_th3_stl();
 
 
 //projection()
