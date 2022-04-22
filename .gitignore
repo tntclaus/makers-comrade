@@ -8,3 +8,11 @@ deps/
 svgs/
 .DS_Store
 *.cbddlp
+
+
+## kicad ignore
+build
+python
+.idea
+*-backups
+fp-info-cache

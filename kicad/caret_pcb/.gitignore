@@ -1,0 +1,5 @@
+build
+python
+.DS_Store
+.idea
+*-backups
