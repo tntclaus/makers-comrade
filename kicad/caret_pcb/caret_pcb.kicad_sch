@@ -53,6 +53,18 @@
     )
   )
 
+  (sheet (at 109.22 38.1) (size 24.13 39.37) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid) (color 0 0 0 0))
+    (fill (color 0 0 0 0.0000))
+    (uuid 35119bf0-23c9-4bb2-becd-2a858b5cb4d5)
+    (property "Sheet name" "Tool Motor" (id 0) (at 109.22 37.3884 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheet file" "tool_motor.kicad_sch" (id 1) (at 109.22 78.0546 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+  )
+
   (sheet (at 99.06 125.73) (size 24.13 53.34) (fields_autoplaced)
     (stroke (width 0.1524) (type solid) (color 0 0 0 0))
     (fill (color 0 0 0 0.0000))
@@ -82,6 +94,18 @@
     (pin "+5V" input (at 99.06 172.72 180)
       (effects (font (size 1.27 1.27)) (justify left))
       (uuid a29041bb-66d2-45d3-8449-a8c40232be35)
+    )
+  )
+
+  (sheet (at 153.67 43.18) (size 26.67 41.91) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid) (color 0 0 0 0))
+    (fill (color 0 0 0 0.0000))
+    (uuid 88560847-ae10-4705-b2a9-799bbf32e0fc)
+    (property "Sheet name" "Tool Extruder" (id 0) (at 153.67 42.4684 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheet file" "tool_extruder.kicad_sch" (id 1) (at 153.67 85.6746 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
     )
   )
 
@@ -123,6 +147,8 @@
     (path "/c36f7147-bc6f-4cbe-8b56-617ae1aaead3" (page "3"))
     (path "/0243fc01-c89d-427f-ada0-c7b78b375c4b" (page "4"))
     (path "/78e2c7a0-0fe9-440e-ab14-9611b86fc8cb" (page "5"))
+    (path "/35119bf0-23c9-4bb2-becd-2a858b5cb4d5" (page "6"))
+    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc" (page "7"))
   )
 
   (symbol_instances
@@ -195,6 +221,9 @@
     (path "/78e2c7a0-0fe9-440e-ab14-9611b86fc8cb/75f94081-ba34-4e91-962b-4aaabfcc5c9d"
       (reference "D5") (unit 1) (value "BLUE") (footprint "Diode_SMD:D_0805_2012Metric")
     )
+    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/ad9cd185-93cd-4d1a-bc79-eb3cd44db75b"
+      (reference "D?") (unit 1) (value "LED_Filled") (footprint "LED_SMD:LED_PLCC_2835")
+    )
     (path "/0674c5a1-ca4b-4b6b-aa60-3847e1a37d52/9b2243e1-b4a5-4d8d-b925-203eb710e075"
       (reference "J1") (unit 1) (value "RAMPS POWER IN") (footprint "Connector_JST:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical")
     )
@@ -233,6 +262,30 @@
     )
     (path "/0243fc01-c89d-427f-ada0-c7b78b375c4b/13c6b480-64d5-4c28-8352-28caeafe01dd"
       (reference "J15") (unit 1) (value "PWR IN") (footprint "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical")
+    )
+    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/00672a55-4382-40ef-af60-f37336738671"
+      (reference "J?") (unit 1) (value "T.ext") (footprint "")
+    )
+    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/077384ec-a581-49ad-af44-ec7b3a27e958"
+      (reference "J?") (unit 1) (value "T.hbr") (footprint "")
+    )
+    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/0f9db253-2dc4-425a-8711-82a5b930da1b"
+      (reference "J?") (unit 1) (value "Stepper") (footprint "")
+    )
+    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/82a136d8-6c7b-4689-bb30-d476f4678c1a"
+      (reference "J?") (unit 1) (value "TOOLHEAD") (footprint "Connector_JST:JST_XH_B12B-XH-A_1x12_P2.50mm_Vertical")
+    )
+    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/b17ae402-ae49-4ceb-bf50-99a7d1dce2e2"
+      (reference "J?") (unit 1) (value "PWR IN") (footprint "Connector_JST:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical")
+    )
+    (path "/35119bf0-23c9-4bb2-becd-2a858b5cb4d5/f26c481d-d67e-4482-a7d9-6f79748d485a"
+      (reference "J?") (unit 1) (value "Conn_01x02_Male") (footprint "")
+    )
+    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/4d8ffbb9-4b7c-4337-81da-35463caa6407"
+      (reference "LS?") (unit 1) (value "7BB-12-9") (footprint "Speak_Murata_7BB:Murata-7BB-12-9-MFG")
+    )
+    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/7a7ccb21-53b7-43cb-b537-0b377a1cd2f1"
+      (reference "LS?") (unit 1) (value "7BB-12-9") (footprint "Speak_Murata_7BB:Murata-7BB-12-9-MFG")
     )
     (path "/78e2c7a0-0fe9-440e-ab14-9611b86fc8cb/707c1dbd-ad7b-48a0-8f2e-9fa5c9b5d1f6"
       (reference "POT1") (unit 1) (value "TC33X-2-105") (footprint "digikey-footprints:Trimpot_3.8mmx3.6mm_TC33X-2-103E")
@@ -290,6 +343,9 @@
     )
     (path "/78e2c7a0-0fe9-440e-ab14-9611b86fc8cb/aec54768-96cf-4162-9535-941f53c863f6"
       (reference "U2") (unit 4) (value "LM324") (footprint "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm")
+    )
+    (path "/35119bf0-23c9-4bb2-becd-2a858b5cb4d5/80f86dbb-173a-407f-b1a5-5b28f6434658"
+      (reference "U?") (unit 1) (value "A4950E") (footprint "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm")
     )
   )
 )

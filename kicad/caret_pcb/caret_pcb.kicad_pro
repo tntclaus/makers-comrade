@@ -495,6 +495,14 @@
     [
       "78e2c7a0-0fe9-440e-ab14-9611b86fc8cb",
       "Piezo sensor"
+    ],
+    [
+      "35119bf0-23c9-4bb2-becd-2a858b5cb4d5",
+      "Tool Motor"
+    ],
+    [
+      "88560847-ae10-4705-b2a9-799bbf32e0fc",
+      "Tool Extruder"
     ]
   ],
   "text_variables": {}
