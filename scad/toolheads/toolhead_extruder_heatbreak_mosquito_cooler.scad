@@ -306,19 +306,18 @@ module toolhead_mosquito_extruder_collets(
 
     toolhead_mosquito_extruder_groove_collets(groove_collet_width, heigth, length);
 
-    translate_z(6){
-        groove_collet_top_heigth = 4;
+    groove_collet_top_heigth = 4;
 
 
-        ptfe_cylinder_heigth = heigth - groove_collet_top_heigth;
+    ptfe_cylinder_heigth = heigth - groove_collet_top_heigth;
 
-        translate_z(18 + piezo_disc_thick) {
-            translate_z(2)
-            piezo_disc();
-            color(TOOLHEAD_EXTRUDER_PLASTIC_COLOR)
-                translate_z(3.05 + piezo_disc_thick)
-                toolhead_piezo_groove();
-        }
+    translate_z(5.05 + piezo_disc_thick)
+    rotate([180,0,0]){
+        translate_z(2)
+        piezo_disc();
+        color(TOOLHEAD_EXTRUDER_PLASTIC_COLOR)
+            translate_z(3.05 + piezo_disc_thick)
+            toolhead_piezo_groove();
     }
 
 }
@@ -368,7 +367,8 @@ module toolhead_mosquito_extruder_groove_collet(
                 fan_duct_tube(FAN_DUCT_INNER_D, true);
             }
 
-            translate([-5.75,width/2+4,0])
+            // wire ear
+            translate([-6,width/2+2,0])
             difference() {
                 cube([10, 10, groove_collet_heigth], center = true);
                 translate([3,-2,0])
@@ -448,14 +448,14 @@ module ABS_toolhead_mosquito_extruder_groove_collets_W44xH29xL100_stl(){
 //D16T_toolhead_extruder_mosquito_bottom_plate_W60xL100_IL80_ID8_dxf();
 
 
-//translate_z(3+21.5)
-//toolhead_extruder_mosquito_bottom_plate(
-//width = 60,
-//length = 100,
-//inset_length = 80,
-//inset_depth = 8,
-//heigth = 29
-//);
+translate_z(3+21.5)
+toolhead_extruder_mosquito_bottom_plate(
+width = 60,
+length = 100,
+inset_length = 80,
+inset_depth = 8,
+heigth = 29
+);
 
 //toolhead_extruder_heatbreak_mosquito_cooler(plate_length = 100, cut_half=true);
 //rotate([0, 180, 0])
@@ -466,4 +466,5 @@ module ABS_toolhead_mosquito_extruder_groove_collets_W44xH29xL100_stl(){
 //toolhead_extruder_heatbreak_mosquito_top_sketch()
 
 //ABS_toolhead_mosquito_extruder_groove_collets_W44xH29xL100_stl();
+//toolhead_mosquito_extruder_collets();
 //toolhead_mosquito_extruder_groove_collets(width = 44, heigth = 29, length = 100);
