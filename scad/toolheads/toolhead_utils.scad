@@ -125,6 +125,10 @@ module toolhead_screw_mount_locations(locations, z = 0) {
 }
 
 piezo_disc_thick = 0.45;
+PIEZO_DISC_TH = 0.45;
+
+PIEZO_DISC_DIA = 16;
+PIEZO_DISC_DIA_MAX = 24;
 
 module piezo_disc() {
     vitamin("piezo_disc_d20");
@@ -135,7 +139,7 @@ module piezo_disc() {
             cylinder(d = 20, h = 0.2);
             translate_z(0)
             color("white")
-            cylinder(d = 16, h = 0.25);
+            cylinder(d = PIEZO_DISC_DIA, h = 0.25);
         }
         cylinder(d = 4, h = 1, center = true);
     }

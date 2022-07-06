@@ -347,52 +347,55 @@ module toolhead_mosquito_extruder_groove_collet(
 
     translate_z(groove_collet_heigth / 2)
     color(TOOLHEAD_EXTRUDER_PLASTIC_COLOR)
-        difference() {
-            union() {
-                rounded_rectangle([length, width, groove_collet_heigth], r = 3, center = true);
-                translate([- length / 2 + 4, 0, screw_mount_column_h + groove_collet_heigth / 2 -
-                        m4_washer_grover_assembly_h / 2])
-                    rounded_rectangle([8, width, heigth - groove_collet_heigth - m4_washer_grover_assembly_h], r = 3,
-                    center = true);
+    difference() {
+        union() {
+            base_length = length/2-1;
+            translate([-base_length/2-1,0,0])
+            rounded_rectangle([base_length, width, groove_collet_heigth], r = 3, center = true);
 
-                translate_z(- groove_collet_heigth / 2)
-                translate(hose_position(plate_length, coolant_hose_size))
-                    cylinder(d = coolant_hose_out_wall_dia, h = heigth + groove_collet_heigth / 2);
+            translate([- length / 2 + 4, 0, screw_mount_column_h + groove_collet_heigth / 2 -
+                    m4_washer_grover_assembly_h / 2])
+                rounded_rectangle([8, width, heigth - groove_collet_heigth - m4_washer_grover_assembly_h], r = 3,
+                center = true);
 
-                translate_z(- groove_collet_heigth / 2)
-                difference() {
-                    fan_duct_tube(FAN_DUCT_OUTER_D);
-                    fan_duct_tube(FAN_DUCT_INNER_D, true);
-                }
-                cylinder(d1 = 6, d2 = 6, h = heigth-5.5);
+            translate_z(- groove_collet_heigth / 2)
+            translate(hose_position(plate_length, coolant_hose_size))
+                cylinder(d = coolant_hose_out_wall_dia-.5, h = heigth + groove_collet_heigth / 2 - 1);
+
+            translate_z(- groove_collet_heigth / 2)
+            difference() {
+                fan_duct_tube(FAN_DUCT_OUTER_D);
+                fan_duct_tube(FAN_DUCT_INNER_D, true);
             }
-            cylinder(d1 = 3.5, d2 = 4, h = heigth*2+1, center = true);
 
-            //        toolhead_extruder_groove_collet_mounts()
-            //            translate_z(-groove_collet_heigth) cylinder(d = 4.01, h = groove_collet_heigth*4);
-
-            toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
-            translate_z(- groove_collet_heigth) cylinder(r = M4_clearance_radius, h = 1000);
-
-            translate([length, 0, 0])
-                cube([length * 2, width * 2, heigth * 3], center = true);
-
-            toolhead_extruder_groove_collet_mounts()
-            cylinder(r = M3_clearance_radius, h = 1000, center = true);
-
-            toolhead_extruder_heatbreak_cooler_mounts() cylinder(r = M3_clearance_radius, h = 1000, center = true);
-
-            translate_z(- groove_collet_heigth)
-            translate(hose_position(plate_length, coolant_hose_size))
-                cylinder(d = coolant_hose_size, h = 1000);
-
-
-            translate_z(heigth - groove_collet_heigth - 10)
-            translate(hose_position(plate_length, coolant_hose_size))
-                cylinder(d = coolant_hose_size_out, h = 1000);
-
-
+            translate([-5.75,width/2+4,0])
+            difference() {
+                cube([10, 10, groove_collet_heigth], center = true);
+                translate([3,-2,0])
+                cube([10, 10, groove_collet_heigth*2], center = true);
+            }
         }
+        cylinder(d = PIEZO_DISC_DIA_MAX, h = 50, center = true);
+
+        toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
+        translate_z(- groove_collet_heigth) cylinder(r = M4_clearance_radius, h = 1000);
+
+        translate([length, 0, 0])
+            cube([length * 2, width * 2, heigth * 3], center = true);
+
+        toolhead_extruder_heatbreak_cooler_mounts() cylinder(r = M3_clearance_radius, h = 1000, center = true);
+
+        translate_z(- groove_collet_heigth)
+        translate(hose_position(plate_length, coolant_hose_size))
+            cylinder(d = coolant_hose_size, h = 1000);
+
+
+        translate_z(heigth - groove_collet_heigth - 10)
+        translate(hose_position(plate_length, coolant_hose_size))
+            cylinder(d = coolant_hose_size_out, h = 1000);
+
+
+    }
 
 
     module fan_duct_tube(d, cut = false) {
@@ -462,4 +465,5 @@ module ABS_toolhead_mosquito_extruder_groove_collets_W44xH29xL100_stl(){
 
 //toolhead_extruder_heatbreak_mosquito_top_sketch()
 
-//ABS_toolhead_mosquito_extruder_groove_collets_W44xH29xL100_stl();
+ABS_toolhead_mosquito_extruder_groove_collets_W44xH29xL100_stl();
+//toolhead_mosquito_extruder_groove_collets(width = 44, heigth = 29, length = 100);
