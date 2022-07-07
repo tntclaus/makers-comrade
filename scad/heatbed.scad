@@ -493,7 +493,7 @@ module heatbed_table_assembly(
     }
 }
 
-//heatbed_table_assembly(600, 30, 25);
+//heatbed_table_assembly(300, 300, 11.5, 25);
 
 //GRANITE_heatbed_table_base_610_10_25_3_dxf();
 
