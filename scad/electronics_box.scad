@@ -222,13 +222,13 @@ module pcb_base_frame(type, heigth, wall = 2) {
     }
 }
 
-module mains_inlet(cutouts = false) {
+module mains_inlet(inlet, cutouts = false) {
     //    translate([65, 155, 25])
     //        rotate([0, 90, 0])
     if (!cutouts) {
-        iec_assembly(IEC_inlet_atx, 4);
+        iec_assembly(inlet, 4);
     } else {
-        iec_holes(IEC_inlet_atx);
+        iec_holes(inlet);
     }
 }
 
@@ -249,92 +249,6 @@ function ELECTRONICS_BOX_THICKNESS() = ELECTRONICS_BOX_THICKNESS;
 
 function ELECTRONICS_BOX_CAMERA() = ELECTRONICS_BOX_CAMERA;
 function ELECTRONICS_BOX_PSU() = ELECTRONICS_BOX_PSU;
-
-
-
-//module lcd_holder_socket_stl() {
-//    lcd_holder_socket();
-//}
-
-module lcd_holder_socket() {
-    stl("lcd_holder_socket");
-    th = 3;
-    w = 15;
-
-    module ear() {
-        color("red")
-            difference() {
-                hull() {
-                    cylinder(d = w, h = th);
-                    translate([w / 2, 0, th / 2])
-                        cube([1, w, th], center = true);
-                }
-                cylinder(d = 4, h = th * 3, center = true);
-            }
-    }
-
-    union() {
-        ear();
-        translate([w / 2, 0, w / 2 + th])
-            rotate([0, 90, 0])
-                ear();
-
-        translate([w / 2 + th / 2, 0, th / 2])
-            cube([th, w, th], center = true);
-    }
-}
-
-module lcd_holder_base_stl() {
-    lcd_holder_base();
-}
-
-module lcd_holder_base() {
-    stl("lcd_holder_base");
-
-    module half_sphere(d = 10) {
-        difference() {
-            sphere(d = d);
-            translate_z(- d / 2)
-            cube([d, d, d], center = true);
-        }
-    }
-
-    difference() {
-        union() {
-            hull() {
-                translate([0, - 10, 0])
-                    half_sphere(20);
-
-                translate([0, 10, 0])
-                    half_sphere(20);
-            }
-
-            cylinder(d = 15, h = 20);
-        }
-
-        translate_z(- .1) {
-            nut_d = nut_radius(M4_NUT) * 2 + .2;
-            cylinder(d = 4, h = 21);
-            cylinder(d = nut_d, h = 5, $fn = 6);
-            translate_z(16)
-            cylinder(d = nut_d, h = 5, $fn = 6);
-
-            translate([0, - 12, 0]) {
-                cylinder(d = 4, h = 21);
-                translate_z(6)
-                cylinder(d = 9, h = 5);
-            }
-            translate([0, 12, 0]) {
-                cylinder(d = 4, h = 21);
-                translate_z(6)
-                cylinder(d = 9, h = 5);
-            }
-        }
-    }
-}
-
-
-
 
 
 //nut(M4_NUT);
@@ -995,10 +909,10 @@ module electronics_box_assembly() {
 
 
 
-module electronics_box_psu_case_mains_inlet(size, cutouts = false) {
+module electronics_box_psu_case_mains_inlet(size, inlet, cutouts = false) {
     translate([- (size.x / 2 + 30), - size.y / 2 - ELECTRONICS_BOX_THICKNESS, 0])
-        rotate([90, 180, 0])
-            mains_inlet(cutouts = cutouts);
+        rotate([90, 90, 0])
+            mains_inlet(inlet, cutouts = cutouts);
 }
 
 module electronics_box_psu_case_mounts() {
@@ -1006,13 +920,16 @@ module electronics_box_psu_case_mounts() {
         children();
 }
 
-module electronics_box_psu_case_assembly(type = ELECTRONICS_BOX_PSU) {
+module electronics_box_psu_case_assembly(
+    type = ELECTRONICS_BOX_PSU,
+    inlet = IEC_inlet_atx
+) {
     assembly("electronics_box_psu_case") {
         psu(type);
         size = psu_size(type);
-        electronics_box_psu_case(type, th = ELECTRONICS_BOX_THICKNESS);
+        electronics_box_psu_case(type, inlet, th = ELECTRONICS_BOX_THICKNESS);
         translate_z(size.z / 2)
-        electronics_box_psu_case_mains_inlet(size);
+        electronics_box_psu_case_mains_inlet(size, inlet);
         if ($preview_screws) {
             psu_screw_positions(type, 4) {translate_z(ELECTRONICS_BOX_THICKNESS) screw(M4_pan_screw, 5);}
             psu_screw_positions(type, 5) {translate_z(ELECTRONICS_BOX_THICKNESS) screw(M4_pan_screw, 5);}
@@ -1026,7 +943,7 @@ module electronics_box_psu_case_stl() {
     electronics_box_psu_case(type = ELECTRONICS_BOX_PSU, th = ELECTRONICS_BOX_THICKNESS);
 }
 
-module electronics_box_psu_case(type, th) {
+module electronics_box_psu_case(type, inlet, th) {
     stl("electronics_box_psu_case");
 
     size = psu_size(type);
@@ -1044,7 +961,7 @@ module electronics_box_psu_case(type, th) {
             cube([size.x + th + extra_length, size.y * 2, size.z * 2], center = true);
         cube([size.x + extra_length * 2, size.y, size.z + .1], center = true);
 
-        electronics_box_psu_case_mains_inlet(size, true);
+        electronics_box_psu_case_mains_inlet(size, inlet, true);
 
         translate_z(- size.z / 2)
         psu_screw_positions(type, 4) {cylinder(d = 4.5, h = 10, center = true);}
@@ -1127,9 +1044,16 @@ module electronics_box_lcd_vesa_75() {
     }
 }
 
+/*
+ * 5" LCD Case for vesa mount
+ * https://www.thingiverse.com/thing:3444546
+ */
+//electronics_box_lcd_vesa_75();
+
+
+
 //translate([ELECTRONICS_BOX_WIDTH / 2 + 60, 40, ELECTRONICS_BOX_HEIGTH])
 //    rotate([90, 0, - 90])
-//        electronics_box_lcd_vesa_75();
 
 //rotate([0,180,0])
 //electronics_box_psu_case_assembly();
@@ -1145,7 +1069,7 @@ module electronics_box_lcd_vesa_75() {
 //color("green")
 //translate_z(180)
 //rotate([0,180,0])
-electronics_box_plastic_case_top_w120_l180_th3_stl();
+//electronics_box_plastic_case_top_w120_l180_th3_stl();
 
 
 //projection()
@@ -1156,3 +1080,7 @@ electronics_box_plastic_case_top_w120_l180_th3_stl();
 //camera_bracket(ELECTRONICS_BOX_CAMERA);
 //camera_back(ELECTRONICS_BOX_CAMERA);
 //camera_front(ELECTRONICS_BOX_CAMERA);
+
+//electronics_box_psu_case_assembly(inlet = IEC_320_C14_switched_fused_inlet);
+
+//electronics_box_psu_case(ELECTRONICS_BOX_PSU, IEC_320_C14_switched_fused_inlet, th = ELECTRONICS_BOX_THICKNESS);
