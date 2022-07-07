@@ -67,7 +67,7 @@ module x_axis_assembly(position = 0, xAxisLength, railsWidth = 30) {
             safe_margin_top = caretSafeMargin
             ) {
                 let();
-                x_caret_2_stl(stl = false);
+                x_caret_2_stl();
 
 
                 translate([- 43, 0, railsWidth])
@@ -328,22 +328,10 @@ module x_caret_1_assembly() {
     children();
 }
 
-module x_caret_2_stl(stl = true) {
+module x_caret_2_stl() {
     dxf("D16T_x_caret");
 
-    module addons() {
-//        x_caret_strnghteners();
-//        belt_clamps();
-//        rotate([180,0,0])
-//        translate([X_VW_HOLES[1][2], X_VW_HOLES[1][1], -1.5])
-//        piezo_shield(25);
-    }
-
-    if (stl) {
-        vslot_plate(X_RAIL[1][1]) addons();
-    } else {
-        addons();
-    }
+//    vslot_plate(X_RAIL[1][1]) addons();
 
     // стальные опоры
     toolhead_supports();
@@ -487,15 +475,15 @@ module x_caret_connector(width, heigth, thickness = 3, endstop = false) {
 
 
 
-module precision_piezo_holder_stl() {
-    stl("precision_piezo_holder");
-    difference() {
-        translate([-100,-10,-1.5])
-        import("../../libstl/pp_uni_2.75_holder.stl");
-        translate_z(-2)
-        cube([100,100,4], center = true);
-    }
-}
+//module precision_piezo_holder_stl() {
+//    stl("precision_piezo_holder");
+//    difference() {
+//        translate([-100,-10,-1.5])
+//        import("../../libstl/pp_uni_2.75_holder.stl");
+//        translate_z(-2)
+//        cube([100,100,4], center = true);
+//    }
+//}
 
 module x_caret_endstop_anchor_stl() {
     x_caret_endstop_anchor();
@@ -533,7 +521,6 @@ module caret_endstop_anchor(anchor_width) {
 
 //x_caret_endstop_anchor_stl();
 
-////x_caret_2_stl();
 //railsWidth = 30;
 //x_caret_connector(width = railsWidth*2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH, endstop = true);
 
@@ -541,19 +528,6 @@ module caret_endstop_anchor(anchor_width) {
 
 
 //x_axis_assembly(50, 300);
-
-
-//rotate([0,0,-90])
-//x_caret_2_assembly() {
-//    railsWidth = 30;
-//                    translate([-8.85-1,-X_PLATE_CONNECTOR_MOUNT_X,railsWidth])
-//                    rotate([90,90,0])
-//                    x_caret_connector(width = railsWidth*2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH, endstop = false);
-//
-//                    translate([-8.85-1,X_PLATE_CONNECTOR_MOUNT_X,railsWidth])
-//                    rotate([90,90,0])
-//                    x_caret_connector(width = railsWidth*2, heigth = X_PLATE_CARET_CONNECTOR_HEIGTH, endstop = true);
-//}
 
 //D16T_x_caret_dxf();
 //D16T_x_caret_with_cable_chain_dxf();

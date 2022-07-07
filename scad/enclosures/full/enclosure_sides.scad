@@ -301,8 +301,8 @@ module cable_chain_enclousure_inner_mount(
 w = 30,
 h = 16
 ) {
-    l = 10;
-    d_o = 29;
+    l = 20;
+    d_o = 30;
 
     name = str("ABS_cable_chain_enclousure_inner_mount_",
         "w", w, "x",
@@ -310,22 +310,31 @@ h = 16
     );
     stl(name);
 
-    module fan_duct_path() {
+    module fan_duct_path(rotate_angle = -95) {
         translate([-d_o+2,4.5,d_o/2])
-            rotate([0, 00, 0])
+            rotate([0, 0, 0])
                 translate([d_o-2,0,0])
-                    rotate_extrude(angle = -95, convexity = 10)
+                    rotate_extrude(angle = rotate_angle, convexity = 10)
                         translate([- (w / 2 + d_o / 2 - 2), 0, 0])
                             children();
 
-        translate([-(d_o-1.5),0.2,d_o/2])
-        rotate([90,0,0]) difference() {
-            cylinder(d = d_o, h = 10, center = true);
-            cylinder(d = 25.5, h = 10*2, center = true);
+        translate([-(d_o-2),0.2,d_o/2])
+        rotate([90,0,0]) {
+            difference() {
+                cylinder(d = d_o, h = 10, center = true);
+                cylinder(d = 25, h = 10 * 2, center = true);
+                rotate([0,-90,0])
+                cylinder(d=3, h= 100);
+            }
+//            translate([0,0,0])
+//            difference() {
+//                cylinder(d = 19, h = 2, center = true);
+//                cylinder(d = 17, h = 2 * 2, center = true);
+//            }
         }
     }
 
-    translate([-20,-40,h/2+3])
+    translate([-l-18,-40,h/2])
     rotate([0,0,90]) {
         difference() {
             union() {
@@ -354,13 +363,20 @@ h = 16
 
     difference() {
         translate([- 30, 14, -10])
-            rotate([0, 90, -90])
+            rotate([0, 90, -90]) {
                 fan_duct_path() {
                     difference() {
                         circle(d = d_o, $fn = 100);
-                        circle(d = 25.5, $fn = 100);
+                        circle(d = 25, $fn = 100);
                     }
                 }
+                fan_duct_path(rotate_angle = -90) {
+                    difference() {
+                        circle(d = d_o, $fn = 100);
+                        circle(d = 19, $fn = 100);
+                    }
+                }
+            }
 
         translate([0, - 20, -30])
         linear_extrude(30) {
