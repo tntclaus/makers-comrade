@@ -347,5 +347,8 @@
     (path "/35119bf0-23c9-4bb2-becd-2a858b5cb4d5/80f86dbb-173a-407f-b1a5-5b28f6434658"
       (reference "U?") (unit 1) (value "A4950E") (footprint "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm")
     )
+    (path "/78e2c7a0-0fe9-440e-ab14-9611b86fc8cb/779344fa-d152-47c6-93db-1aa9b37d8300"
+      (reference "U?") (unit 5) (value "LM324") (footprint "")
+    )
   )
 )
