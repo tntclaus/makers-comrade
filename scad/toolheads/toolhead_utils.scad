@@ -128,7 +128,7 @@ piezo_disc_thick = 0.45;
 PIEZO_DISC_TH = 0.45;
 
 PIEZO_DISC_DIA = 16;
-PIEZO_DISC_DIA_MAX = 24;
+PIEZO_DISC_DIA_MAX = 25.5;
 
 module piezo_disc() {
     vitamin("piezo_disc_d20");

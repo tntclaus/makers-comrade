@@ -339,7 +339,7 @@ module toolhead_mosquito_extruder_groove_collet(
     m4_washer_grover_assembly_h = m4_washer_heigth + m4_grover_half_compressed_heigth;
 
 
-    groove_collet_heigth = hot_end_groove(E3DVulcano);
+    groove_collet_heigth = 6;
     screw_mount_column_h = (heigth - groove_collet_heigth) / 2;
 
     groove_dia = hot_end_groove_dia(E3DVulcano);
@@ -352,9 +352,8 @@ module toolhead_mosquito_extruder_groove_collet(
             translate([-base_length/2-1,0,0])
             rounded_rectangle([base_length, width, groove_collet_heigth], r = 3, center = true);
 
-            translate([- length / 2 + 4, 0, screw_mount_column_h + groove_collet_heigth / 2 -
-                    m4_washer_grover_assembly_h / 2])
-                rounded_rectangle([8, width, heigth - groove_collet_heigth - m4_washer_grover_assembly_h], r = 3,
+            translate([- length / 2 + 4, 0, screw_mount_column_h + groove_collet_heigth / 2])
+                rounded_rectangle([8, width, heigth - groove_collet_heigth], r = 3,
                 center = true);
 
             translate_z(- groove_collet_heigth / 2)
@@ -375,6 +374,7 @@ module toolhead_mosquito_extruder_groove_collet(
                 cube([10, 10, groove_collet_heigth*2], center = true);
             }
         }
+//        resize([PIEZO_DISC_DIA_MAX, PIEZO_DISC_DIA, 50])
         cylinder(d = PIEZO_DISC_DIA_MAX, h = 50, center = true);
 
         toolhead_screw_mount_locations(TOOLHEAD_EXTRUDER_VERTICAL_SCREW_MOUNTS())
@@ -448,14 +448,14 @@ module ABS_toolhead_mosquito_extruder_groove_collets_W44xH29xL100_stl(){
 //D16T_toolhead_extruder_mosquito_bottom_plate_W60xL100_IL80_ID8_dxf();
 
 
-translate_z(3+21.5)
-toolhead_extruder_mosquito_bottom_plate(
-width = 60,
-length = 100,
-inset_length = 80,
-inset_depth = 8,
-heigth = 29
-);
+//translate_z(3+21.5)
+//toolhead_extruder_mosquito_bottom_plate(
+//width = 60,
+//length = 100,
+//inset_length = 80,
+//inset_depth = 8,
+//heigth = 29
+//);
 
 //toolhead_extruder_heatbreak_mosquito_cooler(plate_length = 100, cut_half=true);
 //rotate([0, 180, 0])
@@ -465,6 +465,6 @@ heigth = 29
 
 //toolhead_extruder_heatbreak_mosquito_top_sketch()
 
-//ABS_toolhead_mosquito_extruder_groove_collets_W44xH29xL100_stl();
-//toolhead_mosquito_extruder_collets();
+ABS_toolhead_mosquito_extruder_groove_collets_W44xH29xL100_stl();
 //toolhead_mosquito_extruder_groove_collets(width = 44, heigth = 29, length = 100);
+//toolhead_mosquito_extruder_collets();
