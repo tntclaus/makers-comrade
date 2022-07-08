@@ -207,10 +207,14 @@ module enclosure_side_dual_z(width, heigth, window_h, x_length) {
 
         }
 
-        translate([0, heigth/2+ELECTRONICS_BOX_LENGTH()/2 + 75,-MATERIAL_STEEL_THICKNESS])
-            rotate([180,0,180])
+        translate([0, heigth/2+ELECTRONICS_BOX_LENGTH()/2 + 75,-MATERIAL_STEEL_THICKNESS]) {
+            rotate([180, 0, 180])
                 cable_chain_enclousure_inner_mount()
                 cable_chain(CABLE_CHAIN);
+
+            translate_z(MATERIAL_STEEL_THICKNESS)
+            cable_chain_enclousure_outer_mount();
+        }
 
 
         translate_z(- MATERIAL_STEEL_THICKNESS)
@@ -293,6 +297,34 @@ module cable_chain_enclousure_outer_mount() {
 ang = 1.5;
 CABLE_CHAIN = [30, 30, 16, [25,25,25,20,15,10,ang,ang,ang,ang,ang,ang,10,12,25,25,40,40,40,40]];
 
+module ABS_cable_chain_enclousure_outer_mount_stl() {
+    cable_chain_enclousure_outer_mount();
+}
+
+module cable_chain_enclousure_outer_mount() {
+    name = str("ABS_cable_chain_enclousure_outer_mount"
+    );
+    stl(name);
+
+    difference() {
+        union() {
+            linear_extrude(3, convexity = 3) difference() {
+                translate([0, - 22])
+                    rounded_square([70, 76], r = 5, center = true);
+                cooling_hose_perforation(mount_radius = M3_clearance_radius, hotend_cooling_dia = 27);
+
+            }
+            difference() {
+                cylinder(d = 28, h = 20);
+                cylinder(d = 24.5, h = 50);
+            }
+        }
+        translate_z(1.5)
+            cooling_hose_mounts() cylinder(r = nut_radius(M3_nut), h = 2);
+    }
+}
+
+
 module ABS_cable_chain_enclousure_inner_mount_w30xh18_stl() {
     cable_chain_enclousure_inner_mount(w = 30, h = 18);
 }
@@ -318,13 +350,13 @@ h = 16
                         translate([- (w / 2 + d_o / 2 - 2), 0, 0])
                             children();
 
-        translate([-(d_o-2),0.2,d_o/2])
+        translate([-(d_o-2),-10+.2,d_o/2])
         rotate([90,0,0]) {
             difference() {
-                cylinder(d = d_o, h = 10, center = true);
-                cylinder(d = 25, h = 10 * 2, center = true);
-                rotate([0,-90,0])
-                cylinder(d=3, h= 100);
+                cylinder(d = 23, h = 30, center = true);
+                cylinder(d = 19, h = 30 * 2, center = true);
+//                rotate([0,-90,0])
+//                cylinder(d=3, h= 100);
             }
 //            translate([0,0,0])
 //            difference() {
@@ -404,12 +436,14 @@ module PC_2mm_enclosure_side_window_h380_dxf() {
     enclosure_side_window_sketch(heigth = 380);
 }
 
-//enclosure_side_dual_z(
-//500, 490, 380, 300, $LEG_HEIGTH = 70,
-//$preview_left_side_parts = true,
-//$preview_screws = false
-//);
+enclosure_side_dual_z(
+500, 490, 380, 300, $LEG_HEIGTH = 70,
+$preview_left_side_parts = true,
+$preview_screws = false
+);
 
 //cable_chain_enclousure_inner_mount();
 
-ABS_cable_chain_enclousure_inner_mount_w30xh18_stl();
+//ABS_cable_chain_enclousure_inner_mount_w30xh18_stl();
+
+//ABS_cable_chain_enclousure_outer_mount_w30xh18_stl();
