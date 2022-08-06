@@ -3,7 +3,7 @@ include <NopSCADlib/utils/core/rounded_rectangle.scad>
 include <NopSCADlib/vitamins/extrusions.scad>
 
 use <heat_bed_heater.scad>
-
+use <ceramic_granite_heatbed_table.scad>
 
 ///////////////////////////////////////////
 ///// NEW!!!!! 2021.04.13
@@ -453,22 +453,6 @@ module heatbed_table_heater_08_2kW(work_area_width) {
     heatbed_table_thermal_compound();
 }
 
-module heatbed_table_ceramic_granite(
-    x_work_area_width,
-    y_work_area_width,
-    thickness = 8
-) {
-    vitamin(
-        str("heatbed_table_ceramic_granite: Ceramic Granite Tile ",
-            x_work_area_width, "x", y_work_area_width, "x",
-            thickness, "mm"
-        )
-    );
-    translate_z(thickness/2)
-    color("#333333")
-    cube([x_work_area_width,y_work_area_width, thickness], center = true);
-}
-
 module heatbed_table_assembly(
     x_work_area_width,
     y_work_area_width,
@@ -485,15 +469,16 @@ module heatbed_table_assembly(
         mount_point_offset = mount_point_offset,
         mounts_num = mounts_num
         );
-        translate_z(0) {
-            //        heatbed_table_heater_08_2kW(work_area_width);
-            //        translate_z(10)
-            heatbed_table_ceramic_granite(x_work_area_width, y_work_area_width);
+        translate_z(-5) {
+//            heatbed_table_heater_08_2kW(work_area_width);
+//                    translate_z(10)
+            children();
         }
     }
 }
 
-//heatbed_table_assembly(300, 300, 11.5, 25);
+heatbed_table_assembly(300, 300, 11.5, 25)
+    ceramic_granite_heatbed_table(300, 300);
 
 //GRANITE_heatbed_table_base_610_10_25_3_dxf();
 
