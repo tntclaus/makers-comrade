@@ -173,6 +173,9 @@
     (path "/c36f7147-bc6f-4cbe-8b56-617ae1aaead3/fe7c867c-5df7-40c0-8348-81d3a2dce86e"
       (reference "#FLG0105") (unit 1) (value "PWR_FLAG") (footprint "")
     )
+    (path "/0243fc01-c89d-427f-ada0-c7b78b375c4b/2c259faf-78dd-4114-9613-87e97f36f276"
+      (reference "#FLG0106") (unit 1) (value "PWR_FLAG") (footprint "")
+    )
     (path "/0674c5a1-ca4b-4b6b-aa60-3847e1a37d52/5759330d-e400-452f-9fb0-84a367be3d16"
       (reference "#PWR0101") (unit 1) (value "GNDREF") (footprint "")
     )
@@ -222,7 +225,7 @@
       (reference "D5") (unit 1) (value "BLUE") (footprint "Diode_SMD:D_0805_2012Metric")
     )
     (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/ad9cd185-93cd-4d1a-bc79-eb3cd44db75b"
-      (reference "D?") (unit 1) (value "LED_Filled") (footprint "LED_SMD:LED_PLCC_2835")
+      (reference "D6") (unit 1) (value "LED_Filled") (footprint "LED_SMD:LED_PLCC_2835")
     )
     (path "/0674c5a1-ca4b-4b6b-aa60-3847e1a37d52/9b2243e1-b4a5-4d8d-b925-203eb710e075"
       (reference "J1") (unit 1) (value "RAMPS POWER IN") (footprint "Connector_JST:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical")
@@ -241,6 +244,12 @@
     )
     (path "/c36f7147-bc6f-4cbe-8b56-617ae1aaead3/d5e4e58b-7952-4a1a-a314-48163f58401a"
       (reference "J6") (unit 1) (value "TOOLHEAD") (footprint "Connector_JST:JST_XH_B12B-XH-A_1x12_P2.50mm_Vertical")
+    )
+    (path "/35119bf0-23c9-4bb2-becd-2a858b5cb4d5/f26c481d-d67e-4482-a7d9-6f79748d485a"
+      (reference "J7") (unit 1) (value "Conn_01x02_Male") (footprint "")
+    )
+    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/b17ae402-ae49-4ceb-bf50-99a7d1dce2e2"
+      (reference "J8") (unit 1) (value "PWR IN") (footprint "Connector_JST:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical")
     )
     (path "/c36f7147-bc6f-4cbe-8b56-617ae1aaead3/13c15b23-49c6-473a-a640-272df9fa9b60"
       (reference "J9") (unit 1) (value "PWR IN") (footprint "Connector_IDC:IDC-Header_2x08_P2.54mm_Vertical")
@@ -263,29 +272,23 @@
     (path "/0243fc01-c89d-427f-ada0-c7b78b375c4b/13c6b480-64d5-4c28-8352-28caeafe01dd"
       (reference "J15") (unit 1) (value "PWR IN") (footprint "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical")
     )
-    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/00672a55-4382-40ef-af60-f37336738671"
-      (reference "J?") (unit 1) (value "T.ext") (footprint "")
-    )
-    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/077384ec-a581-49ad-af44-ec7b3a27e958"
-      (reference "J?") (unit 1) (value "T.hbr") (footprint "")
+    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/82a136d8-6c7b-4689-bb30-d476f4678c1a"
+      (reference "J16") (unit 1) (value "TOOLHEAD") (footprint "Connector_JST:JST_XH_B12B-XH-A_1x12_P2.50mm_Vertical")
     )
     (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/0f9db253-2dc4-425a-8711-82a5b930da1b"
-      (reference "J?") (unit 1) (value "Stepper") (footprint "")
+      (reference "J17") (unit 1) (value "Stepper") (footprint "")
     )
-    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/82a136d8-6c7b-4689-bb30-d476f4678c1a"
-      (reference "J?") (unit 1) (value "TOOLHEAD") (footprint "Connector_JST:JST_XH_B12B-XH-A_1x12_P2.50mm_Vertical")
+    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/00672a55-4382-40ef-af60-f37336738671"
+      (reference "J18") (unit 1) (value "T.ext") (footprint "")
     )
-    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/b17ae402-ae49-4ceb-bf50-99a7d1dce2e2"
-      (reference "J?") (unit 1) (value "PWR IN") (footprint "Connector_JST:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical")
-    )
-    (path "/35119bf0-23c9-4bb2-becd-2a858b5cb4d5/f26c481d-d67e-4482-a7d9-6f79748d485a"
-      (reference "J?") (unit 1) (value "Conn_01x02_Male") (footprint "")
+    (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/077384ec-a581-49ad-af44-ec7b3a27e958"
+      (reference "J19") (unit 1) (value "T.hbr") (footprint "")
     )
     (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/4d8ffbb9-4b7c-4337-81da-35463caa6407"
-      (reference "LS?") (unit 1) (value "7BB-12-9") (footprint "Speak_Murata_7BB:Murata-7BB-12-9-MFG")
+      (reference "LS1") (unit 1) (value "7BB-12-9") (footprint "Speak_Murata_7BB:Murata-7BB-12-9-MFG")
     )
     (path "/88560847-ae10-4705-b2a9-799bbf32e0fc/7a7ccb21-53b7-43cb-b537-0b377a1cd2f1"
-      (reference "LS?") (unit 1) (value "7BB-12-9") (footprint "Speak_Murata_7BB:Murata-7BB-12-9-MFG")
+      (reference "LS2") (unit 1) (value "7BB-12-9") (footprint "Speak_Murata_7BB:Murata-7BB-12-9-MFG")
     )
     (path "/78e2c7a0-0fe9-440e-ab14-9611b86fc8cb/707c1dbd-ad7b-48a0-8f2e-9fa5c9b5d1f6"
       (reference "POT1") (unit 1) (value "TC33X-2-105") (footprint "digikey-footprints:Trimpot_3.8mmx3.6mm_TC33X-2-103E")
@@ -332,6 +335,9 @@
     (path "/c36f7147-bc6f-4cbe-8b56-617ae1aaead3/49c37692-773a-4783-950a-c26c3d94c603"
       (reference "TH1") (unit 1) (value "Thermistor_NTC") (footprint "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal")
     )
+    (path "/78e2c7a0-0fe9-440e-ab14-9611b86fc8cb/779344fa-d152-47c6-93db-1aa9b37d8300"
+      (reference "U1") (unit 5) (value "LM324") (footprint "")
+    )
     (path "/78e2c7a0-0fe9-440e-ab14-9611b86fc8cb/6aa8c486-32ac-4622-b983-28b6b0239d8f"
       (reference "U2") (unit 1) (value "LM324") (footprint "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm")
     )
@@ -345,10 +351,7 @@
       (reference "U2") (unit 4) (value "LM324") (footprint "Package_SO:SOIC-14_3.9x8.7mm_P1.27mm")
     )
     (path "/35119bf0-23c9-4bb2-becd-2a858b5cb4d5/80f86dbb-173a-407f-b1a5-5b28f6434658"
-      (reference "U?") (unit 1) (value "A4950E") (footprint "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm")
-    )
-    (path "/78e2c7a0-0fe9-440e-ab14-9611b86fc8cb/779344fa-d152-47c6-93db-1aa9b37d8300"
-      (reference "U?") (unit 5) (value "LM324") (footprint "")
+      (reference "U3") (unit 1) (value "A4950E") (footprint "Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm")
     )
   )
 )
