@@ -501,6 +501,7 @@ Y_VW_HOLES = [
 
 function Y_MOUNTS(w = 20 / 2, l = 20 / 2) = [
         [5.05, 0, ["circle", [[23, - 80], [33, - 80]]]],
+        [2.05, 0, ["circle", [[-7, 17], [-13, 17]]]],
         [5.05, 0, w, l],
         [5.05, 0, w, - l],
         [5.05, 0, - w, l],
@@ -768,16 +769,16 @@ module axis_x(width, pos = 0) {
     dx = FRAME_TYPE[1] / 2;
     full_width = width + dx * 4 + MATERIAL_THICKNESS;
 
-    module x_motor_plate() {
+    module y_motor_plate() {
         translate([- (full_width / 2 + MATERIAL_THICKNESS), 0, 0])
             mirror([1, 0, 0])
                 axis_y_motor_plate();
     }
 
-    x_motor_plate();
+    y_motor_plate();
 
     mirror([1, 0, 0])
-        x_motor_plate();
+        y_motor_plate();
 
     rotate([0, 90, 0])
         extrusion_2x2(FRAME_TYPE_X, full_width, center = true);
