@@ -359,12 +359,18 @@ module block_BF12() {
     }
 }
 
+module STEEL_5mm_axis_z_gantry_dxf() {
+    polygon_plate_sketch(Z_PLATE);
+}
 
 module axis_z(heigth, pos = 0) {
     //    extrusion(FRAME_TYPE, heigth, center = true);
     translate([0,-10,0])
     leadnut(SFU1605);
 //    place_spindle_screws()
+    name = str("STEEL_",MATERIAL_THICKNESS,"mm_axis_z_gantry");
+    dxf(name);
+
     translate([0, 14.5, 0])
         rotate([0, 0, 90])
             vwheel_gantry(Z_GANTRY) {
@@ -574,7 +580,12 @@ Z_GANTRY = ["", Z_PLATE,
 */
 
 module STEEL_5mm_axis_y_motor_plate_dxf() {
-    axis_y_motor_plate_sketch();
+    axis_y_motor_plate_sketch()
+    translate(X_MOTOR_POSITION) {
+        circle(d = NEMA_boss_radius(X_MOTOR) * 2);
+        NEMA_screw_positions(X_MOTOR)
+        circle(d = 3.1);
+    };
 }
 
 module axis_y_motor_plate_sketch() {
@@ -611,10 +622,25 @@ X_PIVOT_AXIS_POSITION = [0, - X_GANTRY_HEIGTH / 2 + 10, 0];
 X_PIVOT_MOTOR_POSITION = [- X_GANTRY_WIDTH / 2 + 20, - 40, 0];
 
 module STEEL_5mm_axis_x_motor_plate_dxf() {
-    polygon_plate_sketch(X_PLATE);
+    polygon_plate_sketch(X_PLATE)
+    translate(X_MOTOR_POSITION) {
+        circle(d = NEMA_boss_radius(X_MOTOR) * 2);
+        NEMA_screw_positions(X_MOTOR)
+        circle(d = 3.1);
+    };
 }
 module STEEL_5mm_axis_x_motor_plate_front_dxf() {
-    polygon_plate_sketch(X_PLATE_FRONT);
+    polygon_plate_sketch(X_PLATE_FRONT)
+    translate([0,X_GANTRY_ELEVATION-10,0])
+        union() {
+            place_block_BF12()
+            place_block_BF12_mounts()
+            circle(r = screw_pilot_hole(BK12M_SCREWS));
+
+            place_block_BK12()
+            place_block_BK12_mounts()
+            circle(r = screw_pilot_hole(BK12M_SCREWS));
+        };
 }
 
 module axis_x_plate_motor_plate() {
@@ -806,19 +832,22 @@ module axis_y_assembly() {
     }
 }
 
-module main_assembly() {
-    axis_y_assembly();
+module cnc_router_assembly() {
+    assembly("cnc_router") {
+        axis_y_assembly();
 
-    translate_z(HEIGTH)
-    axis_x(width = WIDTH);
+        translate_z(HEIGTH)
+        axis_x(width = WIDTH);
 
-    translate([0, 48.5 + MATERIAL_THICKNESS * 2, HEIGTH + 147 - 40])
-        axis_z(heigth = HEIGTH);
+        translate([0, 48.5 + MATERIAL_THICKNESS * 2, HEIGTH + 147 - 40])
+            axis_z(heigth = HEIGTH);
+    }
 }
 
-
-
 if ($preview)
-    main_assembly();
+    cnc_router_assembly();
 
 
+module main_assembly() {
+    cnc_router_assembly();
+}
