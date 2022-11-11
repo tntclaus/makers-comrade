@@ -177,4 +177,4 @@ module ABS_extra_fanlets() {
         extra_fan_inlet(type = type);
 }
 //ABS_extra_fanlets();
-//extra_fan();
+extra_fan();
