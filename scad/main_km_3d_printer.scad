@@ -8,7 +8,7 @@ use <axes/z-axis.scad>
 use <axes/y-axis.scad>
 use <axes/x-axis.scad>
 
-use <heatbed.scad>
+use <heatbeds/heatbed.scad>
 
 use <toolheads/toolhead_extruder_orbiter_mosquito.scad>
 use <toolheads/toolhead_extruder_titan_e3d.scad>
@@ -17,7 +17,12 @@ use <toolheads/lasers/toolhead_laser_lasertree_80w.scad>
 
 use <pulley_and_motor_plates.scad>
 
-include <enclosures/full/enclosure_common.scad>
+//include <enclosures/light/enclosure_common.scad>
+//use <enclosures/light/enclosure_assembly.scad>
+include <enclosures/enclosure_common.scad>
+use <enclosures/full/enclosure_assembly.scad>
+//use <enclosures/full/enclosure_sides.scad>
+
 
 $bom = undef;
 function is_bom() = $bom != undef ? true : false;
@@ -36,7 +41,7 @@ FULL_HEIGTH = realZAxisLength(AXIS_Z_SIZE) + 40 + $LEG_HEIGTH + enclosure_cap_he
 $CASE_MATERIAL_THICKNESS = 3;
 
 if ($preview)
-main_assembly();
+    main_assembly();
 
 $preview_table = !$preview || is_bom() || false;
 $preview_belts = !$preview || is_bom() || false;
@@ -53,7 +58,7 @@ module PC_5mm_dxf() {
 }
 
 module main_assembly() {
-    dxf("STEEL_3mm");
+//    dxf("STEEL_3mm");
     //    dxf("PC_5mm");
 
     km_3d_printer(zpos = 200, xypos = 0);
@@ -147,7 +152,6 @@ module km_frame_assembly(zpos = 0, xypos = 0) {
     }
 }
 
-use <enclosures/full/enclosure_sides.scad>
 
 module km_frame_corner_plates(x, y) {
     translate([- (x - 20), - y - 10, 10]) {
@@ -210,7 +214,6 @@ module corexy_belts(width_x, width_y, xpos, ypos) {
 
 }
 
-use <enclosures/full/enclosure_assembly.scad>
 
 module case() {
         translate_z(- $LEG_HEIGTH) {
