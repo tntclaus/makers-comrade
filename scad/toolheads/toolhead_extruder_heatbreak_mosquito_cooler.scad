@@ -171,12 +171,12 @@ module toolhead_extruder_mosquito_heatbreak_fan_duct_nozzle_stl() {
         toolhead_extruder_heatbreak_mosquito_fan_duct_nozzle();
 }
 module toolhead_extruder_heatbreak_mosquito_fan_duct_nozzle() {
-    stl("toolhead_extruder_mosquito_heatbreak_fan_duct_nozzle");
+    stl("ABS_toolhead_extruder_mosquito_heatbreak_fan_duct_nozzle");
 
     // magnum
-//    heigth = 20;
+    heigth = 20;
     // magnum+
-    heigth = 20 + 19;
+//    heigth = 20 + 19;
 
     module object(d, cutout = false) {
         hull() {
@@ -440,7 +440,7 @@ module ABS_toolhead_mosquito_extruder_groove_collets_W44xH29xL100_stl(){
 //cylinder(d=2, h=10);
 
 //translate_z(- 21.5)
-//toolhead_extruder_heatbreak_mosquito_cooler_100_stl();
+toolhead_extruder_heatbreak_mosquito_cooler_100_stl();
 
 //translate_z(- 21.5)
 //    translate([0,50,0])
@@ -465,6 +465,6 @@ module ABS_toolhead_mosquito_extruder_groove_collets_W44xH29xL100_stl(){
 
 //toolhead_extruder_heatbreak_mosquito_top_sketch()
 
-ABS_toolhead_mosquito_extruder_groove_collets_W44xH29xL100_stl();
+//ABS_toolhead_mosquito_extruder_groove_collets_W44xH29xL100_stl();
 //toolhead_mosquito_extruder_groove_collets(width = 44, heigth = 29, length = 100);
 //toolhead_mosquito_extruder_collets();
