@@ -12,7 +12,7 @@ use <heatbeds/heatbed.scad>
 
 use <toolheads/toolhead_extruder_orbiter_mosquito.scad>
 use <toolheads/toolhead_extruder_titan_e3d.scad>
-use <toolheads/toolhead_spindle.scad>
+use <toolheads/spindles/toolhead_spindles_rs.scad>
 use <toolheads/lasers/toolhead_laser_lasertree_80w.scad>
 
 use <pulley_and_motor_plates.scad>
@@ -99,7 +99,7 @@ module km_frame_assembly(zpos = 0, xypos = 0) {
             rotate([0, 0, 90])
                 y_axis_assembly(xypos, AXIS_Y_SIZE, AXIS_X_SIZE) {
                     if ($preview_tool) {
-                        toolhead_spindle_assembly(
+                        toolhead_spindle_RS385_assemby(
                         width = 60,
                         length = 100,
                         inset_length = 80,
@@ -115,6 +115,13 @@ module km_frame_assembly(zpos = 0, xypos = 0) {
                         );
                         toolhead_laser_lasertree_80w_assembly();
                     }
+//                    toolhead_spindle_RS385_assemby(
+//                    width = 60,
+//                    length = 100,
+//                    inset_length = 80,
+//                    inset_depth = 8,
+//                    heigth = 29
+//                    );
                 }
 
             xAxisExtrusions();
