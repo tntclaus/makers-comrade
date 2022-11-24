@@ -1,6 +1,7 @@
 include <NopSCADlib/core.scad>
 include <NopSCADlib/utils/rounded_polygon.scad>
 include <NopSCADlib/vitamins/screws.scad>
+include <../../lib/utils.scad>
 
 show_magnets = true;
 TOOLHEAD_PLATES_BELT_INSET = 10;
@@ -130,13 +131,13 @@ PIEZO_DISC_TH = 0.45;
 PIEZO_DISC_DIA = 16;
 PIEZO_DISC_DIA_MAX = 25.5;
 
-module piezo_disc() {
-    vitamin("piezo_disc_d20");
+module piezo_disc(d = 20) {
+    vitamin(str("piezo_disc_d", d));
 
     difference() {
         union() {
             translate_z(0.25)
-            cylinder(d = 20, h = 0.2);
+            cylinder(d = d, h = 0.2);
             translate_z(0)
             color("white")
             cylinder(d = PIEZO_DISC_DIA, h = 0.25);
@@ -145,24 +146,25 @@ module piezo_disc() {
     }
 }
 
-module toolhead_piezo_groove_20x16_stl() {
+module ABS_toolhead_piezo_groove_20x16x2_1_stl() {
     $fn=180;
-    toolhead_piezo_groove(d_out = 20, d_in = 16);
+    toolhead_piezo_groove(d_out = 20, d_in = 16, h = 2.1);
 }
 
 module toolhead_piezo_groove(
     d_out = 20,
-    d_in = 16
+    d_in = 16,
+    h = 2.1
 ) {
 
     stl_name = str(
-    "toolhead_piezo_groove", "_",
-    d_out, "x", d_in
+    "ABS_toolhead_piezo_groove", "_",
+    d_out, "x", d_in, "x", str_replace(h, ".", "_")
     );
     stl(stl_name);
 
     difference() {
-        cylinder(d = d_out,h = 2.1, center = true);
-        cylinder(d = d_in,h = 2.11, center = true);
+        cylinder(d = d_out,h = h, center = true);
+        cylinder(d = d_in,h = h + .1, center = true);
     }
 }

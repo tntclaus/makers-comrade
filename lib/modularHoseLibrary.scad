@@ -52,7 +52,7 @@ module modularHoseBall(mhBore) {
 
 		// Remove top of ball
 		translate([0,0,mhOffsetToTopOfBall + mhBallOD/2]) cube(size = [mhBallOD,mhBallOD,mhBallOD], center=true);
-	
+
 		// Remove bottom of ball
 		translate([0,0,-mhBallOD/2]) cube(size = [mhBallOD,mhBallOD,mhBallOD], center=true);
 
@@ -75,7 +75,7 @@ module modularHoseSocket(mhBore) {
 	mhOffsetToBaseOfSkirt = 0.39 * mhBore;
 	mhSocketID = tolerance + mhBore * 2;
 	mhSkirtOD = 2.40 * mhBore;    // started at 2.52
-	mhSkirtHeight = 1.26*mhBore;   
+	mhSkirtHeight = 1.26*mhBore;
 	mhWaistOD = 1.58 * mhBore;
 	mhRimRadius = 0.18 * mhBore;
 	mhSocketChamferOffset = 0.79 * mhBore;
@@ -85,29 +85,29 @@ module modularHoseSocket(mhBore) {
 	union() {
 		translate([0,0,mhSkirtHeight + mhOffsetToBaseOfSkirt]) children(0);
 		difference() {
-			union() {		
-	
+			union() {
+
 				// Skirt
 				translate([0,0,mhOffsetToBaseOfSkirt]) cylinder(h=mhSkirtHeight, r1=mhSkirtOD/2, r2=mhWaistOD/2);
-		
+
 				// Rim
 				// Rim - collar
 				translate([0,0,mhRimRadius]) cylinder(h = mhOffsetToBaseOfSkirt-mhRimRadius, r = mhSkirtOD/2);
-		
+
 				// Rim - radius
 				rotate_extrude(convexity = 10) translate([(mhSkirtOD/2) - mhRimRadius, mhRimRadius, 0]) circle(r = mhRimRadius);
-			
+
 				// Rim - cap
 				cylinder(h= mhRimRadius, r=(mhSkirtOD/2) - mhRimRadius);
 			}
-		
+
 			// removeBore
 			translate([0,0,-1]) cylinder(h=mhSkirtHeight + mhOffsetToBaseOfSkirt + 2,r=mhBore/2);
-		
+
 			// straighten socket sides
 			translate([0,0,mhSocketChamferOffset]) cylinder(h=mhSocketChamferHeight,r1=mhSocketChamferID/2,r2=mhBore/2);
-		
-			// remove socket		
+
+			// remove socket
 			translate([0,0,mhOffsetToSocketCenter]) sphere(r = mhSocketID/2);
 		}
 	}
@@ -122,7 +122,7 @@ module modularHoseWaist(mhBore, mhWaistHeight, waist_od = 0) {
 		translate([0,0,mhWaistHeight]) children(0);
 		difference() {
 			translate([0,0,-0.01]) cylinder(h= mhWaistHeight + 0.02, r=mhWaistOD/2);
-				
+
 			// removeBore
 			translate([0,0,-1]) cylinder(h=mhWaistHeight+2,r=mhBore/2);
 		}
@@ -141,7 +141,7 @@ module hose_round_nozzleTip(mhBore, mhNozzleID) {
 
 			cylinder(h= mhNozzleHeight, r1=mhWaistOD/2, r2=mhNozzleOD/2);
 		}
-	
+
 		// removeBore
 		translate([0,0,-0.01]) cylinder(h=mhNozzleHeight+0.02,r1=mhBore/2, r2=mhNozzleID/2);
 	}
@@ -161,7 +161,7 @@ module modular_hose_flat_nozzle_tip(mhBore, mhNozzleWidth, mhNozzleThickness) {
             rotate([0,180,0])
             tube_adapter(mhNozzleWidth, mhNozzleThickness, mhNozzleHeight, 3.65, in_dia = mhBore);
 		}
-	
+
 		// removeBore
 		translate([0,0,-0.01]) cylinder(h=0.02,d=mhBore);
 	}
@@ -179,7 +179,7 @@ module modularHoseFlareNozzleTip(mhBore, mhNozzleWidth,mhNozzleThickness) {
 
 			cylinder(h= mhNozzleHeight, r1=mhWaistOD/2, r2=mhNozzleWidth/2);
 		}
-	
+
 		// removeBore
 		translate([0,0,-0.01]) cylinder(h=mhNozzleHeight+0.02,r1=mhBore/2, r2=mhNozzleThickness/2);
 	}
@@ -233,21 +233,28 @@ module hose_flat_nozzle(mhBore,mhNozzleWidth,mhNozzleThickness) {
 	modularHoseSocket(mhBore) modular_hose_flat_nozzle_tip(mhBore, mhNozzleWidth,mhNozzleThickness);
 }
 
+module hose_base_plate_drill_children(plate_width, screw_offset = 6) {
+	mhScrewOffset=plate_width/2 - screw_offset;
+
+	for ( x = [-1, 1]) {
+		for ( y = [-1, 1]) {
+			translate([x * mhScrewOffset, y * mhScrewOffset, 0])
+				children();
+		}
+	}
+}
+
 module hose_base_plate_drill_holes(mhBore, plate_width, mhThreadDia=3, screw_offset = 6) {
 	mhWaistOD = 1.58 * mhBore;
 	mhScrewOffset=plate_width/2 - screw_offset;
 
     // remove central bore (perhaps to feed cables through?)
     circle(d=mhBore);
-			
-	
+
+
     // remove screw holes
-    for ( x = [-1, 1]) {
-        for ( y = [-1, 1]) {
-            translate([x * mhScrewOffset, y * mhScrewOffset, 0]) 
-                    circle(d=mhThreadDia);
-        }
-    }    
+	hose_base_plate_drill_children(plate_width, screw_offset)
+	circle(d=mhThreadDia);
 }
 
 module hose_base_plate(mhBore, plate_width = 0, mhThreadDia=3, screw_offset = 6, has_ball = true) {
@@ -256,7 +263,7 @@ module hose_base_plate(mhBore, plate_width = 0, mhThreadDia=3, screw_offset = 6,
         "bore_", mhBore, "_",
         "dia_", mhThreadDia)
     );
-    
+
 	mhWaistOD = 12;
 	mhPlateHeight = 3;
 	mhPlateWidth = plate_width != 0 ? plate_width : mhWaistOD + 4*mhThreadDia;
@@ -264,12 +271,12 @@ module hose_base_plate(mhBore, plate_width = 0, mhThreadDia=3, screw_offset = 6,
 	union() {
         if(has_ball)
             translate([0,0,1 + mhPlateHeight*2]) modularHoseBall(mhBore);
-        
+
 		translate([0,0,1]) modularHoseWaist(mhBore, mhPlateHeight*2.5, mhWaistOD) sphere(d=0);
 		difference() {
-			translate([0,0,mhPlateHeight/2]) 
-                rounded_rectangle([mhPlateWidth,mhPlateWidth,mhPlateHeight], r = 2, center = true);				
-	
+			translate([0,0,mhPlateHeight/2])
+                rounded_rectangle([mhPlateWidth,mhPlateWidth,mhPlateHeight], r = 2, center = true);
+
 			// remove screw holes
             translate_z(-1)
             linear_extrude(mhPlateHeight+2)
@@ -293,21 +300,21 @@ module modularHoseDoubleSocket(mhBore) {
 
 if (true) {
 	// top segment
-	difference() {	
+	difference() {
         rotate([0,0,90])
-        translate([0,0,13.9]) hose_flat_nozzle(i4, 12, 4);    
+        translate([0,0,13.9]) hose_flat_nozzle(i4, 12, 4);
 //		translate([0,0,13.9]) hose_segment(i4);
 		translate([-10,0,-1]) cube(size=[20,20,100]);
-	}	
-	
+	}
+
 	// bottom segment
-	difference() {	
-//		hose_segment(i4);	
+	difference() {
+//		hose_segment(i4);
         hose_base_plate(i4, 30, 3, 3);
 		translate([-25,0,-1]) cube(size=[50,50,50]);
 	}
-	
-	
+
+
 	// Show a ruler
 	for (i= [-10 : 10]) {
 		translate([i - 0.05,0,0]) rotate([90,0,0]) color([0.9,0.9,0.9,1]) square(size=[0.1,20]);
@@ -320,7 +327,7 @@ if (true) {
 // -----------------------------------------------------------------------------------
 
 module evenlySpaceX(spacing) {
-  
+
 	for (i = [0 : $children-1])
     		translate([i * spacing , 0, 0 ]) children(i);
 }
@@ -333,11 +340,11 @@ if (true) {
 //		hose_round_nozzle(i4, i8);
 //		hose_round_nozzle(i4, i16);
 //	}
-//	
+//
 //	translate([0,25,0]) evenlySpaceX(25) {
 //		hose_segment(i4);
 //		hose_extended_segment(i4,20);
-//		
+//
 //		hose_base_plate(i4);
 //
 //		modularHoseDoubleSocket(i4);
@@ -349,12 +356,12 @@ if (true) {
 //	hose_segment(i4);
     $fn = 20;
     hose_base_plate(i4)
-//    hose_extended_segment(i4,5)    
-    hose_segment(i4) 
+//    hose_extended_segment(i4,5)
+    hose_segment(i4)
     hose_segment(i4)
 //    modularHoseFlareNozzle(i4, 6, 5);
 //    hose_round_nozzle(i4, 5);
-    hose_flat_nozzle(i4, 10, 2);    
+    hose_flat_nozzle(i4, 10, 2);
 	//hose_base_plate(i4);
 	//modularHoseDoubleSocket(i4);
 
