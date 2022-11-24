@@ -1,6 +1,5 @@
 include <enclosure_common.scad>
 
-use <parametric_hinge_door_front.scad>
 use <../../axes/z-axis.scad>
 use <enclosure_vslot_mounts.scad>
 
@@ -120,10 +119,6 @@ module enclosure_base_side_dual_z_sketch(width, heigth, window_h, x_length, lh, 
         spool_holder_mounts()
         circle(r = M5_tap_radius);
 
-        enclosure_side_place_psu_case()
-        electronics_box_psu_case_mounts()
-        circle(r = M4_clearance_radius);
-
         enclosure_side_place_gas_lift_wall(width-10, heigth)
         gas_lift_mounts()
         circle(r = M4_tap_radius);
@@ -149,13 +144,7 @@ module enclosure_side_z_axis_mount_line(length, lh) {
 module enclosure_side_place_spool_holder(x_length) {
     pos = zAxisDualPosition(x_length) > 195 ? 195 : zAxisDualPosition(x_length)+70;
 
-    translate([pos, 0, 0])
-    children();
-}
-
-module enclosure_side_place_psu_case() {
-    translate([-25,-50, 0])
-        rotate([0,0,-90])
+    translate([-pos, 0, 0])
     children();
 }
 
@@ -199,10 +188,6 @@ module enclosure_side_dual_z(width, heigth, window_h, x_length) {
             enclosure_side_place_spool_holder(x_length)
             spool_holder_assembly();
             //            spool_holder_assembly(type = false);
-
-
-            enclosure_side_place_psu_case()
-            electronics_box_psu_case_assembly();
 
 
         }

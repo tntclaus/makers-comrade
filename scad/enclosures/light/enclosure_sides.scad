@@ -153,12 +153,6 @@ module enclosure_side_place_spool_holder(x_length) {
     children();
 }
 
-module enclosure_side_place_psu_case() {
-    translate([-25,-50, 0])
-        rotate([0,0,-90])
-    children();
-}
-
 module enclosure_side_window(heigth) {
     name = str("PC_", MATERIAL_SIDE_WINDOW_THICKNESS, "mm", "_enclosure_side_window_h", heigth);
     dxf(name);
@@ -199,12 +193,6 @@ module enclosure_side_dual_z(width, heigth, window_h, x_length) {
             enclosure_side_place_spool_holder(x_length)
             spool_holder_assembly();
             //            spool_holder_assembly(type = false);
-
-
-            enclosure_side_place_psu_case()
-            electronics_box_psu_case_assembly();
-
-
         }
 
         translate([0, heigth/2+ELECTRONICS_BOX_LENGTH()/2 + 75,-MATERIAL_STEEL_THICKNESS]) {

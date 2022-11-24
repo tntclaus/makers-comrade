@@ -2,7 +2,6 @@ import abc
 from typing import Union, Optional, List, Dict, Any, overload, Tuple, Iterator, cast
 from enum import Enum
 
-from cadquery import Assembly
 from cadquery.assembly import Assembly, AssemblyObjects, Color, Location
 
 

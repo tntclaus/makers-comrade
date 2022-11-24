@@ -5,12 +5,18 @@ use <../axes/x-axis.scad>
 use <../axes/y-axis.scad>
 use <../axes/z-axis.scad>
 
-//use <doors.scad>
-
-use <parametric_hinge_door_front.scad>
-
 include <enclosure_common.scad>
 use <enclosure_vslot_mounts.scad>
+
+use <../electronics_box.scad>
+
+
+
+module enclosure_side_place_psu_case() {
+    translate([-100,60, 0])
+        rotate([0,0,-90])
+            children();
+}
 
 
 
@@ -46,6 +52,10 @@ module enclosure_bottom_plate(width, length, xAxisSize, lengthX) {
             enclosure_vslot_mount_line_horizontal(width, 0);
             enclosure_vslot_mount_line_horizontal(length, 0);
         }
+
+        rotate([180,0,0])
+        enclosure_side_place_psu_case()
+        electronics_box_psu_case_assembly();
     }
 }
 
@@ -72,6 +82,11 @@ module enclosure_bottom_plate_sketch(width, length, xAxisSize, lengthX) {
             z_axis_motor_place() z_axis_motor_outline();
             z_axis_motor_place() z_axis_motor_outline();
         }
+
+
+        enclosure_side_place_psu_case()
+        electronics_box_psu_case_mounts()
+        circle(r = M4_clearance_radius);
     }
 }
 

@@ -47,7 +47,8 @@ $preview_table = !$preview || is_bom() || false;
 $preview_belts = !$preview || is_bom() || false;
 $preview_tool = !$preview || is_bom() || false;
 $preview_screws = !$preview || is_bom() || false;
-$preview_left_side_parts = !$preview || is_bom() || false;
+$preview_left_side_parts = !$preview || is_bom() || true;
+$preview_bottom_side_parts = !$preview || is_bom() || true;
 
 module STEEL_3mm_dxf() {
     square(5);
