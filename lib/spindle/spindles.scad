@@ -4,7 +4,7 @@ use <spindle.scad>
 //               center  shield  dia    heigth  vent   vent   vent   dia    heigth  z       collar  collar  dia
 //               offset  dia                    holes  holes  holes                 offset  dia     heigth
 //                                              offse  top z  top h
-RS385 = ["RS385",     8,   28,    28,  37.6,      8,   44.75, 7.4,  2.3,     57,     66.5,   10,     2.6,    2.5];
+RS385 = ["RS385",     8,   28,    28,  37.6,      9,   44.75, 7.4,  2.3,     57,     66.5,   11,     2.6,    2.5];
 RS775 = ["RS775",  14.5,   45,    42,    67,   14.5,   44.75, 7.4,    5,     98,     66.5,   18,     4.5,    4.2];
 RS895 = ["RS895",  14.5,   50,  47.6,    72,     16,   44.75, 7.4,    5,     85,     66.5,   18,     4.5,    4.2];
 
