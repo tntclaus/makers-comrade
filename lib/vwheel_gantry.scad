@@ -11,7 +11,7 @@ module vwheel_gantry(type, center = false, mirror = false, mirror_plate = [0,0,0
 
     holes = plate[3];
 
-    double = wheels[0][5];
+//    double = wheels[0][5];
     plate_thickness = plate[2];
 
     zTranslation = center ? 29/2 : 0;
@@ -32,18 +32,18 @@ module vwheel_gantry(type, center = false, mirror = false, mirror_plate = [0,0,0
                 }
             }
 
-            if(double) {
-                translate([0,0,21.8]) rotate([180,0,0])
-                if(mirror) {
-                    vslot_plate(plate) {
-                        children(0);
-                        if($children > 1)
-                            children([1:$children-1]);
-                    }
-                } else {
-                    vslot_plate(plate);
-                }
-            }
+//            if(double) {
+//                translate([0,0,21.8]) rotate([180,0,0])
+//                if(mirror) {
+//                    vslot_plate(plate) {
+//                        children(0);
+//                        if($children > 1)
+//                            children([1:$children-1]);
+//                    }
+//                } else {
+//                    vslot_plate(plate);
+//                }
+//            }
         }
     }
 }

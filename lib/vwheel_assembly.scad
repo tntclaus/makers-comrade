@@ -4,12 +4,17 @@ include <NopSCADlib/utils/core/core.scad>
 include <NopSCADlib/vitamins/nuts.scad>
 include <NopSCADlib/vitamins/screws.scad>
 
+
+function v_wheel_assembly_screw_overhang(type)  = type[6] == undef ? 0 : type[6];
+
+
 module spacer(h = 6) {
     hstr = str_replace(str(h), ".", "_");
     vitamin(str(
         "spacer(", str(h), "): OpenBuilds Spacer (h=", h, "mm)"
     ));
     color("silver")
+    render()
     translate([0,0,h])
     rotate([0,180,0])
     difference() {
@@ -60,29 +65,32 @@ module vwheel_all_but_spacer(type) {
     screwType = type[4];
     double = type[5];
 
-    shift = eccentric ? [0.25,1,h + 11/2] : [0,0,h + 11/2];
+    if(wheelType != undef) {
+//        echo(wheelType);
+        shift = eccentric ? [0.25, 1, h + v_wheel_thick(wheelType[3]) / 2] : [0, 0, h + v_wheel_thick(wheelType[3]) / 2];
 
-    screwLength = double ? 35 : 25;
+        screw_base_length = h + v_wheel_thick(wheelType[3]) + v_wheel_assembly_screw_overhang(type) + 6;
+        screwLength = double ? screw_base_length + h + v_wheel_thick(wheelType[3]) : screw_base_length;
 
 
-    translate(shift){
-        vwheel(wheelType);
-        rotate([0,180,0])
-            translate([0,0,14.5])
-                screw(screwType, screwLength);
+        translate(shift) {
+            vwheel(wheelType);
+            rotate([0, 180, 0])
+                translate([0, 0, h+v_wheel_thick(wheelType[3])/2+v_wheel_assembly_screw_overhang(type)])
+                    screw(screwType, screwLength);
 
-        translate([0,0,h-1+screwLength-25])
-            spring_washer(screw_washer(screwType));
-        translate([0,0,h+screwLength-25])
-            nut(screw_nut(screwType));
+            translate([0, 0, v_wheel_thick(wheelType[3])/2])
+                spring_washer(screw_washer(screwType));
+            translate([0, 0, v_wheel_thick(wheelType[3])/2+1])
+                nut(screw_nut(screwType));
+        }
 
-    }
-
-    if(double) {
-        if(eccentric) {
-            translate([0,0,21.8]) rotate([0,180,0]) eccentric_spacer(h);
-        } else {
-            translate([0,0,21.8]) rotate([0,180,0]) spacer(h);
+        if (double) {
+            if (eccentric) {
+                translate([0, 0, 21.8]) rotate([0, 180, 0]) eccentric_spacer(h);
+            } else {
+                translate([0, 0, 21.8]) rotate([0, 180, 0]) spacer(h);
+            }
         }
     }
 }
