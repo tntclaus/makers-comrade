@@ -361,6 +361,13 @@ module block_BF12() {
 
 module STEEL_5mm_axis_z_gantry_dxf() {
     polygon_plate_sketch(Z_PLATE);
+//    function wheelHoles(w = 100+v_wheel_dia2(D_STEEL_ZZ[3])) = [
+//            [1, 0, w / 2, - 17],
+//            [1, 0, - w / 2, - 17],
+//            [1, 0, - w / 2, 17 - Z_GANTRY_HEIGTH],
+//            [1, 0, w / 2, 17 - Z_GANTRY_HEIGTH],
+//        ];
+//    drillHoles(wheelHoles(), 0);
 }
 
 module axis_z(heigth, pos = 0) {
@@ -542,24 +549,18 @@ function Z_PLATE_GEOM(h = Z_GANTRY_HEIGTH, w = Z_GANTRY_WIDTH + 60, wr = 20, r =
         [h + r, - w / 2 + r, r],
     ];
 
-function Z_VW_HOLES(w = Z_GANTRY_WIDTH + 60) = [
-        [7.21, 0, - 10 - w / 2 + 20, - 10],
-        [5.01, 0, 68 - w / 2 + 60, - 10],
-        [5.01, 0, 68 - w / 2 + 60, 10 - Z_GANTRY_HEIGTH],
-        [7.21, 0, - 10 - w / 2 + 20, 10 - Z_GANTRY_HEIGTH],
+function Z_VW_HOLES(w = 100+v_wheel_dia2(D_STEEL_ZZ[3])) = [
+        [7.21, 0, w / 2, - 10],
+        [5.01, 0, - w / 2, - 10],
+        [5.01, 0, - w / 2, 10 - Z_GANTRY_HEIGTH],
+        [7.21, 0, w / 2, 10 - Z_GANTRY_HEIGTH],
     ];
 
 Z_SPINDLE_MOUNTS = [for(l = SPINDLE_MOUNTS()) [screw_pilot_hole(SPINDLE_SCREW)*2, 0, l.x, l.y-30]];
-Z_PLATE_LEADSCREW_MOUNTS = [for(l = Z_LEADSCREW_MOUNTS()) [screw_pilot_hole(Z_LEADSCREW_SCREW)*2, 0, l.x, l.y-30]];
+Z_PLATE_LEADSCREW_MOUNTS = [for(l = Z_LEADSCREW_MOUNTS()) [screw_radius(Z_LEADSCREW_SCREW)*2, 0, l.x, l.y-30]];
 
-function Z_MOUNTS(w = Z_GANTRY_WIDTH + 60, l = 20 / 2) = concat(
-        [
-        //        [5.05,0,["circle", [[23-w/2+20,-80], [33-w/2+20,-80]]]],
-            [7.21, 0, - 10 - w / 2 + 20, - 10],
-            [5.01, 0, 68 - w / 2 + 60, - 10],
-            [5.01, 0, 68 - w / 2 + 60, l - Z_GANTRY_HEIGTH],
-            [7.21, 0, - 10 - w / 2 + 20, l - Z_GANTRY_HEIGTH],
-        ],
+function Z_MOUNTS(l = 20 / 2) = concat(
+        Z_VW_HOLES(),
         Z_SPINDLE_MOUNTS,
         Z_PLATE_LEADSCREW_MOUNTS
     );
@@ -567,12 +568,16 @@ function Z_MOUNTS(w = Z_GANTRY_WIDTH + 60, l = 20 / 2) = concat(
 
 Z_PLATE = [Z_PLATE_GEOM(), 5, MATERIAL_THICKNESS, Z_VW_HOLES(), Z_MOUNTS()];
 
+Z_WHEEL_SPACER = ["", 6, false, D_STEEL_2RS, M5_dome_screw, false, MATERIAL_THICKNESS];
+Z_WHEEL_ECCENTRIC = ["", 6, true, D_STEEL_2RS, M5_dome_screw, false, MATERIAL_THICKNESS];
+
+
 Z_GANTRY = ["", Z_PLATE,
         [
-        S_XTREME_VW_ECCENT,
-        S_XTREME_VW_SPACER,
-        S_XTREME_VW_SPACER,
-        S_XTREME_VW_ECCENT,
+        Z_WHEEL_ECCENTRIC,
+        Z_WHEEL_SPACER,
+        Z_WHEEL_SPACER,
+        Z_WHEEL_ECCENTRIC,
         ], 40];
 
 /**
@@ -851,3 +856,9 @@ if ($preview)
 module main_assembly() {
     cnc_router_assembly();
 }
+
+
+//translate([0,100,277])
+//color("blue")
+//rotate([90,0,180])
+//import("../dxfs/STEEL_5mm_axis_z_gantry.dxf");
