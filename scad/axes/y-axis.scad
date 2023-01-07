@@ -21,6 +21,56 @@ use <../endstops_xy.scad>
 //use <NopSCADlib/vitamins/pulley.scad>
 include <carets.scad>
 
+module ABS_pulley_cap() {
+    $fn = 90;
+    translate([-7,0,0])
+    pulley_cap_top();
+    translate([7,0,0])
+    pulley_cap_bottom();
+}
+
+// Cap to put on pulley axis bolt to prevent cable chain from
+// being tangled with the bolt.
+module pulley_cap() {
+    stl("ABS_pulley_cap");
+
+    translate_z(4)
+    pulley_cap_top();
+
+    pulley_cap_bottom();
+}
+module pulley_cap_top() {
+    difference() {
+        rotate_extrude()
+            difference() {
+                scale([1, 2.5])
+                    circle(r = 6);
+
+                translate([0, - 10])
+                    square([20, 30]);
+
+                translate([- 10, - 20])
+                    square([20, 20]);
+
+                // паз под винт
+                square([4.2, 15], center = true);
+            }
+        translate_z(-1)
+        nut(M4_nut);
+    }
+}
+module pulley_cap_bottom() {
+    difference() {
+        cylinder(r = 6, h = 4);
+        cylinder(r = 4.2/2, h = 5);
+        translate_z(2)
+        nut(M4_nut);
+    }
+}
+
+
+ABS_pulley_cap();
+
 
 module D16T_y_caret_60_dxf() {
     $fn = 180;
