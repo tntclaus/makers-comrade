@@ -648,7 +648,34 @@ module STEEL_5mm_axis_x_motor_plate_front_dxf() {
         };
 }
 
+use <../lib/gears.scad>
+
+
+module gear_with_mounts(modul, tooth_number, width, bore) {
+    module gear_mount() {
+        rotate([90,0,0]) {
+            cylinder(d = 3, h = 40);
+            cylinder(d = 7.6, h = bore, $fn = 6);
+        }
+    }
+    difference() {
+        spur_gear(modul, tooth_number, width, bore, pressure_angle = 20, helix_angle = 0, optimized = true);
+        translate_z(width/2) {
+            for(y = [0, 72*2])
+            rotate([0, 0, 17.5 + y])
+                gear_mount();
+        }
+    }
+}
+
+module gear_with_latch(modul, tooth_number, width, bore) {
+    spur_gear(modul, tooth_number, width, bore, pressure_angle = 20, helix_angle = 0, optimized = true);
+    translate([0,width/2-bore/2,width/2])
+    cube([bore,bore/3,width], center = true);
+}
+
 module axis_x_plate_motor_plate() {
+
     module place_extrusion() {
         translate([- 40, - 10+X_GANTRY_ELEVATION, - 43 / 2 - MATERIAL_THICKNESS])
             rotate([0, 0, 90])
@@ -658,6 +685,7 @@ module axis_x_plate_motor_plate() {
     offs = 21.5 + MATERIAL_THICKNESS;
     name = str("STEEL_",MATERIAL_THICKNESS,"mm_axis_x_motor_plate_front");
     dxf(name);
+
     translate([offs, 0, 0])
         mirror([0, 1, 0])
             vwheel_gantry(X_GANTRY_FRONT) {
@@ -688,6 +716,21 @@ module axis_x_plate_motor_plate() {
 
                     place_block_BK12()
                     block_BK12();
+
+
+
+                    color("gray")
+                    translate([0,30,25])
+                        rotate([90,0,0])
+                            gear_with_mounts(2, 39, 10, 10);
+
+
+
+                    color("green")
+                    translate([0,30,-26.5])
+                    rotate([0,9,0])
+                        rotate([90,0,0])
+                            gear_with_latch(2, 12, 10, 5);
                 }
             };
 
@@ -849,16 +892,22 @@ module cnc_router_assembly() {
     }
 }
 
-if ($preview)
-    cnc_router_assembly();
+//if ($preview)
+//    cnc_router_assembly();
+//
+//
+//module main_assembly() {
+//    cnc_router_assembly();
+//}
+//gear_with_mounts(2, 32, 10, 10);
 
+//gear_with_latch(2, 20, 10, 5);
 
-module main_assembly() {
-    cnc_router_assembly();
-}
+translate([-60,0,0])
+gear_with_mounts(2, 39, 10, 10);
+gear_with_latch(2, 12, 10, 5);
 
-
-//translate([0,100,277])
+//translate([0,100,277])    b
 //color("blue")
 //rotate([90,0,180])
 //import("../dxfs/STEEL_5mm_axis_z_gantry.dxf");
