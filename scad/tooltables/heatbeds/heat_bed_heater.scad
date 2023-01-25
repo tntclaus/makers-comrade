@@ -205,3 +205,29 @@ module heat_bed_heater_etching_template(thickness = 2) {
 }
 
 //heat_bed_heater_etching_template(1.2);
+
+
+function HEATER_WIDTH(table_width) = 540;
+
+
+module heatbed_table_thermal_compound(width, heigth) {
+
+}
+
+module heatbed_table_heater_08_2kW(work_area_width) {
+    nichrome_wire_dia = 0.8;
+    nichrome_wire_total_l = 10000;
+    nichrome_wire_span_x  = 30;
+    nichrome_wire_span_y = 490;
+
+    width = 540;
+    assert(
+    work_area_width >= width,
+    "This is 2kW heater for tables bigger than 0.25 sq. meters"
+    );
+
+    heatbed_table_glassfiber_coat(width);
+    translate_z(5)
+    //    heat_bed_heater(width, width);
+    heatbed_table_thermal_compound();
+}

@@ -8,7 +8,7 @@ use <axes/z-axis.scad>
 use <axes/y-axis.scad>
 use <axes/x-axis.scad>
 
-use <heatbeds/heatbed.scad>
+use <tooltables/heatbeds/heatbed.scad>
 
 use <toolheads/toolhead_extruder_orbiter_mosquito.scad>
 use <toolheads/toolhead_extruder_titan_e3d.scad>

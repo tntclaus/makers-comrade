@@ -2,8 +2,6 @@ include <NopSCADlib/utils/core/core.scad>
 include <NopSCADlib/utils/core/rounded_rectangle.scad>
 include <NopSCADlib/vitamins/extrusions.scad>
 
-use <heat_bed_heater.scad>
-use <ceramic_granite_heatbed_table.scad>
 
 ///////////////////////////////////////////
 ///// NEW!!!!! 2021.04.13
@@ -20,10 +18,7 @@ D16T_COLOR = "#aaaaaa";
 
 POPERECHINA_STEP = 100;
 
-function HEATER_WIDTH(table_width) = 540;
-
-
-module heatbed_table_base_extrusions(
+module tooltable_base_extrusions(
     work_area_width,
     mount_length,
     mount_point_offset,
@@ -44,28 +39,28 @@ module place_poperechina(work_area_width) {
     children();
 }
 
-module STEEL_3mm_heatbed_table_base_poperechina_bottom_300_dxf() {
-    heatbed_table_base_poperechina_bottom(300);
+module STEEL_3mm_tooltable_base_poperechina_bottom_300_dxf() {
+    tooltable_base_poperechina_bottom(300);
 }
-module STEEL_3mm_heatbed_table_base_poperechina_top_300_dxf() {
-    heatbed_table_base_poperechina_top(300);
-}
-
-module heatbed_table_base_poperechina_top(work_area_width) {
-    dxf_name = str("STEEL_3mm_heatbed_table_base_poperechina_top_", work_area_width);
-    dxf(dxf_name);
-    heatbed_table_base_poperechina_sketch(work_area_width, cut = 1);
+module STEEL_3mm_tooltable_base_poperechina_top_300_dxf() {
+    tooltable_base_poperechina_top(300);
 }
 
-module heatbed_table_base_poperechina_bottom(work_area_width) {
-    dxf_name = str("STEEL_3mm_heatbed_table_base_poperechina_bottom_", work_area_width);
+module tooltable_base_poperechina_top(work_area_width) {
+    dxf_name = str("STEEL_3mm_tooltable_base_poperechina_top_", work_area_width);
     dxf(dxf_name);
-    heatbed_table_base_poperechina_sketch(work_area_width, cut = -1);
+    tooltable_base_poperechina_sketch(work_area_width, cut = 1);
+}
+
+module tooltable_base_poperechina_bottom(work_area_width) {
+    dxf_name = str("STEEL_3mm_tooltable_base_poperechina_bottom_", work_area_width);
+    dxf(dxf_name);
+    tooltable_base_poperechina_sketch(work_area_width, cut = -1);
 }
 
 function poperechina_width(work_area_width) = TABLE_BASE_BORDER * 2 + work_area_width - 4;
 
-module heatbed_table_base_poperechina_sketch(work_area_width, cut = 1) {
+module tooltable_base_poperechina_sketch(work_area_width, cut = 1) {
     width = poperechina_width(work_area_width);
     module ear() {
         square([3, 13], center = true);
@@ -86,7 +81,7 @@ module heatbed_table_base_poperechina_sketch(work_area_width, cut = 1) {
 }
 
 
-module heatbed_table_base_sketch(
+module tooltable_base_sketch(
     x_work_area_width,
     y_work_area_width,
     mount_length,
@@ -174,8 +169,8 @@ module heatbed_table_base_sketch(
 }
 
 
-module STEEL_3mm_heatbed_table_base_300x300_3_dxf() {
-    heatbed_table_base_sketch(
+module STEEL_3mm_tooltable_base_300x300_3_dxf() {
+    tooltable_base_sketch(
         x_work_area_width = 300,
         y_work_area_width = 300,
         mount_length = 11.2,
@@ -185,7 +180,7 @@ module STEEL_3mm_heatbed_table_base_300x300_3_dxf() {
 }
 
 
-module heatbed_table_base(
+module tooltable_base(
     x_work_area_width,
     y_work_area_width,
     mount_length,
@@ -193,7 +188,7 @@ module heatbed_table_base(
     mounts_num = 3
 ) {
     dxf_name = str(
-    "STEEL_3mm_heatbed_table_base", "_",
+    "STEEL_3mm_tooltable_base", "_",
     x_work_area_width, "x", y_work_area_width, "_",
     mounts_num
     );
@@ -201,7 +196,7 @@ module heatbed_table_base(
     dxf(dxf_name);
     color(STAINLESS_COLOR)
     linear_extrude(3)
-    heatbed_table_base_sketch(
+    tooltable_base_sketch(
         x_work_area_width = x_work_area_width,
         y_work_area_width = y_work_area_width,
         mount_length = mount_length,
@@ -213,7 +208,7 @@ module heatbed_table_base(
         rotate([90,0,90])
         translate_z(-1.5)
         linear_extrude(3)
-            heatbed_table_base_poperechina_top(work_area_width = y_work_area_width);
+            tooltable_base_poperechina_top(work_area_width = y_work_area_width);
     }
 
     module poperechina_bottom() {
@@ -221,7 +216,7 @@ module heatbed_table_base(
         rotate([90,0,90])
         translate_z(-1.5)
         linear_extrude(3)
-            heatbed_table_base_poperechina_bottom(work_area_width = x_work_area_width);
+            tooltable_base_poperechina_bottom(work_area_width = x_work_area_width);
     }
 
     translate_z(-10) {
@@ -408,14 +403,14 @@ module heater_table_compound_walls(
     heater_compound_support(heater_width);
 }
 
-module heatbed_table_glassfiber_coat(
+module tooltable_glassfiber_coat(
     heater_width,
     name = "unknown_brand",
     thickness = 5
 ) {
     width = heater_width + TABLE_BASE_COMPOUND_WALL_THICKNESS * 2;
     vitamin(
-        str("heatbed_table_glassfiber_coat_",
+        str("tooltable_glassfiber_coat_",
             width, "x", width, "_",
             name, "_",
             thickness, "mm"
@@ -431,29 +426,9 @@ module heatbed_table_glassfiber_coat(
     );
 }
 
-module heatbed_table_thermal_compound(width, heigth) {
 
-}
 
-module heatbed_table_heater_08_2kW(work_area_width) {
-    nichrome_wire_dia = 0.8;
-    nichrome_wire_total_l = 10000;
-    nichrome_wire_span_x  = 30;
-    nichrome_wire_span_y = 490;
-
-    width = 540;
-    assert(
-        work_area_width >= width,
-        "This is 2kW heater for tables bigger than 0.25 sq. meters"
-    );
-
-    heatbed_table_glassfiber_coat(width);
-    translate_z(5)
-//    heat_bed_heater(width, width);
-    heatbed_table_thermal_compound();
-}
-
-module heatbed_table_assembly(
+module tooltable_assembly(
     x_work_area_width,
     y_work_area_width,
     mount_length,
@@ -461,8 +436,8 @@ module heatbed_table_assembly(
     mounts_num = 3)
 {
     assembly("heatbed_table"){
-        heatbed_table_base(
-        //    heatbed_table_base_extrusions(
+        tooltable_base(
+        //    tooltable_base_extrusions(
         x_work_area_width = x_work_area_width,
         y_work_area_width = y_work_area_width,
         mount_length = mount_length,
@@ -470,15 +445,15 @@ module heatbed_table_assembly(
         mounts_num = mounts_num
         );
         translate_z(-5) {
-//            heatbed_table_heater_08_2kW(work_area_width);
+//            tooltable_heater_08_2kW(work_area_width);
 //                    translate_z(10)
             children();
         }
     }
 }
 
-heatbed_table_assembly(300, 300, 11.5, 25)
-    ceramic_granite_heatbed_table(300, 300);
+tooltable_assembly(300, 300, 11.5, 25);
+//    ceramic_granite_heatbed_table(300, 300);
 
 //GRANITE_heatbed_table_base_610_10_25_3_dxf();
 
