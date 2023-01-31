@@ -1,16 +1,17 @@
 include <NopSCADlib/utils/core/core.scad>
 include <NopSCADlib/utils/core/rounded_rectangle.scad>
 include <NopSCADlib/vitamins/extrusions.scad>
+include <NopSCADlib/vitamins/screws.scad>
 
 
 ///////////////////////////////////////////
 ///// NEW!!!!! 2021.04.13
 ///////////////////////////////////////////
 
-TABLE_BASE_BORDER = 10;
-TABLE_BASE_OFFSET = 0;
+function TABLE_BASE_BORDER() = 10;
+function TABLE_BASE_OFFSET() = 0;
 
-TABLE_BASE_COMPOUND_WALL_THICKNESS = 30;
+function TABLE_BASE_COMPOUND_WALL_THICKNESS() = 30;
 
 STEEL_COLOR = "#555555";
 STAINLESS_COLOR = "#999999";
@@ -58,7 +59,7 @@ module tooltable_base_poperechina_bottom(work_area_width) {
     tooltable_base_poperechina_sketch(work_area_width, cut = -1);
 }
 
-function poperechina_width(work_area_width) = TABLE_BASE_BORDER * 2 + work_area_width - 4;
+function poperechina_width(work_area_width) = TABLE_BASE_BORDER() * 2 + work_area_width - 4;
 
 module tooltable_base_poperechina_sketch(work_area_width, cut = 1) {
     width = poperechina_width(work_area_width);
@@ -81,6 +82,32 @@ module tooltable_base_poperechina_sketch(work_area_width, cut = 1) {
 }
 
 
+module tooltable_mount(mount_point_offset, mount_length) {
+    difference() {
+        hull() {
+            translate([0, -10])
+                square([mount_point_w(mount_point_offset)-5, 0.0001], center = true);
+
+            translate([0, mount_length-4, 0])
+                square([35, 8], center = true);
+        }
+        translate([ 00, mount_length-6.65, 0])
+            circle(d = 5);
+
+        //            translate([-10, mount_length-4, 0])
+        //            circle(d = 4);
+
+    }
+}
+
+function mount_point_w(mount_point_offset) = mount_point_offset < 45 ? 45 : mount_point_offset;
+
+function fixture_mount_points(x_width, y_width) = [
+        [x_width/2-TABLE_BASE_BORDER()/2, -(y_width/2-TABLE_BASE_BORDER()/2-60)]
+    ];
+
+function tooltable_width(work_area_width) = work_area_width + TABLE_BASE_BORDER()*2 + TABLE_BASE_OFFSET()*2;
+
 module tooltable_base_sketch(
     x_work_area_width,
     y_work_area_width,
@@ -89,29 +116,29 @@ module tooltable_base_sketch(
     mounts_num = 3
 ) {
     strenghtener_line_width = 33;
-    echo(y_work_area_width);
+//    echo(y_work_area_width);
     assert(x_work_area_width >= 300);
     assert(y_work_area_width >= 300);
 
     assert(mounts_num >= 3);
     assert(mounts_num <= 4);
 
-    x_width = x_work_area_width + TABLE_BASE_BORDER*2 + TABLE_BASE_OFFSET*2;
-    y_width = y_work_area_width + TABLE_BASE_BORDER*2 + TABLE_BASE_OFFSET*2;
+    x_width = tooltable_width(x_work_area_width);
+    y_width = tooltable_width(y_work_area_width);
 
 //    min_width = width > 700 ? 600 : width;
 
     difference() {
         slw = strenghtener_line_width/3;
 
-        rounded_square([x_width, y_width], TABLE_BASE_BORDER, center = true);
+        rounded_square([x_width, y_width], TABLE_BASE_BORDER(), center = true);
 //        for(x = [-1, 1])
 //            for(y = [-1, 1])
 //                translate([x*(work_area_width/4-slw), y*(work_area_width/4-slw)]) {
 ////                    circle(d = work_area_width/2-20);
 //                    rounded_square(
 //                    [work_area_width/2-4*slw, work_area_width/2-4*slw],
-//                    TABLE_BASE_BORDER*4, center = true);
+//                    TABLE_BASE_BORDER()*4, center = true);
 //                }
 
         rounded_square([x_work_area_width, y_work_area_width], 0.5, center = true);
@@ -133,39 +160,24 @@ module tooltable_base_sketch(
             translate([0,-poperechina_width(y_work_area_width)/2+4])
                 square([3,3], center = true);
         }
+
+
+        for(point = fixture_mount_points(x_width, y_width))
+            translate(point)
+                circle(r = M4_tap_radius);
     }
 
-    mount_point_w = mount_point_offset < 45 ? 45 : mount_point_offset;
-
-    module mount() {
-        difference() {
-
-            hull() {
-                translate([0, -10])
-                square([mount_point_w-5, 0.0001], center = true);
-
-                translate([0, mount_length-4, 0])
-                square([35, 8], center = true);
-            }
-            translate([ 00, mount_length-6.65, 0])
-            circle(d = 5);
-
-//            translate([-10, mount_length-4, 0])
-//            circle(d = 4);
-
-        }
-    }
 
     translate([0, y_width/2, 0])
-    mount();
+        tooltable_mount(mount_point_offset, mount_length);
 
-    translate([ x_width/2-mount_point_offset-TABLE_BASE_BORDER, -y_width/2, 0])
+    translate([ x_width/2-mount_point_offset-TABLE_BASE_BORDER(), -y_width/2, 0])
     rotate([0,0,180])
-    mount();
+        tooltable_mount(mount_point_offset, mount_length);
 
-    translate([-(x_width/2-mount_point_offset-TABLE_BASE_BORDER), -y_width/2, 0])
+    translate([-(x_width/2-mount_point_offset-TABLE_BASE_BORDER()), -y_width/2, 0])
     rotate([0,0,180])
-    mount();
+        tooltable_mount(mount_point_offset, mount_length);
 }
 
 
@@ -233,11 +245,11 @@ module tooltable_base(
 }
 
 module heater_compound_support_sketch(width) {
-    translate([0,-TABLE_BASE_COMPOUND_WALL_THICKNESS/2])
+    translate([0,-TABLE_BASE_COMPOUND_WALL_THICKNESS()/2])
     rotate([0,0,90])
     square([
-        width - TABLE_BASE_COMPOUND_WALL_THICKNESS*3,
-        TABLE_BASE_COMPOUND_WALL_THICKNESS/2
+        width - TABLE_BASE_COMPOUND_WALL_THICKNESS()*3,
+        TABLE_BASE_COMPOUND_WALL_THICKNESS()/2
     ], center = true);
 }
 
@@ -252,10 +264,10 @@ module heater_compound_wall_top_center_sketch(width) {
     wall_width = width/3;
 
     union() {
-        square([wall_width, TABLE_BASE_COMPOUND_WALL_THICKNESS], center = true);
+        square([wall_width, TABLE_BASE_COMPOUND_WALL_THICKNESS()], center = true);
         square([
-            wall_width+TABLE_BASE_COMPOUND_WALL_THICKNESS,
-            TABLE_BASE_COMPOUND_WALL_THICKNESS/2-0.1
+            wall_width+TABLE_BASE_COMPOUND_WALL_THICKNESS(),
+            TABLE_BASE_COMPOUND_WALL_THICKNESS()/2-0.1
         ], center = true);
     }
 }
@@ -268,23 +280,23 @@ module heater_compound_wall_top_center(width) {
 }
 
 module heater_compound_wall_top_corner_sketch(width) {
-    wall_width = width/3-TABLE_BASE_COMPOUND_WALL_THICKNESS/2;
+    wall_width = width/3-TABLE_BASE_COMPOUND_WALL_THICKNESS()/2;
 
     difference() {
         union() {
             hull() {
-                circle(d = TABLE_BASE_COMPOUND_WALL_THICKNESS);
+                circle(d = TABLE_BASE_COMPOUND_WALL_THICKNESS());
                 translate([wall_width, 0, 0])
                     square([
                         0.0001,
-                        TABLE_BASE_COMPOUND_WALL_THICKNESS
+                        TABLE_BASE_COMPOUND_WALL_THICKNESS()
                     ], center = true);
             }
             hull() {
-                circle(d = TABLE_BASE_COMPOUND_WALL_THICKNESS);
+                circle(d = TABLE_BASE_COMPOUND_WALL_THICKNESS());
                 translate([0, wall_width, 0])
                     square([
-                        TABLE_BASE_COMPOUND_WALL_THICKNESS,
+                        TABLE_BASE_COMPOUND_WALL_THICKNESS(),
                         0.0001
                     ], center = true);
             }
@@ -293,15 +305,15 @@ module heater_compound_wall_top_corner_sketch(width) {
 
         translate([0, wall_width, 0])
             square([
-                TABLE_BASE_COMPOUND_WALL_THICKNESS/2,
-                TABLE_BASE_COMPOUND_WALL_THICKNESS
+                TABLE_BASE_COMPOUND_WALL_THICKNESS()/2,
+                TABLE_BASE_COMPOUND_WALL_THICKNESS()
             ], center = true);
 
 
         translate([wall_width, 0, 0])
             square([
-                TABLE_BASE_COMPOUND_WALL_THICKNESS,
-                TABLE_BASE_COMPOUND_WALL_THICKNESS/2
+                TABLE_BASE_COMPOUND_WALL_THICKNESS(),
+                TABLE_BASE_COMPOUND_WALL_THICKNESS()/2
             ], center = true);
     }
 }
@@ -314,23 +326,23 @@ module heater_compound_wall_top_corner(width) {
 }
 
 module heater_compound_wall_bottom_corner_sketch(width) {
-    wall_width = width/3-TABLE_BASE_COMPOUND_WALL_THICKNESS/2;
+    wall_width = width/3-TABLE_BASE_COMPOUND_WALL_THICKNESS()/2;
 
     difference() {
         union() {
             hull() {
-                circle(d = TABLE_BASE_COMPOUND_WALL_THICKNESS);
+                circle(d = TABLE_BASE_COMPOUND_WALL_THICKNESS());
                 translate([wall_width, 0, 0])
                     square([
                         0.0001,
-                        TABLE_BASE_COMPOUND_WALL_THICKNESS
+                        TABLE_BASE_COMPOUND_WALL_THICKNESS()
                     ], center = true);
             }
             hull() {
-                circle(d = TABLE_BASE_COMPOUND_WALL_THICKNESS);
+                circle(d = TABLE_BASE_COMPOUND_WALL_THICKNESS());
                 translate([0, wall_width, 0])
                     square([
-                        TABLE_BASE_COMPOUND_WALL_THICKNESS,
+                        TABLE_BASE_COMPOUND_WALL_THICKNESS(),
                         0.0001
                     ], center = true);
             }
@@ -339,15 +351,15 @@ module heater_compound_wall_bottom_corner_sketch(width) {
 
         translate([0, wall_width, 0])
             square([
-                TABLE_BASE_COMPOUND_WALL_THICKNESS/2,
-                TABLE_BASE_COMPOUND_WALL_THICKNESS
+                TABLE_BASE_COMPOUND_WALL_THICKNESS()/2,
+                TABLE_BASE_COMPOUND_WALL_THICKNESS()
             ], center = true);
 
 
         translate([wall_width, 0, 0])
             square([
-                TABLE_BASE_COMPOUND_WALL_THICKNESS,
-                TABLE_BASE_COMPOUND_WALL_THICKNESS/2
+                TABLE_BASE_COMPOUND_WALL_THICKNESS(),
+                TABLE_BASE_COMPOUND_WALL_THICKNESS()/2
             ], center = true);
     }
 }
@@ -362,7 +374,7 @@ module heater_compound_wall_bottom_corner(width) {
 module heater_table_compound_walls(
     heater_width
 ) {
-    move_xy = (heater_width-TABLE_BASE_COMPOUND_WALL_THICKNESS)/2;
+    move_xy = (heater_width-TABLE_BASE_COMPOUND_WALL_THICKNESS())/2;
     translate([0, move_xy,0])
         heater_compound_wall_top_center(heater_width);
 
@@ -408,7 +420,7 @@ module tooltable_glassfiber_coat(
     name = "unknown_brand",
     thickness = 5
 ) {
-    width = heater_width + TABLE_BASE_COMPOUND_WALL_THICKNESS * 2;
+    width = heater_width + TABLE_BASE_COMPOUND_WALL_THICKNESS() * 2;
     vitamin(
         str("tooltable_glassfiber_coat_",
             width, "x", width, "_",
