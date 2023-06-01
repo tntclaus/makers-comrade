@@ -33,9 +33,9 @@
         "other_text_thickness": 0.15,
         "other_text_upright": false,
         "pads": {
-          "drill": 0.762,
-          "height": 1.524,
-          "width": 1.524
+          "drill": 3.2,
+          "height": 3.2,
+          "width": 3.2
         },
         "silk_line_width": 0.15,
         "silk_text_italic": false,
@@ -45,7 +45,7 @@
         "silk_text_upright": false,
         "zones": {
           "45_degree_only": false,
-          "min_clearance": 0.508
+          "min_clearance": 0.25
         }
       },
       "diff_pair_dimensions": [
@@ -85,7 +85,7 @@
         "padstack": "error",
         "pth_inside_courtyard": "ignore",
         "shorting_items": "error",
-        "silk_over_copper": "warning",
+        "silk_over_copper": "ignore",
         "silk_overlap": "warning",
         "skew_out_of_range": "error",
         "through_hole_pad_without_hole": "error",
@@ -370,7 +370,7 @@
       },
       {
         "bus_width": 12.0,
-        "clearance": 0.4,
+        "clearance": 0.25,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
@@ -379,6 +379,18 @@
         "microvia_drill": 0.1,
         "name": "Power",
         "nets": [
+          "/Motor A/1A",
+          "/Motor A/1B",
+          "/Motor A/2A",
+          "/Motor A/2B",
+          "/Motor B/1A",
+          "/Motor B/1B",
+          "/Motor B/2A",
+          "/Motor B/2B",
+          "/Motor C/1A",
+          "/Motor C/1B",
+          "/Motor C/2A",
+          "/Motor C/2B",
           "/Motor X/1A",
           "/Motor X/1B",
           "/Motor X/2A",
@@ -387,18 +399,10 @@
           "/Motor Y/1B",
           "/Motor Y/2A",
           "/Motor Y/2B",
-          "/Motor Z1/1A",
-          "/Motor Z1/1B",
-          "/Motor Z1/2A",
-          "/Motor Z1/2B",
-          "/Motor Z2/1A",
-          "/Motor Z2/1B",
-          "/Motor Z2/2A",
-          "/Motor Z2/2B",
-          "/Motor Z3/1A",
-          "/Motor Z3/1B",
-          "/Motor Z3/2A",
-          "/Motor Z3/2B",
+          "/Motor Z/1A",
+          "/Motor Z/1B",
+          "/Motor Z/2A",
+          "/Motor Z/2B",
           "Vin"
         ],
         "pcb_color": "rgba(0, 0, 0, 0.000)",
@@ -473,20 +477,32 @@
       "Motor X"
     ],
     [
-      "8ca01849-c226-4c6f-aa6a-0b3e9f1bc8a0",
+      "2f97629b-ca35-40e1-950a-976dc6d5099e",
       "Motor Y"
     ],
     [
-      "2882de54-caab-4141-a96c-15398975ddd5",
-      "Motor Z1"
+      "cbfe036f-5613-48df-a314-10875a3b599a",
+      "Motor B"
     ],
     [
-      "61880754-3884-4079-8978-f0e9c27ad539",
-      "Motor Z2"
+      "21d5a0dd-8380-4cbc-877d-09f4ecd37e4d",
+      "Motor Z"
     ],
     [
-      "b9ab6fc1-ab4a-41a7-bacc-6dcf4cae6b73",
-      "Motor Z3"
+      "19bc01f1-ddb0-42eb-b5a4-99228b6f4f71",
+      "Motor A"
+    ],
+    [
+      "11aba65b-53a2-477d-9cee-8bb1f5f76453",
+      "Motor C"
+    ],
+    [
+      "cefcb18b-530f-4319-8028-c078728148bf",
+      "CAN"
+    ],
+    [
+      "4490347c-ac11-48ee-912e-f73541cfdc65",
+      "FAN"
     ]
   ],
   "text_variables": {}
