@@ -1046,7 +1046,7 @@
   (symbol (lib_id "power:+3V3") (at 200.66 51.308 270) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 1dd846af-fc14-4004-9c30-d170a8887143)
-    (property "Reference" "#PWR?" (id 0) (at 196.85 51.308 0)
+    (property "Reference" "#PWR091" (id 0) (at 196.85 51.308 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3V3" (id 1) (at 203.962 51.3079 90)
@@ -1114,7 +1114,7 @@
   (symbol (lib_id "power:+3V3") (at 120.396 50.546 270) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 2d37e96a-5511-4bed-b31d-e40a8cd44469)
-    (property "Reference" "#PWR?" (id 0) (at 116.586 50.546 0)
+    (property "Reference" "#PWR087" (id 0) (at 116.586 50.546 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3V3" (id 1) (at 123.698 50.5459 90)
@@ -1201,7 +1201,7 @@
   (symbol (lib_id "power:GND") (at 200.66 53.848 90) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 5b511e3c-6333-4353-9ae1-a339062409b8)
-    (property "Reference" "#PWR?" (id 0) (at 207.01 53.848 0)
+    (property "Reference" "#PWR092" (id 0) (at 207.01 53.848 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (id 1) (at 203.962 53.8479 90)
@@ -1219,7 +1219,7 @@
   (symbol (lib_id "power:GND") (at 160.02 53.086 90) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 5da43cdb-11fe-4de8-8acd-b191623db6c8)
-    (property "Reference" "#PWR?" (id 0) (at 166.37 53.086 0)
+    (property "Reference" "#PWR090" (id 0) (at 166.37 53.086 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (id 1) (at 163.322 53.0859 90)
@@ -1255,7 +1255,7 @@
   (symbol (lib_id "Connector:Conn_01x03_Male") (at 195.58 53.848 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 855a6ed4-b488-4169-b98e-aca2285b8954)
-    (property "Reference" "J?" (id 0) (at 196.215 45.72 0))
+    (property "Reference" "J14" (id 0) (at 196.215 45.72 0))
     (property "Value" "" (id 1) (at 196.215 48.26 0))
     (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" (id 2) (at 195.58 53.848 0)
       (effects (font (size 1.27 1.27)) hide)
@@ -1271,7 +1271,7 @@
   (symbol (lib_id "power:GND") (at 120.396 53.086 90) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 86fdbc65-ea55-4abb-bb0e-de3d715f1401)
-    (property "Reference" "#PWR?" (id 0) (at 126.746 53.086 0)
+    (property "Reference" "#PWR088" (id 0) (at 126.746 53.086 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (id 1) (at 123.698 53.0859 90)
@@ -1354,7 +1354,7 @@
   (symbol (lib_id "power:+3V3") (at 160.02 50.546 270) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid a9e23d65-7d04-409d-b52d-4bd1d741b888)
-    (property "Reference" "#PWR?" (id 0) (at 156.21 50.546 0)
+    (property "Reference" "#PWR089" (id 0) (at 156.21 50.546 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3V3" (id 1) (at 163.322 50.5459 90)
@@ -1424,7 +1424,7 @@
   (symbol (lib_id "Connector:Conn_01x03_Male") (at 154.94 53.086 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid c2b3e998-9cfe-4c9e-a7b7-60356a7de733)
-    (property "Reference" "J?" (id 0) (at 155.575 45.72 0))
+    (property "Reference" "J13" (id 0) (at 155.575 45.72 0))
     (property "Value" "" (id 1) (at 155.575 48.26 0))
     (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" (id 2) (at 154.94 53.086 0)
       (effects (font (size 1.27 1.27)) hide)
@@ -1540,7 +1540,7 @@
   (symbol (lib_id "Connector:Conn_01x03_Male") (at 115.316 53.086 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid d785e888-9350-4463-a449-283195043b1b)
-    (property "Reference" "J?" (id 0) (at 115.951 45.72 0))
+    (property "Reference" "J11" (id 0) (at 115.951 45.72 0))
     (property "Value" "" (id 1) (at 115.951 48.26 0))
     (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" (id 2) (at 115.316 53.086 0)
       (effects (font (size 1.27 1.27)) hide)
@@ -2240,6 +2240,24 @@
     (path "/cefcb18b-530f-4319-8028-c078728148bf/6ed11d1b-b7d9-40ca-84fb-408915abe1ef"
       (reference "#PWR086") (unit 1) (value "GND") (footprint "")
     )
+    (path "/2d37e96a-5511-4bed-b31d-e40a8cd44469"
+      (reference "#PWR087") (unit 1) (value "+3V3") (footprint "")
+    )
+    (path "/86fdbc65-ea55-4abb-bb0e-de3d715f1401"
+      (reference "#PWR088") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/a9e23d65-7d04-409d-b52d-4bd1d741b888"
+      (reference "#PWR089") (unit 1) (value "+3V3") (footprint "")
+    )
+    (path "/5da43cdb-11fe-4de8-8acd-b191623db6c8"
+      (reference "#PWR090") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/1dd846af-fc14-4004-9c30-d170a8887143"
+      (reference "#PWR091") (unit 1) (value "+3V3") (footprint "")
+    )
+    (path "/5b511e3c-6333-4353-9ae1-a339062409b8"
+      (reference "#PWR092") (unit 1) (value "GND") (footprint "")
+    )
     (path "/d020a2f5-1049-4c55-9a6f-82477ab73207"
       (reference "#PWR0101") (unit 1) (value "GND") (footprint "")
     )
@@ -2266,24 +2284,6 @@
     )
     (path "/1c9edd80-85d9-4c0d-9cc6-2c3a113885ca/f68ca242-ee83-486d-83a3-543812f1e24c"
       (reference "#PWR0124") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/1dd846af-fc14-4004-9c30-d170a8887143"
-      (reference "#PWR?") (unit 1) (value "+3V3") (footprint "")
-    )
-    (path "/2d37e96a-5511-4bed-b31d-e40a8cd44469"
-      (reference "#PWR?") (unit 1) (value "+3V3") (footprint "")
-    )
-    (path "/5b511e3c-6333-4353-9ae1-a339062409b8"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/5da43cdb-11fe-4de8-8acd-b191623db6c8"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/86fdbc65-ea55-4abb-bb0e-de3d715f1401"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/a9e23d65-7d04-409d-b52d-4bd1d741b888"
-      (reference "#PWR?") (unit 1) (value "+3V3") (footprint "")
     )
     (path "/1c9edd80-85d9-4c0d-9cc6-2c3a113885ca/29c05aa4-d4e2-4af1-a60e-827ca668e338"
       (reference "A1") (unit 1) (value "${SHEETNAME} Driver") (footprint "TMCSockets:TMC220X")
@@ -2378,8 +2378,17 @@
     (path "/cefcb18b-530f-4319-8028-c078728148bf/88514ba3-3c33-4eef-8020-c02f58bae04f"
       (reference "J10") (unit 1) (value "CAN") (footprint "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical")
     )
+    (path "/d785e888-9350-4463-a449-283195043b1b"
+      (reference "J11") (unit 1) (value "A-") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical")
+    )
     (path "/11aba65b-53a2-477d-9cee-8bb1f5f76453/f268893d-d27d-4643-8d48-d1ca2e4e5a32"
       (reference "J12") (unit 1) (value "${SHEETNAME}") (footprint "Connector_JST:JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical")
+    )
+    (path "/c2b3e998-9cfe-4c9e-a7b7-60356a7de733"
+      (reference "J13") (unit 1) (value "B-") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical")
+    )
+    (path "/855a6ed4-b488-4169-b98e-aca2285b8954"
+      (reference "J14") (unit 1) (value "C-") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical")
     )
     (path "/15adfdb7-0a96-47d8-b1f2-e517a0c7adc2"
       (reference "J15") (unit 1) (value "Y-") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical")
@@ -2389,15 +2398,6 @@
     )
     (path "/4490347c-ac11-48ee-912e-f73541cfdc65/b2cd9ad9-469c-4085-93c1-386b4fbc15bf"
       (reference "J18") (unit 1) (value "${SHEETNAME}") (footprint "Connector_JST:JST_XH_B2B-XH-A_1x02_P2.50mm_Vertical")
-    )
-    (path "/855a6ed4-b488-4169-b98e-aca2285b8954"
-      (reference "J?") (unit 1) (value "C-") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical")
-    )
-    (path "/c2b3e998-9cfe-4c9e-a7b7-60356a7de733"
-      (reference "J?") (unit 1) (value "B-") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical")
-    )
-    (path "/d785e888-9350-4463-a449-283195043b1b"
-      (reference "J?") (unit 1) (value "A-") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical")
     )
     (path "/1c9edd80-85d9-4c0d-9cc6-2c3a113885ca/a006615d-32f1-4530-8f68-5161c2fe10b0"
       (reference "JP1") (unit 1) (value "MS3") (footprint "Jumper:SolderJumper-3_P1.3mm_Open_RoundedPad1.0x1.5mm")
