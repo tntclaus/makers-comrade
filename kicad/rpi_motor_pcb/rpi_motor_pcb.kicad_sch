@@ -717,7 +717,6 @@
   (no_connect (at 43.942 19.812) (uuid 485e5015-1b1c-4fc4-bd16-6ade13c211e2))
   (no_connect (at 41.402 85.852) (uuid 75c0d4c7-853b-4aba-b6d0-6c47590b24d0))
   (no_connect (at 36.322 85.852) (uuid 8bc5781e-e27f-40a7-b7b8-50907b254d46))
-  (no_connect (at 26.162 57.912) (uuid b1e98212-b297-4559-8fab-dc460e7f7c34))
   (no_connect (at 38.862 85.852) (uuid be462e91-d70f-405b-bf32-2ecd4ecb8eb4))
 
   (wire (pts (xy 51.562 85.852) (xy 54.102 85.852))
@@ -1001,6 +1000,13 @@
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
   )
+  (global_label "MEN" (shape input) (at 26.162 57.912 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid a0290bb0-8002-4580-9c7c-ebe9c45ebb67)
+    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 19.8179 57.8326 0)
+      (effects (font (size 1.27 1.27)) (justify right) hide)
+    )
+  )
   (global_label "Vin" (shape input) (at 234.442 151.384 90) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left))
     (uuid b1afe354-cf79-4188-9e16-1d1b227f55e7)
@@ -1013,7 +1019,7 @@
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 15adfdb7-0a96-47d8-b1f2-e517a0c7adc2)
     (property "Reference" "J15" (id 0) (at 155.575 19.05 0))
-    (property "Value" "" (id 1) (at 155.575 21.59 0))
+    (property "Value" "Y-" (id 1) (at 155.575 21.59 0))
     (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" (id 2) (at 154.94 26.67 0)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -1065,7 +1071,7 @@
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 2035be7e-73a3-42de-aeb4-597d70dbf2b0)
     (property "Reference" "J8" (id 0) (at 116.205 19.05 0))
-    (property "Value" "" (id 1) (at 116.205 21.59 0))
+    (property "Value" "X-" (id 1) (at 116.205 21.59 0))
     (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" (id 2) (at 115.57 26.67 0)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -1256,7 +1262,7 @@
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 855a6ed4-b488-4169-b98e-aca2285b8954)
     (property "Reference" "J14" (id 0) (at 196.215 45.72 0))
-    (property "Value" "" (id 1) (at 196.215 48.26 0))
+    (property "Value" "C-" (id 1) (at 196.215 48.26 0))
     (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" (id 2) (at 195.58 53.848 0)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -1290,7 +1296,7 @@
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 876d70fa-527b-4d7e-bec1-a8025a7b5744)
     (property "Reference" "J16" (id 0) (at 196.215 19.05 0))
-    (property "Value" "" (id 1) (at 196.215 21.59 0))
+    (property "Value" "Z-" (id 1) (at 196.215 21.59 0))
     (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" (id 2) (at 195.58 26.67 0)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -1425,7 +1431,7 @@
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid c2b3e998-9cfe-4c9e-a7b7-60356a7de733)
     (property "Reference" "J13" (id 0) (at 155.575 45.72 0))
-    (property "Value" "" (id 1) (at 155.575 48.26 0))
+    (property "Value" "B-" (id 1) (at 155.575 48.26 0))
     (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" (id 2) (at 154.94 53.086 0)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -1541,7 +1547,7 @@
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid d785e888-9350-4463-a449-283195043b1b)
     (property "Reference" "J11" (id 0) (at 115.951 45.72 0))
-    (property "Value" "" (id 1) (at 115.951 48.26 0))
+    (property "Value" "A-" (id 1) (at 115.951 48.26 0))
     (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" (id 2) (at 115.316 53.086 0)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -1991,9 +1997,6 @@
     (path "/1c9edd80-85d9-4c0d-9cc6-2c3a113885ca/6707c802-7621-443a-aeac-20e7618da312"
       (reference "#PWR03") (unit 1) (value "GND") (footprint "")
     )
-    (path "/2f97629b-ca35-40e1-950a-976dc6d5099e/8d7dffa6-e4ab-477e-b14a-0cd63cbed4e0"
-      (reference "#PWR04") (unit 1) (value "GND") (footprint "")
-    )
     (path "/2f97629b-ca35-40e1-950a-976dc6d5099e/7e0b5e6c-5e10-4bbc-b043-eb819dc2cf4f"
       (reference "#PWR05") (unit 1) (value "+3V3") (footprint "")
     )
@@ -2012,9 +2015,6 @@
     (path "/2f97629b-ca35-40e1-950a-976dc6d5099e/f68ca242-ee83-486d-83a3-543812f1e24c"
       (reference "#PWR010") (unit 1) (value "GND") (footprint "")
     )
-    (path "/cbfe036f-5613-48df-a314-10875a3b599a/8d7dffa6-e4ab-477e-b14a-0cd63cbed4e0"
-      (reference "#PWR011") (unit 1) (value "GND") (footprint "")
-    )
     (path "/cbfe036f-5613-48df-a314-10875a3b599a/7e0b5e6c-5e10-4bbc-b043-eb819dc2cf4f"
       (reference "#PWR012") (unit 1) (value "+3V3") (footprint "")
     )
@@ -2026,9 +2026,6 @@
     )
     (path "/cbfe036f-5613-48df-a314-10875a3b599a/f68ca242-ee83-486d-83a3-543812f1e24c"
       (reference "#PWR015") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/21d5a0dd-8380-4cbc-877d-09f4ecd37e4d/8d7dffa6-e4ab-477e-b14a-0cd63cbed4e0"
-      (reference "#PWR016") (unit 1) (value "GND") (footprint "")
     )
     (path "/21d5a0dd-8380-4cbc-877d-09f4ecd37e4d/7e0b5e6c-5e10-4bbc-b043-eb819dc2cf4f"
       (reference "#PWR017") (unit 1) (value "+3V3") (footprint "")
@@ -2042,9 +2039,6 @@
     (path "/21d5a0dd-8380-4cbc-877d-09f4ecd37e4d/f68ca242-ee83-486d-83a3-543812f1e24c"
       (reference "#PWR020") (unit 1) (value "GND") (footprint "")
     )
-    (path "/19bc01f1-ddb0-42eb-b5a4-99228b6f4f71/8d7dffa6-e4ab-477e-b14a-0cd63cbed4e0"
-      (reference "#PWR021") (unit 1) (value "GND") (footprint "")
-    )
     (path "/19bc01f1-ddb0-42eb-b5a4-99228b6f4f71/7e0b5e6c-5e10-4bbc-b043-eb819dc2cf4f"
       (reference "#PWR022") (unit 1) (value "+3V3") (footprint "")
     )
@@ -2056,9 +2050,6 @@
     )
     (path "/19bc01f1-ddb0-42eb-b5a4-99228b6f4f71/f68ca242-ee83-486d-83a3-543812f1e24c"
       (reference "#PWR025") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/11aba65b-53a2-477d-9cee-8bb1f5f76453/8d7dffa6-e4ab-477e-b14a-0cd63cbed4e0"
-      (reference "#PWR026") (unit 1) (value "GND") (footprint "")
     )
     (path "/11aba65b-53a2-477d-9cee-8bb1f5f76453/7e0b5e6c-5e10-4bbc-b043-eb819dc2cf4f"
       (reference "#PWR027") (unit 1) (value "+3V3") (footprint "")
@@ -2275,9 +2266,6 @@
     )
     (path "/43c6aee9-0a2d-4cd1-a356-cec58fb4e02b"
       (reference "#PWR0111") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/1c9edd80-85d9-4c0d-9cc6-2c3a113885ca/8d7dffa6-e4ab-477e-b14a-0cd63cbed4e0"
-      (reference "#PWR0112") (unit 1) (value "GND") (footprint "")
     )
     (path "/d69eafbd-851d-4c7c-b105-d4f0f64cd6e5"
       (reference "#PWR0123") (unit 1) (value "+5V") (footprint "")
