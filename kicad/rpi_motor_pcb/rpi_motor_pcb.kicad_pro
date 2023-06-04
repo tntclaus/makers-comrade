@@ -395,6 +395,10 @@
           "/Motor X/1B",
           "/Motor X/2A",
           "/Motor X/2B",
+          "/Motor X1/1A",
+          "/Motor X1/1B",
+          "/Motor X1/2A",
+          "/Motor X1/2B",
           "/Motor Y/1A",
           "/Motor Y/1B",
           "/Motor Y/2A",
@@ -497,12 +501,12 @@
       "Motor C"
     ],
     [
-      "cefcb18b-530f-4319-8028-c078728148bf",
-      "CAN"
+      "6362900b-e28d-41f8-a76a-d9fd4cd7a7e6",
+      "Motor X1"
     ],
     [
-      "4490347c-ac11-48ee-912e-f73541cfdc65",
-      "FAN"
+      "cefcb18b-530f-4319-8028-c078728148bf",
+      "CAN"
     ]
   ],
   "text_variables": {}
