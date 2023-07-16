@@ -18,3 +18,5 @@ python
 fp-info-cache
 _autosave*.kicad_sch
 \#auto_saved_files\#
+plot
+out
