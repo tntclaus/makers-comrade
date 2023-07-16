@@ -143,6 +143,36 @@ def generate_board(
     _, net = board.GetNetsByName().items()[0]
     layer = pcbnew.F_Cu
 
+    def add_pad(point, net, width, height, num):
+        lset = pcbnew.LSET()
+        lset.AddLayer(pcbnew.F_Cu)
+        # lset.AddLayer(pcbnew.F_Mask)
+        module = pcbnew.FOOTPRINT(board)
+        module.SetPosition(point)
+        module.SetLayer(layer)
+        # module.SetLayerSet(lset)
+        board.Add(module)
+
+        pcb_mask = pcbnew.PAD(module)
+        pcb_mask.SetSize(pcbnew.wxSizeMM(width / 2, height / 2))
+        pcb_mask.SetShape(pcbnew.PAD_SHAPE_ROUNDRECT)
+        pcb_mask.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
+        pcb_mask.SetLayerSet(pcb_mask.SMDMask())
+        module.Add(pcb_mask)
+
+        pcb_pad = pcbnew.PAD(module)
+        pcb_pad.SetLocalClearance(int(8 * pcbnew.IU_PER_MM))
+        # print(1.5 * pcbnew.MM_PER_IU)
+        # print(int(1.5 * pcbnew.IU_PER_MM))
+        # pcb_pad.SetLocalClearance(2000000)
+        pcb_pad.SetNumber(num)
+        pcb_pad.SetSize(pcbnew.wxSizeMM(width, height))
+        pcb_pad.SetShape(pcbnew.PAD_SHAPE_ROUNDRECT)
+        pcb_pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)
+        pcb_pad.SetLayerSet(lset)
+        pcb_pad.SetNet(net)
+        module.Add(pcb_pad)
+
     def make_track(start, end):
         tr = pcbnew.PCB_TRACK(board)
         tr.SetStart(start)
@@ -152,18 +182,18 @@ def generate_board(
         tr.SetNetCode(net.GetNetCode())
         board.Add(tr)
 
-    left_border = int(border_offset / 2 + st)
+    left_border = int(border_offset / 2 + st + 1.5)
 
     max_lines = int(height / (st / 2)) + 1
 
-    footprint_start_point = make_point(border_offset-1, pcb_height / 2 - 3.5 / 2)
-    footprint_center = make_point(border_offset, pcb_height / 2)
-    footprint_end_point = make_point(border_offset+1.5, pcb_height / 2 + 3.5 / 2)
-    start_point = make_point(border_offset / 2, pcb_height / 2 - 3.5 / 2)
-    end_point = make_point(border_offset / 2, pcb_height / 2 + 3.5 / 2)
+    footprint_start_point = make_point(border_offset, pcb_height / 2 - 7.5 / 2)
+    footprint_end_point = make_point(border_offset, pcb_height / 2 + 7.5 / 2)
+
+    start_point = make_point(border_offset / 2, pcb_height / 2 - 7.5 / 2)
+    end_point = make_point(border_offset / 2, pcb_height / 2 + 7.5 / 2)
 
     first_point = make_point(border_offset / 2, border_offset / 2)
-    last_point = make_point(border_offset / 2, (max_lines+1)/2*st)
+    last_point = make_point(border_offset / 2, border_offset / 2 + (max_lines-1) / 2 * st)
 
     make_track(footprint_start_point, start_point)
     make_track(start_point, first_point)
@@ -174,15 +204,12 @@ def generate_board(
     previous_point = first_point
     previous_horizontal = False
 
+    margin_left = left_border
     for i in range(max_lines):
         prev_y_mm = previous_point.y / pcbnew.IU_PER_MM
-        if pcb_height / 2 - 3.5 < prev_y_mm < pcb_height / 2 + 3.5:
-            margin_left = left_border + border_offset
-        else:
-            margin_left = left_border
 
         # print(previous_horizontal)
-        if i+1 == max_lines:
+        if i + 1 == max_lines:
             next_point = last_point
         elif previous_horizontal:
             # print("Делаем вертикальную линию")
@@ -201,6 +228,11 @@ def generate_board(
 
             next_point = make_point(x, previous_point.y / pcbnew.IU_PER_MM)
 
+        if pcb_height / 2 - 10 < prev_y_mm < pcb_height / 2 + 10:
+            margin_left = left_border + border_offset
+        else:
+            margin_left = left_border
+
         # print(next_point)
         make_track(
             previous_point,
@@ -211,13 +243,17 @@ def generate_board(
         previous_horizontal = not previous_horizontal
 
     # Connector
-    footprints = board.GetFootprints()
-    for f in footprints:
-        fprtRef = f.GetReference()
-        if fprtRef == "J1":
-            refDes = board.FindFootprintByReference(fprtRef)
-            refDes.SetPosition(footprint_center)
-            refDes.SetOrientation(90 * 30)  # rotate by 90 deg
+    # footprints = board.GetFootprints()
+    # for f in footprints:
+    #     fprtRef = f.GetReference()
+    #     print(fprtRef)
+    #     if fprtRef == "J1":
+    #         refDes = board.FindFootprintByReference(fprtRef)
+    #         refDes.SetPosition(footprint_center)
+    #         refDes.SetOrientation(90 * 30)  # rotate by 90 deg
+
+    add_pad(footprint_start_point, net, 7, 5, 1)
+    add_pad(footprint_end_point, net, 7, 5, 2)
 
     # Board edges
     edge = pcbnew.PCB_SHAPE(board)
@@ -230,10 +266,10 @@ def generate_board(
     board.Add(edge)
 
     # fill zones
-    points = (pcbnew.wxPointMM(border_offset / 8, border_offset / 8),
-              pcbnew.wxPointMM(pcb_width - border_offset / 8, border_offset / 8),
-              pcbnew.wxPointMM(pcb_width - border_offset / 8, pcb_height - border_offset / 8),
-              pcbnew.wxPointMM(border_offset / 8, pcb_height - border_offset / 8)
+    points = (pcbnew.wxPointMM(border_offset, border_offset),
+              pcbnew.wxPointMM(pcb_width - border_offset, border_offset),
+              pcbnew.wxPointMM(pcb_width - border_offset, pcb_height - border_offset),
+              pcbnew.wxPointMM(border_offset, pcb_height - border_offset)
               )
 
     zone = pcbnew.ZONE(board)
@@ -248,4 +284,4 @@ def generate_board(
 
 
 copy_template()
-generate_board(310, 310)
+generate_board(610, 610)
