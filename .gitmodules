@@ -4,3 +4,9 @@
 [submodule "lib/cyclone_dust_collector"]
 	path = lib/cyclone_dust_collector
 	url = https://github.com/eraga/cyclone_dust_collector
+[submodule "lib/cable_chain"]
+	path = lib/cable_chain
+	url = https://github.com/eraga/openscad_cable_chain
+[submodule "kicad/canbus_heatbed_pico/libs/KiCad-RP-Pico"]
+	path = kicad/canbus_heatbed_pico/libs/KiCad-RP-Pico
+	url = https://github.com/ncarandini/KiCad-RP-Pico
