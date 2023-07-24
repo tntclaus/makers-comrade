@@ -118,11 +118,13 @@ def generate_board(
 
     track_width = track_cross_section / copper_thickness
 
-    print("P ", material_resistance, "micro ohm / mm")
+    print("P ", material_resistance, "micro ohm / mm at ", target_temperature, "ºC")
+    print("P ", material.resistivity(20) / 1000, "micro ohm / mm at 20ºC")
     print("Power ", power, "VA")
     print("Voltage ", voltage, "V")
     print("Current ", total_current, "A")
-    print("Resistance ", total_resistance, "ohm")
+    print("Resistance at 100ºC", material_resistance * (track_total_length_mm + (height-border_offset)*2) / track_cross_section, "ohm")
+    print("Resistance at  20ºC", material.resistivity(20) / 1000 * (track_total_length_mm + (height-border_offset)*2) / track_cross_section, "ohm")
     print("Wire S ", track_cross_section, "mm2")
     print("Wire length ", track_total_length_mm, "mm")
     print("Wire width ", track_width, "mm")
@@ -284,4 +286,4 @@ def generate_board(
 
 
 copy_template()
-generate_board(610, 610)
+generate_board(310, 310)
