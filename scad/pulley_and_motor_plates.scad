@@ -3,6 +3,7 @@ include <NopSCADlib/vitamins/screws.scad>
 include <NopSCADlib/vitamins/pulleys.scad>
 include <NopSCADlib/utils/rounded_polygon.scad>
 include <NopSCADlib/vitamins/stepper_motors.scad>
+include <NopSCADlib/vitamins/ball_bearings.scad>
 
 include <screw_assemblies.scad>
 
@@ -119,18 +120,128 @@ module motorMountPlate(model, distance = 3) {
 
 
 module motor_assembly(motorScrewY, model) {
+    tr = NEMA_hole_pitch(model)/2;
     rotate([0,90,0]) {
         NEMA(model);
         translate_z(7)
         pulley(GT2x16_pulley);
+
+        translate([-tr-6,-tr,3])
+            xy_belt_tensioner_assembly();
     }
 
-    tr = NEMA_hole_pitch(model)/2;
+
 
     translate([motorScrewY,tr,tr]) screwmM3x15();
     translate([motorScrewY,tr,-tr]) screwmM3x15();
-    translate([motorScrewY,-tr,tr]) screwmM3x15();
+    translate([motorScrewY+4,-tr,tr])  rotate([0,90,0]) screw(M3_hex_screw, 16);
     translate([motorScrewY,-tr,-tr]) screwmM3x15();
+}
+
+
+BB682   =  ["624",   2,  5, 2.3,   "blue",      0.3, 0.4];  // ball bearing for idlers
+
+//TENSIONER_BB = BB682;
+TENSIONER_BB = BB624;
+TENSIONER_BB_SCREW = M4_cs_cap_screw;
+TENSIONER_BB_SCREW_L = 10;
+
+module xy_belt_tensioner_assembly() {
+    WHEEL_LOC = [15,0,9];
+    rotate([0,0,5]) {
+        difference() {
+            xy_belt_tensioner();
+//            cube([100,100,20]);
+        }
+        translate(WHEEL_LOC) {
+            pulley(GT2x16_plain_idler);
+
+//            ball_bearing(TENSIONER_BB);
+//            translate_z(2.3)
+//            ball_bearing(TENSIONER_BB);
+
+            translate_z(-5){
+                rotate([180, 0, 0])
+                    screw(TENSIONER_BB_SCREW, TENSIONER_BB_SCREW_L);
+                translate_z(TENSIONER_BB_SCREW_L - 2)
+                nut(screw_nut(TENSIONER_BB_SCREW));
+            }
+        }
+//        translate(WHEEL_LOC)
+//        translate_z(1)
+//        xy_belt_tensioner_wheel();
+    }
+}
+
+module ABS_xy_belt_tensioner_wheel_stl() {
+    xy_belt_tensioner_wheel();
+}
+module xy_belt_tensioner_wheel() {
+    stl("ABS_xy_belt_tensioner_wheel");
+    difference() {
+        cylinder(d = bb_diameter(TENSIONER_BB)+4, h = 5.6, center = true);
+        cylinder(d = bb_diameter(TENSIONER_BB)+.2, h = 10, center = true);
+    }
+}
+
+module ABS_xy_belt_tensioner_stl() {
+    xy_belt_tensioner();
+}
+
+module xy_belt_tensioner() {
+    stl("ABS_xy_belt_tensioner");
+
+    l = 15;
+    d = 8;
+    d_in = 3.2;
+//    d_in2 = 2.2;
+
+    d_ten = screw_radius(TENSIONER_BB_SCREW)*2;
+    d_ten_out = screw_head_radius(TENSIONER_BB_SCREW)*2;
+
+    h_base = 7;
+
+    difference() {
+        union() {
+            hull() {
+                translate([l, 0, 0]) {
+                    cylinder(d = d, h = h_base);
+//                    cylinder(d = d_in+1, h = 10);
+                }
+
+                cylinder(d = d, h = h_base);
+            }
+            translate([l, 0, 0]) {
+                translate_z(h_base)
+                hull() {
+                    translate_z(2)
+                    cylinder(d = d_ten, h = .1);
+                    cylinder(d = d_ten_out + 2, h = .01);
+                }
+
+                cylinder(d = d_ten_out + 3, h = h_base);
+            }
+        }
+
+
+        hull() {
+            translate([l/2, 0, 0])
+                cylinder(d = d_in, h = h_base+2);
+
+            translate([0, 0, 0])
+            cylinder(d = d_in, h = h_base+2);
+        }
+        translate([l, 0, 0]) {
+            cylinder(d = d_ten, h = h_base + 3);
+            cylinder(r = screw_head_radius(TENSIONER_BB_SCREW)+.2, h = h_base-2);
+            translate_z(h_base-2)
+            hull() {
+                translate_z(screw_socket_af(TENSIONER_BB_SCREW))
+                cylinder(r = screw_radius(TENSIONER_BB_SCREW)+.2, h = .01);
+                cylinder(r = screw_head_radius(TENSIONER_BB_SCREW)+.2, h = .01);
+            }
+        }
+    }
 }
 
 module xyAxisMotor(left = false, wallThickness = 3) {
@@ -158,4 +269,8 @@ module xyAxisMotor(left = false, wallThickness = 3) {
 
 
 //STEEL_3mm_pulley_corner_plate_dxf();
-xyAxisMotor();
+//xyAxisMotor();
+
+
+//ABS_xy_belt_tensioner_wheel_stl();
+ABS_xy_belt_tensioner_stl();
