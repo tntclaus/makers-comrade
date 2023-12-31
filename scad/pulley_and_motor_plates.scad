@@ -141,35 +141,38 @@ module motor_assembly(motorScrewY, model) {
 
 BB682   =  ["624",   2,  5, 2.3,   "blue",      0.3, 0.4];  // ball bearing for idlers
 
-//TENSIONER_BB = BB682;
-TENSIONER_BB = BB624;
-TENSIONER_BB_SCREW = M4_cs_cap_screw;
-TENSIONER_BB_SCREW_L = 10;
+TENSIONER_BB = BB682;
+TENSIONER_BB_SCREW = M3_cs_cap_screw;
+//TENSIONER_BB = BB624;
+//TENSIONER_BB_SCREW = M4_cs_cap_screw;
+TENSIONER_BB_SCREW_L = 16;
 
 module xy_belt_tensioner_assembly() {
     WHEEL_LOC = [15,0,9];
-    rotate([0,0,5]) {
+    translate([5,0,0])
+    rotate([0,0,12]) {
         difference() {
             xy_belt_tensioner();
 //            cube([100,100,20]);
         }
         translate(WHEEL_LOC) {
-            pulley(GT2x16_plain_idler);
+//            pulley(GT2x16_plain_idler);
 
-//            ball_bearing(TENSIONER_BB);
-//            translate_z(2.3)
-//            ball_bearing(TENSIONER_BB);
+            translate_z(2.5)
+            ball_bearing(TENSIONER_BB);
+            translate_z(6.5)
+            ball_bearing(TENSIONER_BB);
 
-            translate_z(-5){
+            translate_z(-4){
                 rotate([180, 0, 0])
                     screw(TENSIONER_BB_SCREW, TENSIONER_BB_SCREW_L);
                 translate_z(TENSIONER_BB_SCREW_L - 2)
                 nut(screw_nut(TENSIONER_BB_SCREW));
             }
         }
-//        translate(WHEEL_LOC)
-//        translate_z(1)
-//        xy_belt_tensioner_wheel();
+        translate(WHEEL_LOC)
+        translate_z(4.5)
+        xy_belt_tensioner_wheel();
     }
 }
 
@@ -178,9 +181,27 @@ module ABS_xy_belt_tensioner_wheel_stl() {
 }
 module xy_belt_tensioner_wheel() {
     stl("ABS_xy_belt_tensioner_wheel");
+
+    od = bb_diameter(TENSIONER_BB)+1.6;
+    id = bb_diameter(TENSIONER_BB)+.2;
+
+    module belt_face() {
+        translate_z(7/2)
+        hull() {
+            cylinder(d = od, h = 0.01);
+            translate_z(1)
+            cylinder(d = od + 2, h = 0.01);
+        }
+    }
+
     difference() {
-        cylinder(d = bb_diameter(TENSIONER_BB)+4, h = 5.6, center = true);
-        cylinder(d = bb_diameter(TENSIONER_BB)+.2, h = 10, center = true);
+        union() {
+            cylinder(d = od, h = 7, center = true);
+            belt_face();
+            mirror([0,0,1])
+            belt_face();
+        }
+        cylinder(d = id, h = 20, center = true);
     }
 }
 
@@ -269,8 +290,9 @@ module xyAxisMotor(left = false, wallThickness = 3) {
 
 
 //STEEL_3mm_pulley_corner_plate_dxf();
+
 //xyAxisMotor();
 
 
 //ABS_xy_belt_tensioner_wheel_stl();
-ABS_xy_belt_tensioner_stl();
+//ABS_xy_belt_tensioner_stl();
