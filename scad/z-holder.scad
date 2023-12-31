@@ -10,11 +10,11 @@ include <../lib/leadscrew_couplers.scad>
 
 module motor(motorScrewY, model, diff=false) {
     tr = NEMA_hole_pitch(model)/2;
-        
+
     module scr() {
         cylinder(d = 5, h = 30);
     }
-        
+
     rotate([0,90,0]) if(!diff) {
         NEMA(model);
         translate([0,0,30])
@@ -27,30 +27,30 @@ module motor(motorScrewY, model, diff=false) {
     }
 
     if(!diff) {
-        translate([motorScrewY,tr,tr]) screwmM3x15();  
-        translate([motorScrewY,tr,-tr]) screwmM3x15(); 
-        translate([motorScrewY,-tr,tr]) screwmM3x15(); 
-        translate([motorScrewY,-tr,-tr]) screwmM3x15();    
+        translate([motorScrewY,tr,tr]) screwmM3x15();
+        translate([motorScrewY,tr,-tr]) screwmM3x15();
+        translate([motorScrewY,-tr,tr]) screwmM3x15();
+        translate([motorScrewY,-tr,-tr]) screwmM3x15();
     } else {
-        translate([motorScrewY,tr,tr]) rotate([0,90,0]) scr();  
-        translate([motorScrewY,tr,-tr]) rotate([0,90,0]) scr(); 
-        translate([motorScrewY,-tr,tr]) rotate([0,90,0]) scr(); 
-        translate([motorScrewY,-tr,-tr]) rotate([0,90,0]) scr();        
+        translate([motorScrewY,tr,tr]) rotate([0,90,0]) scr();
+        translate([motorScrewY,tr,-tr]) rotate([0,90,0]) scr();
+        translate([motorScrewY,-tr,tr]) rotate([0,90,0]) scr();
+        translate([motorScrewY,-tr,-tr]) rotate([0,90,0]) scr();
     }
 }
 
-module motorPulley(motorScrewY, model, pulley, pulleyElevation) {
-    rotate([0,90,0]) {
-        NEMA(model);
-        translate([0,0,pulleyElevation])
-            pulley(pulley);
-    }
-
-    tr = NEMA_hole_pitch(model)/2;
-
-    translate([motorScrewY,tr,tr]) screwmM3x15();  
-    translate([motorScrewY,tr,-tr]) screwmM3x15(); 
-    translate([motorScrewY,-tr,tr]) screwmM3x15(); 
-    translate([motorScrewY,-tr,-tr]) screwmM3x15();
-}
-
+//module motorPulley(motorScrewY, model, pulley, pulleyElevation) {
+//    rotate([0,90,0]) {
+//        NEMA(model);
+//        translate([0,0,pulleyElevation])
+//            pulley(pulley);
+//    }
+//
+//    tr = NEMA_hole_pitch(model)/2;
+//
+//    translate([motorScrewY,tr,tr]) screwmM3x15();
+//    translate([motorScrewY,tr,-tr]) screwmM3x15();
+//    translate([motorScrewY,-tr,tr]) screwmM3x15();
+//    translate([motorScrewY,-tr,-tr]) screwmM3x15();
+//}
+//

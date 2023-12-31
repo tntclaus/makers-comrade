@@ -21,7 +21,7 @@ use <pulley_and_motor_plates.scad>
 //use <enclosures/light/enclosure_assembly.scad>
 include <enclosures/enclosure_common.scad>
 use <enclosures/full/enclosure_assembly.scad>
-//use <enclosures/full/enclosure_sides.scad>
+use <enclosures/full/enclosure_sides.scad>
 
 
 $bom = undef;
@@ -41,10 +41,11 @@ FULL_HEIGTH = realZAxisLength(AXIS_Z_SIZE) + 40 + $LEG_HEIGTH + enclosure_cap_he
 $CASE_MATERIAL_THICKNESS = 3;
 
 if ($preview)
-    main_assembly();
+    main_assembly_printer();
 
 $preview_table = !$preview || is_bom() || false;
-$preview_belts = !$preview || is_bom() || false;
+//$preview_belts = !$preview || is_bom() || false;
+$preview_belts = true;
 $preview_tool = !$preview || is_bom() || false;
 $preview_screws = !$preview || is_bom() || false;
 $preview_left_side_parts = !$preview || is_bom() || true;
@@ -58,7 +59,7 @@ module PC_5mm_dxf() {
     circle(d = 5);
 }
 
-module main_assembly() {
+module main_assembly_printer() {
 //    dxf("STEEL_3mm");
     //    dxf("PC_5mm");
 
@@ -181,8 +182,8 @@ module km_frame_corner_plates(x, y) {
             corner_pulley_assembly(8.5, 25.5, 40, 3);
     }
 
-    translate([x + 10, y + 37, 10 + MOTOR_LEFT_ELEVATION_PLATES_COUNT() * 3]) xyAxisMotor(left = true);
-    translate([- (x + 10), y + 37, 10]) xyAxisMotor(left = false);
+    translate([(x + 10), y + 37, 10 + MOTOR_LEFT_ELEVATION_PLATES_COUNT() * 3]) xyAxisMotor(left = true);
+    translate([-(x + 10), y + 37, 10]) xyAxisMotor(left = false);
 
     for (i = [0 : MOTOR_LEFT_ELEVATION_PLATES_COUNT() - 1])
     translate([x - 20, y + 10, 10 + i * 3]) rotate([0, 0, - 90]) linear_extrude(3) pulley_corner_plate();

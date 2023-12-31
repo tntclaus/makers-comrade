@@ -121,6 +121,8 @@ module motorMountPlate(model, distance = 3) {
 module motor_assembly(motorScrewY, model) {
     rotate([0,90,0]) {
         NEMA(model);
+        translate_z(7)
+        pulley(GT2x16_pulley);
     }
 
     tr = NEMA_hole_pitch(model)/2;
@@ -141,7 +143,6 @@ module xyAxisMotor(left = false, wallThickness = 3) {
     }
 
     rotate([0,-90,0]) motor_assembly(6, NEMA17M);
-    //    motorPulley(6, NEMA17M, GT2x16_toothed_idler, 4);
 }
 
 //
@@ -154,3 +155,7 @@ module xyAxisMotor(left = false, wallThickness = 3) {
 //    corner_pulley_assembly(8.5, 25.5, 40, 3);
 
 //pulley_spacer(8.5);
+
+
+//STEEL_3mm_pulley_corner_plate_dxf();
+xyAxisMotor();

@@ -424,6 +424,9 @@ module toolhead_mosquito_extruder_groove_collet(
 module ABS_toolhead_mosquito_extruder_groove_collets_W44xH29xL100_stl(){
     $fn = 90;
     toolhead_mosquito_extruder_groove_collets(width = 44, heigth = 29, length = 100);
+
+    translate_z(2.1/2)
+    toolhead_piezo_groove();
 }
 
 
@@ -440,7 +443,7 @@ module ABS_toolhead_mosquito_extruder_groove_collets_W44xH29xL100_stl(){
 //cylinder(d=2, h=10);
 
 //translate_z(- 21.5)
-toolhead_extruder_heatbreak_mosquito_cooler_100_stl();
+//toolhead_extruder_heatbreak_mosquito_cooler_100_stl();
 
 //translate_z(- 21.5)
 //    translate([0,50,0])

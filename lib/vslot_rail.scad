@@ -1,4 +1,4 @@
-include <vwheel_gantries.scad>
+include <../lib/vslot_wheels/vwheel_gantries.scad>
 include <NopSCADlib/vitamins/extrusions.scad>
 include <NopSCADlib/vitamins/extrusion_brackets.scad>
 include <vslot_connectors.scad>

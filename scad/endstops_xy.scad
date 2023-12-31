@@ -7,7 +7,7 @@ include <pulley_and_motor_plates.scad>
 
 include <axes/carets.scad>
 //use <axes/y-axis.scad>
-use <../lib/vwheel_plate.scad>
+use <../lib/vslot_wheels/vwheel_plate.scad>
 use <../lib/opto_endstop.scad>
 
 module ABS_endstop_x_stl() {

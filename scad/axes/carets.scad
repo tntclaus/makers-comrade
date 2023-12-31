@@ -7,7 +7,7 @@ include <NopSCADlib/vitamins/pulleys.scad>
 //use <NopSCADlib/vitamins/pulley.scad>
 
 include <../screw_assemblies.scad>
-include <../../lib/vwheel_gantries.scad>
+include <../../lib/vslot_wheels/vwheel_gantries.scad>
 include <../../lib/vslot_rails.scad>
 
 

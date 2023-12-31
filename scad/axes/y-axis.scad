@@ -7,7 +7,7 @@ include <NopSCADlib/vitamins/pulleys.scad>
 
 include <../screw_assemblies.scad>
 include <../../lib/leadscrew_couplers.scad>
-include <../../lib/vwheel_gantries.scad>
+include <../../lib/vslot_wheels/vwheel_gantries.scad>
 include <../../lib/vslot_rails.scad>
 use <x-axis.scad>
 include <brackets.scad>
@@ -69,7 +69,6 @@ module pulley_cap_bottom() {
 }
 
 
-ABS_pulley_cap();
 
 
 module D16T_y_caret_60_dxf() {
@@ -115,8 +114,6 @@ module y_axis_assembly(
     xAxisLength,
     railSpacing = 60) {
     assembly("y_axis"){
-
-
         dxf(str("D16T_y_caret_", railSpacing));
         dxf(str("D16T_y_caret_", railSpacing));
 
@@ -135,7 +132,6 @@ module y_axis_assembly(
                 safe_margin_top = caretSafeMargin
                 ) {
                     let();
-
                     translate([- outerXAxisWidth / 2, 0, 10])
                         rotate([0, 0, 180])
                             x_axis_assembly(position, xAxisLength, railSpacing / 2)
@@ -169,6 +165,8 @@ module y_axis_assembly(
     }
 }
 
+//ABS_pulley_cap();
+//
 //y_axis_assembly(298, 300, 300);
 //
 //translate([-235,210,10]) {

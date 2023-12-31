@@ -796,6 +796,7 @@ module cooling_hose_mounts() {
 
 module cooling_hose_perforation(mount_radius, hotend_cooling_dia = 30) {
     // hotend cooling hose ø24mm
+    translate([0,-7])
     circle(d = hotend_cooling_dia);
 
     cooling_hose_mounts() circle(r = mount_radius);

@@ -10,3 +10,6 @@
 [submodule "kicad/canbus_heatbed_pico/libs/KiCad-RP-Pico"]
 	path = kicad/canbus_heatbed_pico/libs/KiCad-RP-Pico
 	url = https://github.com/ncarandini/KiCad-RP-Pico
+[submodule "lib/vslot_wheels"]
+	path = lib/vslot_wheels
+	url = https://github.com/eraga/openscad_vslot_wheels

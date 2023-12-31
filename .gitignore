@@ -9,6 +9,7 @@ svgs/
 .DS_Store
 *.cbddlp
 
+oldlib/
 
 ## kicad ignore
 build
@@ -20,3 +21,4 @@ _autosave*.kicad_sch
 \#auto_saved_files\#
 plot
 out
+

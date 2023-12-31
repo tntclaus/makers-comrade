@@ -8,6 +8,8 @@ include <NopSCADlib/utils/core/rounded_rectangle.scad>
 use <../../electronics_box.scad>
 use <../../spool_holder.scad>
 
+include <../../../lib/cable_chain/cable_chains.scad>
+
 
 module enclosure_side_window_place_holes(heigth) {
     translate([0, 35]) {
@@ -274,10 +276,12 @@ module enclosure_side_single_z(width, heigth, window_h) {
     }
 }
 
-include <../../../lib/cable_chain.scad>
 
 ang = 1.5;
-CABLE_CHAIN = [30, 30, 16, [25,25,25,20,15,10,ang,ang,ang,ang,ang,ang,10,12,25,25,40,40,40,40]];
+smnts = [25,25,25,20,15,10,ang,ang,ang,ang,ang,ang,10,12,25,25,40,40,40,40];
+//                                    name,  l,  w,  h,hook,a,   smnts, lh,    of
+//XY_CABLE_CHAIN = ["ABS_y_axis_cable_chain", 20, 20, 12, 2, 33, [0,-10,20, -10, 0, 0], 0.2, true];
+CABLE_CHAIN = [         "ABS_xy_cable_chain", 30, 30, 16, 5, 33, smnts, 0, true];
 
 module ABS_cable_chain_enclousure_outer_mount_stl() {
     $fn=90;
@@ -296,6 +300,7 @@ module cable_chain_enclousure_outer_mount() {
                 cooling_hose_perforation(mount_radius = M3_clearance_radius, hotend_cooling_dia = 27);
 
             }
+            translate([0,-7,0])
             difference() {
                 cylinder(d = 30, h = 20);
                 cylinder(d = 24.5, h = 50);
@@ -315,7 +320,7 @@ module cable_chain_enclousure_inner_mount(
 w = 30,
 h = 16
 ) {
-    l = 20;
+    l = cable_chain_segment_length(CABLE_CHAIN);
     d_o = 30;
 
     name = str("ABS_cable_chain_enclousure_inner_mount_",
@@ -348,13 +353,14 @@ h = 16
         }
     }
 
-    translate([-l-18,-40,h/2])
+    translate([-l,-40,h/2])
     rotate([0,0,90]) {
         difference() {
             union() {
-                cable_chain_section_body_base(l = l, w = w, h = h, start = false);
-                cable_chain_section_body_base(l = l, w = w + 3, h = h, start = false);
-                cable_chain_section_body_base(l = l, w = w + 6, h = h, start = false);
+                cable_chain_section_body_base(CABLE_CHAIN, start = false);
+//                cable_chain_section_body_base(l = l, w = w, h = h, start = false);
+//                cable_chain_section_body_base(l = l, w = w + 3, h = h, start = false);
+//                cable_chain_section_body_base(l = l, w = w + 6, h = h, start = false);
             }
             cube([w - 3, l * 2, h * 2], center = true);
         }
@@ -376,7 +382,7 @@ h = 16
     }
 
     difference() {
-        translate([- 30, 14, -10])
+        translate([- 30, 7, -10])
             rotate([0, 90, -90]) {
                 fan_duct_path() {
                     difference() {

@@ -8,7 +8,7 @@ include <NopSCADlib/vitamins/pcbs.scad>
 
 include <../screw_assemblies.scad>
 include <../../lib/leadscrew_couplers.scad>
-include <../../lib/vwheel_gantries.scad>
+include <../../lib/vslot_wheels/vwheel_gantries.scad>
 include <../../lib/vslot_rails.scad>
 include <../endstops_xy.scad>
 

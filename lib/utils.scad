@@ -41,14 +41,20 @@ module drillHoles(holes, plate_thickness = 0, extra_size = 0) {
         color("green") hull() {
             for(vertex = hullGeom) {
                 translate([vertex.x,vertex.y,plate_thickness/2]) {
-                if(hullType == "circle")
-                    drill(hole[0]/2 + extra_size, plate_thickness*2);
-                else if(hullType == "square")
-                    if(plate_thickness > 0) {
-                        cube([hole[0], hole[0], plate_thickness*2], center = true);
-                    } else {
-                        square([hole[0], hole[0]], center = true);
-                    }
+                    if(hullType == "circle")
+                        drill(hole[0]/2 + extra_size, plate_thickness*2);
+                    else if(hullType == "square")
+                        if(plate_thickness > 0) {
+                            cube([hole[0], hole[0], plate_thickness*2], center = true);
+                        } else {
+                            square([hole[0], hole[0]], center = true);
+                        }
+                    else if(hullType == "rect")
+                        if(plate_thickness > 0) {
+                            cube([hole[0], hole[1], plate_thickness*2], center = true);
+                        } else {
+                            square([hole[0], hole[1]], center = true);
+                        }
                 }
             }
         }

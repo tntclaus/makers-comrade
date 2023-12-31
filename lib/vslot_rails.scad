@@ -1,5 +1,5 @@
 include <NopSCADlib/vitamins/extrusions.scad>
-include <vwheel_gantries.scad>
+include <../lib/vslot_wheels/vwheel_gantries.scad>
 
 VSLOT_RAIL_2020_S = ["", S_20_TRIANGLE_GANTRY, E2020];
 VSLOT_RAIL_2040_S = ["", S_40_TRIANGLE_GANTRY, E2040];
