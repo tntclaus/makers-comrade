@@ -1,26 +1,29 @@
-include <../../lib/cable_chain.scad>
+include <../../lib/cable_chain/cable_chains.scad>
 
 include <NopSCADlib/utils/core/core.scad>
+include <NopSCADlib/vitamins/screws.scad>
+include <NopSCADlib/vitamins/fans.scad>
+
+
+//                                          name,  l,  w,  h,hook,  smnts,  lh,    of
+CABLE_CHAIN =            ["cable_chain"        , 40, 30, 18, 0, 30];
+CABLE_CHAIN_2 =            ["cable_chain"      , 60, 30, 18, 0, 30];
 
 module caret_cable_chain_mounts() {
     translate([0, 6, 0]) children();
     translate([0, - 6, 0]) children();
 }
 
-module cable_chain_caret_section(
-l = 40,
-w = 30,
-h = 18
-) {
-
+module cable_chain_caret_section() {
+    type = CABLE_CHAIN;
     d_o = 30;
 
-    name = str("ABS_cable_chain_caret_section_",
-    "l", l, "x",
-    "w", w, "x",
-    "h", h
-    );
+    name = str("ABS_cable_chain_caret_section");
     stl(name);
+
+    w = cable_chain_segment_width(CABLE_CHAIN);
+    h = cable_chain_segment_heigth(CABLE_CHAIN);
+    l = cable_chain_segment_length(CABLE_CHAIN);
 
     module fan_duct_path() {
         translate([- d_o + 2, 6.5, 0])
@@ -35,16 +38,23 @@ h = 18
     difference() {
         color("red")
             union() {
-                cable_chain_section_body_base(l = 60, w = w, h = h, end = false);
+                cable_chain_section_body_base(CABLE_CHAIN_2, end = false);
                 translate_z(- 8.5){
                     hull() {
-                        translate([15, 0, 0])
-                            cube([1, 30, 1], center = true);
-                        translate([72, 0, 0])
-                            cylinder(d = 8, h = 1, center = true);
+                        translate([15, 0, -1])
+                            cube([3, 30, 3], center = true);
+                        translate([72, 0, -1])
+                            cylinder(d = 8, h = 3, center = true);
                     }
                     translate([72, 0, 1])
                         cylinder(d = 8, h = 2, center = true);
+
+                    translate([0, 0, -1])
+                        cube([w, 51, 3], center = true);
+
+                    translate([15, -21, -2.5])
+                        cube([3, 7, h]);
+
                 }
             }
 
@@ -85,13 +95,9 @@ h = 18
 
 }
 
-module ABS_cable_chain_caret_section_l40xw30xh18_stl() {
+module ABS_cable_chain_caret_section_stl() {
     $fn = 90;
-    cable_chain_caret_section(
-    l = 40,
-    w = 30,
-    h = 18
-    );
+    cable_chain_caret_section(CABLE_CHAIN);
 }
 
 
@@ -122,7 +128,6 @@ module ABS_cable_chain_section_body_and_cap_no_coil_l30w30h18_stl() {
 //ABS_cable_chain_caret_section_l40xw30xh18_stl();
 
 
-include <NopSCADlib/vitamins/fans.scad>
 
 module extra_fan_shtuzer(type, d_i, d_o) {
     w = fan_width(type);
@@ -177,4 +182,6 @@ module ABS_extra_fanlets() {
         extra_fan_inlet(type = type);
 }
 //ABS_extra_fanlets();
-extra_fan();
+//extra_fan();
+
+//cable_chain_caret_section();

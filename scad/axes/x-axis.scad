@@ -540,3 +540,4 @@ module caret_endstop_anchor(anchor_width) {
 //endstop_x_stl();
 
 //x_caret_with_cable_chain();
+cable_chain_caret_section();
