@@ -4,7 +4,7 @@ include <NopSCADlib/utils/core/rounded_rectangle.scad>
 
 include <../screw_assemblies.scad>
 include <../../lib/leadscrew_couplers.scad>
-include <../../lib/vwheel_gantries.scad>
+include <../../lib/vslot_wheels/vwheel_gantries.scad>
 
 include <../motors.scad>
 include <NopSCADlib/vitamins/stepper_motors.scad>
