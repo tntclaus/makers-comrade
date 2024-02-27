@@ -1,7 +1,7 @@
 include <enclosure_common.scad>
 
 use <../../axes/z-axis.scad>
-use <enclosure_vslot_mounts.scad>
+use <../enclosure_vslot_mounts.scad>
 
 include <NopSCADlib/utils/core/rounded_rectangle.scad>
 

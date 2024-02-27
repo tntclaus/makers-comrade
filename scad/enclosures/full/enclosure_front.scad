@@ -3,7 +3,7 @@ include <enclosure_common.scad>
 use <parametric_hinge_door_front.scad>
 
 use <enclosure_doors.scad>
-use <enclosure_vslot_mounts.scad>
+use <../enclosure_vslot_mounts.scad>
 
 module enclosure_front(width, heigth, window_w, window_h, window_translate_z) {
     lh = $LEG_HEIGTH - MATERIAL_STEEL_THICKNESS;

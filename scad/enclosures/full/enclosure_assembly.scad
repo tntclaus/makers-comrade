@@ -6,7 +6,7 @@ use <enclosure_bottom.scad>
 use <enclosure_sides.scad>
 use <enclosure_doors.scad>
 use <enclosure_doors_top.scad>
-use <enclosure_vslot_mounts.scad>
+use <../enclosure_vslot_mounts.scad>
 
 use <../../axes/x-axis.scad>
 use <../../axes/y-axis.scad>

@@ -1,7 +1,7 @@
 include <enclosure_common.scad>
 include <NopSCADlib/utils/rounded_polygon.scad>
 
-use <../../../lib/utils.scad>
+use <../../lib/utils.scad>
 
 module enclosure_vslot_mount_line_vertical(length) {
     color("silver")
